@@ -3,3 +3,5 @@ venv/
 testImg/
 node_modules/
 package-lock.json
+package.json
+.cache
