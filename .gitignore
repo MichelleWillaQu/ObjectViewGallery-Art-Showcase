@@ -5,3 +5,6 @@ node_modules/
 package-lock.json
 package.json
 .cache
+dev_notes.txt
+*.obj
+*.OBJ

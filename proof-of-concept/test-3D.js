@@ -6,10 +6,10 @@
         
         //Get a camera
         const fov = 75; //Field of view (in vertical dimension in degrees)
-        const aspect = window.innerWidth/window.innerHeight;  // display aspect (width/height); default (300x150px)
+        const aspect = 2;  // display aspect (width/height); default (300x150px)
         const near = 0.1; //space in front of camera that will be rendered (start)
         //space in front of camera that will be rendered (end), aka draw distance
-        const far = 1000; 
+        const far = 100; 
         //All 4 settings = frustum (name of a 3D shape that looks like a pyramid
         //with the tip sliced off) - anything inside is rendered
         const camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
