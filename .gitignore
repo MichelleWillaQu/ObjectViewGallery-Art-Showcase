@@ -8,3 +8,6 @@ package.json
 dev_notes.txt
 *.obj
 *.OBJ
+*.MTL
+*.mtl
+*.png
