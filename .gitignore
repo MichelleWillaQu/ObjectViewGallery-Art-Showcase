@@ -1,6 +1,5 @@
 venv/
 *.pyc
-testImg/
 node_modules/
 package-lock.json
 package.json
