@@ -141,7 +141,7 @@ class Like(db.Model):
 
     __tablename__ = 'likes'
 
-    likes_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    like_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     media_id = db.Column(db.Integer, db.ForeignKey('media.media_id'))
     user_who_liked = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
