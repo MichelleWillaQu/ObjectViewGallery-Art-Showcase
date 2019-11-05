@@ -35,7 +35,7 @@ class Media(db.Model):
 
     media_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     media_name = db.Column(db.String(100))
-    metadata = db.Column(db.Text, nullable=True)
+    meta_info = db.Column(db.Text, nullable=True)
     media_url = db.Column(db.Text)
     is_downloadable = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime)
@@ -161,13 +161,21 @@ class Following(db.Model):
     __tablename__ = 'following'
 
     f_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-    user_followed_id = db.Column(db.Integer, db.ForeignKey(users.user_id))
-    follower_id = db.Column(db.Integer, db.ForeignKey(users.user_id))
+    user_followed_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    follower_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
+    #Relationship
+    user_followed = db.relationship('User',
+                                    foreign_keys=[user_followed_id],
+                                    backref=db.backref('followers'))
+    follower = db.relationship('User',
+                               foreign_keys=[follower_id], 
+                               backref=db.backref('following'))
 
     def __repr__(self):
         """Provide information of the Following object."""
         return (f"<Following id:{self.likes_id} " \
-                f"user_followed:{self.user_followed_id} " \
+                f"user_followed:{self.user_id_followed} " \
                 f"follower_id:{self.follower_id}>")
 
 
