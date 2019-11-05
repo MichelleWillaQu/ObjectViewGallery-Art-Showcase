@@ -1,8 +1,8 @@
 from random import randint
 from flask import Flask, request, jsonify, render_template, redirect, session
+#requests and shutil for getting img from url
 import requests, shutil
 from requests_oauthlib import OAuth2Session
-#requests and shutil for getting img from url
 
 app = Flask(__name__)
 app.secret_key = 'ABC'
@@ -16,7 +16,7 @@ client_secret = '88ab4046d51598de373368f085f94412'
 
 @app.route("/")
 def show_index():
-    """Show test page"""
+    """Show 3D test page"""
 
     return render_template("test-3D.html")
 
@@ -43,7 +43,7 @@ def callback():
     return 'potato'
 
 
-@app.route('/hi')
+@app.route('/image-layout')
 def test_redirect_uri():
     return "Hi this sorta works."
 
@@ -64,4 +64,5 @@ def get_img(url):
 
 
 if __name__ == "__main__":
+    #https://blog.miguelgrinberg.com/post/running-your-flask-application-over-https
     app.run(debug=True, host="0.0.0.0", ssl_context='adhoc')
