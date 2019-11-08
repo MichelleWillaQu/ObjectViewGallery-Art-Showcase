@@ -49,7 +49,7 @@ class Media(db.Model):
     user = db.relationship('User', backref=db.backref('owned_media'))
     type_of = db.relationship('MediaType', backref=db.backref('all_media'))
     page = db.relationship('Page', backref=db.backref('media_on'))
-    variables = db.relationship('ReactVar', backref=db.backref('which_media'))
+    variable = db.relationship('ReactVar', backref=db.backref('which_media'))
 
     def __repr__(self):
         """Provide information of the Media object."""
@@ -83,6 +83,8 @@ class ReactVar(db.Model):
 
     react_var_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     #TO BE EDITED
+    height = db.Column(db.Integer)
+    width = db.Column(db.Integer)
 
     def __repr__(self):
         """Provide information of the ReactVar object."""

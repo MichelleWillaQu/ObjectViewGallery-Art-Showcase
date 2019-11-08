@@ -4,10 +4,11 @@ from flask_bcrypt import Bcrypt
 from functools import wraps
 from sqlalchemy import func
 from datetime import datetime
-from model import connect_to_db, db, User, Media, MediaType, Page
+from model import (connect_to_db, db, User, Media, Page, ReactVar, MediaType, 
+                   WhichTag, Tag, Like, Following)
 
 import os
-from werkzeug.utils import secure_filename
+from werkzeug.utils import secure_filename #maybe...
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
 
@@ -74,7 +75,7 @@ def login_action():
     password = request.args.get('password')
 
     #query to see if user exists
-    user = User.query.filter(User.email==email).first()
+    user = User.query.filter(User.email == email).first()
     if not user:
         flash('That email is not associated with an account.')
         return redirect('/login')
@@ -103,24 +104,22 @@ def signup_action():
     bio = request.form.get('bio')
 
     #query to confirm that username and email do not already exist
-    user = User.query.filter(User.username==username).first()
+    user = User.query.filter(User.username == username).first()
     if user:
         flash('That username is taken.')
         return redirect('/signup')
-    user = User.query.filter(User.email==email).first()
+    user = User.query.filter(User.email == email).first()
     if user:
         flash('That email is already used.')
         return redirect('/signup')
 
     #add user to database
-    new_user = User(username=username,
-                    password=bcrypt.generate_password_hash(password),
-                    info=bio,
-                    email=email)
-    new_page = Page(page_num=1,
-                    background_url='static/themes/parchment.jpg',
-                    user_id=new_user.user_id)
-    new_user.pages.append(new_page)
+    new_user = User(username = username,
+                    password = bcrypt.generate_password_hash(password),
+                    info = bio,
+                    email = email)
+    new_user.pages.append(Page(page_num = 1,
+                    background_url = 'static/themes/parchment.jpg'))
     db.session.add(new_user)
     db.session.commit()
 
@@ -152,16 +151,16 @@ def upload_action():
 
     #To handle media file upload
     file = request.files['media']  #gets the media from form
-    # filename = secure_filename(file.filename)
     extension = (file.filename).rsplit('.', 1)[1].lower()
-    ext_id = db.session.query(MediaType.media_id).one()[0]
+    ext_obj = MediaType.query.filter_by(media_ext = extension).one()
+    #Create the filename based on media_id since there may be files with the
+    #same name - this way there is no overwriting
     file_num = db.session.query(func.max(Media.media_id)).first()
     if not file_num[0]:
         filename = '0' + '.' + extension
     else:
         new_num = int(file_num[0]) + 1
         filename = str(new_num) + '.' + extension
-    print(f'filename2: {filename}')
     #save the file in the correct directory
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
     file_url = 'static/uploads/' + filename
@@ -173,15 +172,20 @@ def upload_action():
         date = datetime.today()
 
     #Add media to database
-    # new_media = Media(media_name=name,
-    #                   meta_info=info,
-    #                   media_url=file_url,
-    #                   is_downloadable=downloadable,
-    #                   date_created=date,
-    #                   react_var_id=
-    #                   type_id=ext_id,
-    #                   user_id=session['user'],
-    #                   page_id=1)
+    user = User.query.filter_by(user_id = session['user']).one()
+    page = user.pages[0]  #TO DO: pagination
+    react_var = ReactVar.query.filter_by(react_var_id = 1).one()  #TO DO: REACT
+    new_media = Media(media_name = name,  #TO DO: thumb_url, whichTag, tags
+                      meta_info = info,
+                      media_url = file_url,
+                      is_downloadable = downloadable,
+                      date_created = date,
+                      variable = react_var,
+                      type_of = ext_obj,
+                      user = user,
+                      page = page)
+    db.session.add(new_media)
+    db.session.commit()
 
     return redirect('/')
 
