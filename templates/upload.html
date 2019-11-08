@@ -7,7 +7,8 @@
 {% block button %}{% endblock %}
 
 {% block body %}
-    <form action='/upload-action' method="POST" class="form-upload">
+    <form action='/upload-action' method="POST" class="form-upload"
+     enctype = "multipart/form-data">
         <h3 class="form-heading">Let's upload some media!</h3>
         <div class="form-field">
             <label>Upload Media
@@ -34,7 +35,7 @@
                     <input type="radio" name="downloadable" value="true">
                 </label>
                 <label>No
-                    <input type="radio" name="downloadable" value="false">
+                    <input type="radio" name="downloadable" value="false" checked>
                 </label>
             </label>
         </div>

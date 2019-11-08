@@ -1,16 +1,25 @@
-from jinja2 import StrictUndefined
-
 from flask import (Flask, render_template, redirect, request, flash, session, 
                   jsonify)
 from flask_bcrypt import Bcrypt
 from functools import wraps
-from flask_debugtoolbar import DebugToolbarExtension
+from sqlalchemy import func
+from datetime import datetime
+from model import connect_to_db, db, User, Media, MediaType, Page
 
-from model import connect_to_db, db, User, Media
+import os
+from werkzeug.utils import secure_filename
+from flask_debugtoolbar import DebugToolbarExtension
+from jinja2 import StrictUndefined
 
 
 app = Flask(__name__)
+
+#Bcrypt
 bcrypt = Bcrypt(app)
+
+#secure_filename
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Required to use Flask sessions and the debug toolbar
 app.secret_key = "ABC"
@@ -19,6 +28,7 @@ app.secret_key = "ABC"
 # silently. This is horrible. Fix this so that, instead, it raises an
 # error.
 app.jinja_env.undefined = StrictUndefined
+
 
 #Custom decorators
 def must_be_logged_in(func):  #runs when func decorated with this
@@ -107,6 +117,10 @@ def signup_action():
                     password=bcrypt.generate_password_hash(password),
                     info=bio,
                     email=email)
+    new_page = Page(page_num=1,
+                    background_url='static/themes/parchment.jpg',
+                    user_id=new_user.user_id)
+    new_user.pages.append(new_page)
     db.session.add(new_user)
     db.session.commit()
 
@@ -131,17 +145,43 @@ def upload():
 @must_be_logged_in
 def upload_action():
     #get data
-    # name = request.form.get('name')
-    # info = request.form.get('metadata')
-    # downloadable = request.form.get('downloadable') == 'true'
-    # date = request.form.get('creation') #2018-03-04
-    # file = request.files['media']
+    name = request.form.get('name')
+    info = request.form.get('metadata')
+    downloadable = request.form.get('downloadable') == 'true'
+    date = request.form.get('creation')  #YYYY-MM-DD
 
-    # #setting date if it was left empty, else transforming to correct DateTime
-    # if date:
-    #     pass
-    # else:
-    #     pass
+    #To handle media file upload
+    file = request.files['media']  #gets the media from form
+    # filename = secure_filename(file.filename)
+    extension = (file.filename).rsplit('.', 1)[1].lower()
+    ext_id = db.session.query(MediaType.media_id).one()[0]
+    file_num = db.session.query(func.max(Media.media_id)).first()
+    if not file_num[0]:
+        filename = '0' + '.' + extension
+    else:
+        new_num = int(file_num[0]) + 1
+        filename = str(new_num) + '.' + extension
+    print(f'filename2: {filename}')
+    #save the file in the correct directory
+    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    file_url = 'static/uploads/' + filename
+
+    #setting date if no value, else transforming to correct DateTime
+    if date:
+        date = datetime.strptime(date, "%Y-%m-%d")
+    else:
+        date = datetime.today()
+
+    #Add media to database
+    # new_media = Media(media_name=name,
+    #                   meta_info=info,
+    #                   media_url=file_url,
+    #                   is_downloadable=downloadable,
+    #                   date_created=date,
+    #                   react_var_id=
+    #                   type_id=ext_id,
+    #                   user_id=session['user'],
+    #                   page_id=1)
 
     return redirect('/')
 

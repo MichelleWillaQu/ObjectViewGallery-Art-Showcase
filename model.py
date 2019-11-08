@@ -24,7 +24,7 @@ class User(db.Model):
 
     def __repr__(self):
         """Provide information of the User object."""
-        return (f"<User id={self.user_id} username:{self.username} " \
+        return (f"<User id: {self.user_id} username: {self.username} " \
                 f"email: {self.email}>")
 
 
@@ -53,7 +53,7 @@ class Media(db.Model):
 
     def __repr__(self):
         """Provide information of the Media object."""
-        return (f"<Media id={self.media_id} name:{self.media_name} " \
+        return (f"<Media id: {self.media_id} name: {self.media_name} " \
                 f"user: {self.user_id}>")
 
 
@@ -72,7 +72,7 @@ class Page(db.Model):
 
     def __repr__(self):
         """Provide information of the Page object."""
-        return (f"<Page id={self.page_id} num:{self.page_num} " \
+        return (f"<Page id: {self.page_id} num: {self.page_num} " \
                 f"user: {self.user_id}>")
 
 
@@ -100,7 +100,7 @@ class MediaType(db.Model):
 
     def __repr__(self):
         """Provide information of the MediaType object."""
-        return (f"<MediaType id:{self.type_id} ext:{self.media_ext}>")
+        return (f"<MediaType id: {self.type_id} ext: {self.media_ext}>")
 
 
 class WhichTag(db.Model):
@@ -114,8 +114,8 @@ class WhichTag(db.Model):
 
     def __repr__(self):
         """Provide information of the WhichTag object."""
-        return (f"<WhichTag id:{self.wt_id} media_id:{self.media_ext} " \
-                f"tag_id:{self.tag_id}>")
+        return (f"<WhichTag id: {self.wt_id} media_id: {self.media_ext} " \
+                f"tag_id: {self.tag_id}>")
 
 
 class Tag(db.Model):
@@ -133,7 +133,7 @@ class Tag(db.Model):
 
     def __repr__(self):
         """Provide information of the Tag object."""
-        return (f"<Tag id:{self.tag_id} name:{self.tag_name}>")
+        return (f"<Tag id: {self.tag_id} name: {self.tag_name}>")
 
 
 class Like(db.Model):
@@ -151,8 +151,8 @@ class Like(db.Model):
 
     def __repr__(self):
         """Provide information of the Like object."""
-        return (f"<Like id:{self.likes_id} media_id:{self.media_id} " \
-                f"user_id:{self.user_id}>")
+        return (f"<Like id: {self.likes_id} media_id: {self.media_id} " \
+                f"user_id: {self.user_id}>")
 
 
 class Following(db.Model):
@@ -174,9 +174,9 @@ class Following(db.Model):
 
     def __repr__(self):
         """Provide information of the Following object."""
-        return (f"<Following id:{self.likes_id} " \
-                f"user_followed:{self.user_id_followed} " \
-                f"follower_id:{self.follower_id}>")
+        return (f"<Following id: {self.likes_id} " \
+                f"user_followed: {self.user_id_followed} " \
+                f"follower_id: {self.follower_id}>")
 
 
 #Helper Functions

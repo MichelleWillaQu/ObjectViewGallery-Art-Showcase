@@ -12,3 +12,5 @@ dev_notes.txt
 *.mtl
 *.png
 secrets.sh
+uploads/
+themes/
