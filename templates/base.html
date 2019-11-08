@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    {% block title %}
+    <title>Base</title>
+    {% endblock %}
+</head>
+<body>
+    {% for message in get_flashed_messages() %}
+    <h2>******{{message}}******</h2>
+    {% endfor %}
+    
+    {% block button %}
+        {% if session.get('user') %}
+            <button><a href="/logout">Logout</a></button>
+            <button><a href="/upload">Upload</a></button>
+        {% else %}
+            <button><a href="/login">Log In</a></button>
+        {% endif %}
+    {% endblock %}
+
+    {% block body %}
+    To be filled.
+    {% endblock %}
+</body>
+</html>

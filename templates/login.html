@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    <title>Login</title>
+{% endblock %}
+
+{% block button %}{% endblock %}
+
+{% block body %}
+    <form action='/login-action' method="GET" class="form-login">
+        <h3 class="form-heading">Please Login</h3>
+        <div class="form-field">
+            <label>Email Address
+            <input type="text" name="email" required autofocus>
+            </label>
+        </div>
+        <div class="form-field">
+            <label>Password
+            <input type="password" name="password" required>
+            </label>
+        </div>
+        <button class="btn-login" type="submit">Submit</button>
+    </form>
+    <button><a href="/signup">Sign Up</a></button>
+{% endblock %}
