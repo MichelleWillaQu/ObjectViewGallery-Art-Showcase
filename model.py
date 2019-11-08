@@ -14,7 +14,7 @@ class User(db.Model):
     user_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     #Ref for max string size: https://www.lifewire.com/is-email-address-length-limited-1171110
     username = db.Column(db.String(64))
-    password = db.Column(db.String(64))
+    password = db.Column(db.Binary(60))
     info = db.Column(db.Text, nullable=True)
     email = db.Column(db.String(254))
     da_name = db.Column(db.String(64), nullable=True)  #Deviantart account name
