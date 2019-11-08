@@ -140,30 +140,35 @@ def logout():
 def upload():
     return render_template('upload.html') #TO DO: form changes
 
-@app.route('/upload-action', methods=['POST'])
+@app.route('/upload-action', methods=['POST'])  #TO DO, CHECK
 @must_be_logged_in
 def upload_action():
+    #The user
+    user = User.query.filter_by(user_id = session['user']).one()
     #get data
     name = request.form.get('name')
+    #format name for urls
+    name = "-".join(name.split(' '))
     info = request.form.get('metadata')
     downloadable = request.form.get('downloadable') == 'true'
     date = request.form.get('creation')  #YYYY-MM-DD
+
+    #make sure the name is unique
+    media = Media.query.filter_by(media_name = name).first()
+    if media:
+        flash('You already have art with that name!')
+        return redirect('/upload')
 
     #To handle media file upload
     file = request.files['media']  #gets the media from form
     extension = (file.filename).rsplit('.', 1)[1].lower()
     ext_obj = MediaType.query.filter_by(media_ext = extension).one()
-    #Create the filename based on media_id since there may be files with the
-    #same name - this way there is no overwriting
-    file_num = db.session.query(func.max(Media.media_id)).first()
-    if not file_num[0]:
-        filename = '0' + '.' + extension
-    else:
-        new_num = int(file_num[0]) + 1
-        filename = str(new_num) + '.' + extension
+    #Create the filename based on media_name and user since there may be files
+    #with the same name - this way there is no overwriting
+    filename = user.username + '-' + name + '.' + extension
     #save the file in the correct directory
     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-    file_url = 'static/uploads/' + filename
+    file_url = '/static/uploads/' + filename
 
     #setting date if no value, else transforming to correct DateTime
     if date:
@@ -172,7 +177,6 @@ def upload_action():
         date = datetime.today()
 
     #Add media to database
-    user = User.query.filter_by(user_id = session['user']).one()
     page = user.pages[0]  #TO DO: pagination
     react_var = ReactVar.query.filter_by(react_var_id = 1).one()  #TO DO: REACT
     new_media = Media(media_name = name,  #TO DO: thumb_url, whichTag, tags
@@ -201,9 +205,22 @@ def user(username, page_num):
     return "Hello"
 
 
-@app.route('/<media_name>')  #TO DO
-def media(media_name):
-    return "Why hello my friend."
+@app.route('/<username>/<media_name>')  #TO DO, CHECK
+def media(username, media_name):
+    user = User.query.filter_by(username = username).first()
+    if not user:
+        flash('Invalid url')
+        return redirect('/')
+    media = (Media.query.filter(Media.user_id == user.user_id,
+                               Media.media_name == media_name)
+                        .first())
+    if not media:
+        flash('Invalid url')
+        return redirect('/')
+    formatted_name = ' '.join(media.media_name.split('-'))
+    return render_template('mediapage.html',
+                            media=media,
+                            formatted_name=formatted_name)
 
 
 if __name__ == "__main__":

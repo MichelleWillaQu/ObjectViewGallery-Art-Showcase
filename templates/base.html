@@ -12,10 +12,11 @@
     
     {% block button %}
         {% if session.get('user') %}
-            <button><a href="/logout">Logout</a></button>
             <button><a href="/upload">Upload</a></button>
+            <button><a href="/logout">Logout</a></button>
         {% else %}
             <button><a href="/login">Log In</a></button>
+            <button><a href="/signup">Sign Up</a></button>
         {% endif %}
     {% endblock %}
 
