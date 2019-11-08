@@ -153,12 +153,12 @@ def settings():
 
 
 @app.route('/<username>-<page_num>')
-def settings(username, page_num):
+def user(username, page_num):
     return "Hello"
 
 
 @app.route('/<media_name>')
-def settings(media_name):
+def media(media_name):
     return "Why hello my friend."
 
 
