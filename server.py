@@ -58,7 +58,7 @@ def must_be_logged_out(func):
 
 
 @app.route('/')
-def homepage():
+def homepage():  #TO DO
     return render_template('homepage.html')
 
 
@@ -190,18 +190,18 @@ def upload_action():
     return redirect('/')
 
 
-@app.route('/settings')
+@app.route('/settings')  #TO DO
 @must_be_logged_in
 def settings():
     return "Hi"
 
 
-@app.route('/<username>-<page_num>')
+@app.route('/<username>-<page_num>')  #TO DO
 def user(username, page_num):
     return "Hello"
 
 
-@app.route('/<media_name>')
+@app.route('/<media_name>')  #TO DO
 def media(media_name):
     return "Why hello my friend."
 
