@@ -202,7 +202,11 @@ def settings():
 
 @app.route('/<username>-<page_num>')  #TO DO
 def user(username, page_num):
-    return "Hello"
+    user = User.query.filter_by(username = username).first()
+    if not user:
+        flash('Invalid url')
+        return redirect('/')
+    return render_template('gallery.html', user=user)
 
 
 @app.route('/<username>/<media_name>')  #TO DO, CHECK

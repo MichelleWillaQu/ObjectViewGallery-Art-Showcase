@@ -27,6 +27,7 @@ controls.target.set(0, 5, 0);
 controls.update();
 
 //Takes all the data provided and renders it to canvas
+//const renderer = new THREE.WebGLRenderer({canvas, alpha: true});
 const renderer = new THREE.WebGLRenderer({canvas});
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -34,7 +35,7 @@ document.body.appendChild(renderer.domElement);
 //Scene: root of a form of scene graph; everything needs to be added to
 //a scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color('black');
+scene.background = new THREE.Color('white');
 
 
 
@@ -58,7 +59,7 @@ scene.background = new THREE.Color('black');
   }
 
   {
-    const color = 0xFFFFFF;
+    const color = 0xFFFFFF; //white
     const intensity = 1;
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(5, 10, 2);
@@ -146,6 +147,7 @@ function render() {
       camera.aspect = canvas.clientWidth / canvas.clientHeight;
       camera.updateProjectionMatrix();
     }
+    //renderer.setClearColor(0x808080, 0);
     renderer.render(scene, camera);
     requestAnimationFrame(render);
 }
