@@ -4,7 +4,9 @@
     <title>{{formatted_name}}</title>
 {% endblock %}
 
-{% block body %}
-    <h1>{{formatted_name}}</h1>
-    <img src={{media.media_url}}>
-{% endblock %}
+<!-- {% if %} -->
+    {% block body %}
+        <h1>{{formatted_name}}</h1>
+        <img src={{media.media_url}}>
+    {% endblock %}
+<!-- {% endif %} -->

@@ -11,14 +11,16 @@ const ItemTypes = {
 
 function TwoDElement(props){
   const [{ isDragging }, drag] = useDrag({
-    item: {id: this.props.id,
+    item: {id: props.id,
            type: ItemTypes.TWOD},
     collect: monitor => ({
       isDragging: !!monitor.isDragging(),
     }),
   })
   return(
-    <img ref={drag} src='Archer-Class_Alex_800x800_SEPS-1000x1000.jpg' />
+    <div ref={drag} style={{width: '300px', height: '300px'}}>
+      <img src='../static/uploads/Archer-Class_Alex_800x800_SEPS-1000x1000.jpg' />
+    </div>
   );
 }
 
@@ -52,29 +54,26 @@ class Grid extends React.Component{
   }
   render(){
     const squares = [];
-    for (let i = 0; i < 9500; i++) {
-      const x = i % 100;
-      const y = Math.floor(i / 100); //rounds down
-      const kids =  [];
+    let item = null;
+    for (let i = 0; i < 380; i++) {
+      const x = i % 20;
+      const y = Math.floor(i / 20); //rounds down
       for (const key of Object.keys(this.state)){
         const media = this.state[key];
         if(media.x === x && media.y === y){
           if(media.type === ItemTypes.TWOD){
-            const element = (<div style={{width: media.width,
-                                          height: media.height}}>
-                               <TwoDElement id={key} />
-                             </div>)
+            item = (<TwoDElement id={key} />);
           }
           else{
             //
           }
-          kids.push(element);
         }
       }
-      const here = (kids.length === 0) ? null : kids; 
-      squares.push(<div key={i} style={{width: '1vw', height: '1vh'}}>
-                      <Square x={x} y={y}>{here}</Square>
+      squares.push(<div key={i} style={{width: '5%', height: '5%'}}>
+                      <Square changeState={this.moveElement} 
+                              x={x} y={y}>{item}</Square>
                    </div>);
+      item = null;
     }
     //enclose the component inside DND context provider with initialized backend
     return (<DndProvider backend={HTML5Backend}>
