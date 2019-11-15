@@ -18,11 +18,24 @@ function TwoDElement(props){
     }),
   })
   return(
-    <div ref={drag} style={{width: '300px', height: '300px'}}>
-      <img src='../static/uploads/Archer-Class_Alex_800x800_SEPS-1000x1000.jpg' />
-    </div>
+    <img ref={drag} style={{width: '300px', height: '300px'}}
+         src='/static/uploads/Archer-Class_Alex_800x800_SEPS-1000x1000.jpg' />
   );
 }
+
+// function ThreeDElement(props){
+//   const [{ isDragging }, drag] = useDrag({
+//     item: {id: props.id,
+//            type: ItemTypes.THREED},
+//     collect: monitor => ({
+//       isDragging: !!monitor.isDragging(),
+//     }),
+//   })
+//   return(
+//     <canvas ref={drag} style={{width: '300px', height: '300px'}}
+//          className='/static/uploads/PotatoOverlord-Manarah.obj' />
+//   );
+// }
 
 function Square(props){
   const [, drop] = useDrop({
@@ -49,7 +62,7 @@ class Grid extends React.Component{
       const changedItem = Object.assign({}, prevState[mediaName])
       changedItem.x = x;
       changedItem.y = y;
-      return {changedItem};
+      return {[mediaName]: changedItem};
     });
   }
   render(){
@@ -65,7 +78,7 @@ class Grid extends React.Component{
             item = (<TwoDElement id={key} />);
           }
           else{
-            //
+            //item = (<ThreeDElement id={key} />);
           }
         }
       }

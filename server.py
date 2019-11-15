@@ -222,9 +222,16 @@ def media(username, media_name):
         flash('Invalid url')
         return redirect('/')
     formatted_name = ' '.join(media.media_name.split('-'))
+    if media.type_of.media_ext == 'obj':
+        js_status = 'obj'
+    elif media.type_of.media_ext == 'gltf':
+        js_status = 'gltf'
+    else:
+        js_status = None 
     return render_template('mediapage.html',
                             media=media,
-                            formatted_name=formatted_name)
+                            formatted_name=formatted_name,
+                            status = js_status)
 
 
 if __name__ == "__main__":
