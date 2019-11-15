@@ -206,7 +206,8 @@ def user(username, page_num):
     if not user:
         flash('Invalid url')
         return redirect('/')
-    return render_template('gallery.html', user=user)
+    return render_template('gallery.html', user=user, page_info=[user.username,
+                                                                 page_num])
 
 
 @app.route('/<username>/<media_name>')  #TO DO, CHECK
@@ -232,6 +233,30 @@ def media(username, media_name):
                             media=media,
                             formatted_name=formatted_name,
                             status = js_status)
+
+
+@app.route('/api/check_current_user', methods=['GET'])
+def check_current_user():
+    username = request.args.get('username')
+    if not session.get('user'):
+        return False
+    user = User.query.filter_by(id = session['user']).first()
+    return user.username == username
+
+
+@app.route('/api/get-media.json', methods=['GET'])
+def get_media():
+    username = request.args.get('username')
+    page_num = request.args.get('page')
+    user = User.query.filter_by(username = username).first()
+    return jsonify({background_url: user.pages[0].background_url,
+                   media: user.pages[0].media_on}) #TO DO: fix for page
+
+
+@app.route('/api/post-media-changes', methods=['POST'])
+@must_be_logged_in
+def post_media_changes():
+    return ''
 
 
 if __name__ == "__main__":

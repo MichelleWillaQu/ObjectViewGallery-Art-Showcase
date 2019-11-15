@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
+import $ from "jquery";
 
 //declares my draggable items
 const ItemTypes = {
@@ -19,7 +20,7 @@ function TwoDElement(props){
   })
   return(
     <img ref={drag} style={{width: '300px', height: '300px'}}
-         src='/static/uploads/Archer-Class_Alex_800x800_SEPS-1000x1000.jpg' />
+         src='/static/uploads/PotatoOverlord-Archer-Fox.jpg' />
   );
 }
 
@@ -99,6 +100,7 @@ class Grid extends React.Component{
             </DndProvider>);
   }
 }
+
 
 ReactDOM.render(
   <Grid />,
