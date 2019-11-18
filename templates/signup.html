@@ -1,35 +1,35 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>Signup</title>
+  <title>Signup</title>
 {% endblock %}
 
 {% block button %}{% endblock %}
 
 {% block body %}
-    <form action='/signup-action' method="POST" class="form-signup">
-        <h3 class="form-heading">Please Signup</h3>
-        <div class="form-field">
-            <label>Username
-                <input type="text" name="username" required autofocus>
-            </label>
-        </div>
-        <div class="form-field">
-            <label>Email Address
-                <input type="text" name="email" required>
-            </label>
-        </div>
-        <div class="form-field">
-            <label>Password
-                <input type="password" name="password" required>
-            </label>
-        </div>
-        <div class="form-field">
-            <label>Bio
-                <textarea rows="4" name="bio"
-                 placeholder="You can edit this whenever in your settings."></textarea>
-            </label>
-        </div>
-        <button class="btn-signup" type="submit">Submit</button>
-    </form>
+  <form action='/signup-action' method="POST" class="form-signup">
+    <h3 class="form-heading">Please Signup</h3>
+    <div class="form-field">
+      <label>Username
+        <input type="text" name="username" required autofocus>
+      </label>
+    </div>
+    <div class="form-field">
+      <label>Email Address
+        <input type="text" name="email" required>
+      </label>
+    </div>
+    <div class="form-field">
+      <label>Password
+        <input type="password" name="password" required>
+      </label>
+    </div>
+    <div class="form-field">
+      <label>Bio
+        <textarea rows="4" name="bio"
+        placeholder="You can edit this whenever in your settings."></textarea>
+      </label>
+    </div>
+    <button class="btn-signup" type="submit">Submit</button>
+  </form>
 {% endblock %}

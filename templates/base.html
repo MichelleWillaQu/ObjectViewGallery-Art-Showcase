@@ -1,27 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
-    {% block head %}
+  {% block head %}
     <title>Base</title>
-    {% endblock %}
+  {% endblock %}
 </head>
 <body>
-    {% for message in get_flashed_messages() %}
+  {% for message in get_flashed_messages() %}
     <h2>******{{message}}******</h2>
-    {% endfor %}
+  {% endfor %}
     
-    {% block button %}
-        {% if session.get('user') %}
-            <button><a href="/upload">Upload</a></button>
-            <button><a href="/logout">Logout</a></button>
-        {% else %}
-            <button><a href="/login">Log In</a></button>
-            <button><a href="/signup">Sign Up</a></button>
-        {% endif %}
-    {% endblock %}
+  {% block button %}
+    {% if session.get('user') %}
+      <button><a href="/upload">Upload</a></button>
+      <button><a href="/logout">Logout</a></button>
+    {% else %}
+      <button><a href="/login">Log In</a></button>
+      <button><a href="/signup">Sign Up</a></button>
+    {% endif %}
+  {% endblock %}
 
-    {% block body %}
+  {% block body %}
     To be filled.
-    {% endblock %}
+  {% endblock %}
 </body>
 </html>

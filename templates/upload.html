@@ -1,50 +1,49 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>Uploading Media</title>
+  <title>Uploading Media</title>
 {% endblock %}
 
 {% block button %}{% endblock %}
 
 {% block body %}
-    <form action='/upload-action' method="POST" class="form-upload"
-     enctype = "multipart/form-data">
-        <h3 class="form-heading">Let's upload some media!</h3>
-        <div class="form-field">
-            <label>Upload Media
-                <input type="file" name="media"
-                 accept=".gif, .jpg, .jpeg, .png, .obj, .gltf"
-                 required>
-            </label>
-        </div>
-        <div class="form-field">
-            <label>Name of Media
-                <input type="text" name="name" required>
-            </label>
-        </div>
-        <!-- TO DO: Handle textures and texture maps -->
-        <div class="form-field">
-            <label>Media Information
-                <textarea rows="4" name="metadata"
-                 placeholder="You can edit this on the media's page later."></textarea>
-            </label>
-        </div>
-        <div class="form-field">
-            <label>Is this downloadable?
-                <label>Yes
-                    <input type="radio" name="downloadable" value="true">
-                </label>
-                <label>No
-                    <input type="radio" name="downloadable" value="false" checked>
-                </label>
-            </label>
-        </div>
-        <div class="form-field">
-            <label>Date of Creation
-                <input type="date" name="creation">
-            </label>
-        </div>
-        <!-- TO DO: Add thumbnail -->
-        <button class="btn-upload" type="submit">Upload</button>
-    </form>
+  <form action='/upload-action' method="POST" class="form-upload"
+  enctype = "multipart/form-data">
+    <h3 class="form-heading">Let's upload some media!</h3>
+    <div class="form-field">
+      <label>Upload Media
+        <input type="file" name="media"
+        accept=".gif, .jpg, .jpeg, .png, .obj, .gltf" required> 
+      </label>
+    </div>
+    <div class="form-field">
+      <label>Name of Media
+        <input type="text" name="name" required>
+      </label>
+    </div>
+    <!-- TO DO: Handle textures and texture maps -->
+    <div class="form-field">
+      <label>Media Information
+        <textarea rows="4" name="metadata"
+        placeholder="You can edit this on the media's page later."></textarea>
+      </label>
+    </div>
+    <div class="form-field">
+      <label>Is this downloadable?
+        <label>Yes
+          <input type="radio" name="downloadable" value="true">
+        </label>
+        <label>No
+          <input type="radio" name="downloadable" value="false" checked>
+        </label>
+      </label>
+    </div>
+    <div class="form-field">
+      <label>Date of Creation
+        <input type="date" name="creation">
+      </label>
+    </div>
+    <!-- TO DO: Add thumbnail -->
+    <button class="btn-upload" type="submit">Upload</button>
+  </form>
 {% endblock %}

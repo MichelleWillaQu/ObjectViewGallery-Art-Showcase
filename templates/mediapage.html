@@ -1,30 +1,30 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>{{formatted_name}}</title>
-    <style>
-        canvas {
-            width: 80vw;
-            height: 70vh;
-        }
-    </style> <!-- TO DO: moved to CSS later -->
+  <title>{{formatted_name}}</title>
+  <style>
+    canvas {
+      width: 80vw;
+      height: 70vh;
+    }
+  </style> <!-- TO DO: moved to CSS later -->
 {% endblock %}
 
 {% block body %}
-    {% if status == None %}
-        <h1>{{formatted_name}}</h1>
-        <img src={{media.media_url}}>
-    {% endif %}
+  {% if status == None %}
+    <h1>{{formatted_name}}</h1>
+    <img src={{media.media_url}}>
+  {% endif %}
 
-    {% if status == 'obj' %}
-        <h1>{{formatted_name}}</h1>
-        <canvas class={{media.media_url}} id="obj"></canvas>
-        <script src="/static/JS/obj-3D.js"></script>
-    {% endif %}
+  {% if status == 'obj' %}
+    <h1>{{formatted_name}}</h1>
+    <canvas class={{media.media_url}} id="obj"></canvas>
+    <script src="/static/JS/obj-3D.js"></script>
+  {% endif %}
 
-    {% if status == 'gltf' %}
-        <h1>{{formatted_name}}</h1>
-        <canvas class={{media.media_url}} id="gltf"></canvas>
-        <script src="/static/JS/gltf-3D.js"></script>
-    {% endif %}
+  {% if status == 'gltf' %}
+    <h1>{{formatted_name}}</h1>
+    <canvas class={{media.media_url}} id="gltf"></canvas>
+    <script src="/static/JS/gltf-3D.js"></script>
+  {% endif %}
 {% endblock %}
