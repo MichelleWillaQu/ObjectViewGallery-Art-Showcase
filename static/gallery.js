@@ -16,13 +16,14 @@ const ItemTypes = {
 class Grid extends React.Component {
   constructor(props){
     super(props);
+    //tester: items: [{name: 'Hi', order: 0},
+                 // {name: 'Hello', order: 1},
+                 // {name: 'Welcome', order: 2},
+                 // {name: 'Konichiwa', order: 3}]
     this.state = {isMounted: false,
                   userVerified: false,
                   editMode: false,
-                  items: [{name: 'Hi', order: 0},
-                          {name: 'Hello', order: 1},
-                          {name: 'Welcome', order: 2},
-                          {name: 'Konichiwa', order: 3}]};
+                  items: []};
     this.moveMedia = this.moveMedia.bind(this);
     this.editClick = this.editClick.bind(this);
   }
@@ -47,7 +48,7 @@ class Grid extends React.Component {
         }
         changedList = changedList.concat(itemsAfter);
       }
-      else{
+      else {
         // The item is moved to a later position and move everything forward
         const itemsBefore = prevState.items.slice(0, itemOrder);
         const toChange = prevState.items.slice(itemOrder + 1, hoveringOrder + 1);
@@ -77,18 +78,57 @@ class Grid extends React.Component {
         this.setState({userVerified: true});
       }
     });
+    const data = {username: pageInfo[0],
+                  page: pageInfo[1]}
+    $.get('/api/get-media.json', data, (response) => {
+      // console.log('BACK: ', response.background_url);
+      console.log('MEDIA: ', response.media);
+      const updatedItems = [];
+      let countingOrder = 0;
+      let dimensions = '';
+      for (const item of Object.values(response.media)) {
+        if(item.type === 'png' || item.type === 'jpg' || item.type === 'jpeg'){
+          dimensions = ItemTypes.TWOD;
+        }
+        else if (item.type === 'gltf'){
+          dimensions = ItemTypes.GLTF;
+        }
+        else {//TO DO: handle gifs
+          dimensions = ItemTypes.OBJ;
+        }
+
+        updatedItems.push({name: item.media_name,
+                     url: item.media_url,
+                     type: dimensions,
+                     thumb_url: item.thumb_url,
+                     order: countingOrder});
+        countingOrder += 1;
+      }
+      console.log('UPDATED: ', updatedItems);
+      this.setState({items: updatedItems});
+    });
   }
 
   makeMediaElements(media){
+    console.log('MAKING:', this.state.items);
     for (const item of this.state.items){
-      media.push(<TwoDMedia key={item.name} name={item.name} 
-                            order={item.order} onHover={this.moveMedia}
-                            editMode={this.state.editMode} />);
+      if (item.type === ItemTypes.TWOD){
+        media.push(<TwoDMedia key={item.name} name={item.name} 
+                              order={item.order} url={item.url}
+                              onHover={this.moveMedia}
+                              editMode={this.state.editMode} />);
+      }
+      else {
+        media.push(<Obj key={item.name} name={item.name} 
+                              order={item.order} url={item.url}
+                              editMode={this.state.editMode} />);
+      }
     }
     return media;
   }
 
   editClick(){
+    //TO DO: if this.state.editMode === true then post to db
     this.setState((prevState) => {
       return {editMode: !prevState.editMode};
     });
@@ -109,7 +149,7 @@ class Grid extends React.Component {
                                  display: 'flex',
                                  flexWrap: 'wrap',
                                  justifyContent: 'flex-start'}}>
-              {media}
+            {media}
           </div>
         </DndProvider>
       </span>);
@@ -160,20 +200,36 @@ function TwoDMedia(props) {
   // flex-grow will make the div take up that proportion of the wrapper with
   // respect to other media
   // background-image > img tag to be able to use background-size/position
-  //backgroundImage: `url(${props.url})`
   return(
     <div name={props.name} style={{border: '1px solid transparent',
                                    flexGrow: '1',
                                    display: 'flex',
                                    justifyContent: 'center',
                                    alignItems: 'center',
+                                   backgroundImage: `url(${props.url})`,
                                    backgroundSize: 'cover',
-                                   bacgroundPosition: '50%',
+                                   backgroundPosition: '50%',
                                    opacity: isDragging ? '0.5' : '1'}}
-             ref={reference}>{props.name}
+             ref={reference}>
     </div>
   );
 }
+
+
+function Obj(props) {
+  return(
+    <div name={props.name} style={{border: '1px solid black',
+                                   flexGrow: '1',
+                                   display: 'flex',
+                                   justifyContent: 'center',
+                                   alignItems: 'center',
+                                   backgroundSize: 'cover',
+                                   backgroundPosition: '50%',}}>
+      {props.name}
+    </div>
+  );
+}
+
 
 ReactDOM.render(
   <Grid />,

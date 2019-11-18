@@ -238,12 +238,9 @@ def media(username, media_name):
 @app.route('/api/check_current_user.json', methods=['GET'])
 def check_current_user():
     username = request.args.get('username')
-    print('USERNAME: ', username)
     if not session.get('user'):
         return jsonify({'data': False})
     user = User.query.filter_by(user_id = session['user']).first()
-    print('USER: ', user)
-    print('JSON: ', jsonify({'data': user.username == username}))
     return jsonify({'data': user.username == username})
 
 
@@ -252,8 +249,16 @@ def get_media():
     username = request.args.get('username')
     page_num = request.args.get('page')
     user = User.query.filter_by(username = username).first()
-    return jsonify({background_url: user.pages[0].background_url,
-                   media: user.pages[0].media_on}) #TO DO: fix for page
+    print('background: ', user.pages[0].background_url)
+    media_dict = {}
+    for media in user.pages[0].media_on:
+        media_dict[media.media_name] = {'media_name': media.media_name,
+                                        'media_url': media.media_url,
+                                        'thumb_url': media.thumb_url,
+                                        'type': media.type_of.media_ext}
+    print('media: ', media_dict)
+    return jsonify({'background_url': user.pages[0].background_url,
+                    'media': media_dict}) #TO DO: fix for page
 
 
 @app.route('/api/post-media-changes', methods=['POST'])
