@@ -2,9 +2,14 @@
 
 {% block head %}
     <title>{user.username}</title>
-    <style>
-
+    <style> /*TO DO: MOVE TO CSS; */
+        body{
+            background-image: url({{user.pages[0].background_url}});
+        }
     </style>
+{% endblock %}
+
+{% block button %}
 {% endblock %}
 
 {% block body %}

@@ -119,7 +119,7 @@ def signup_action():
                     info = bio,
                     email = email)
     new_user.pages.append(Page(page_num = 1,
-                    background_url = 'static/themes/parchment.jpg'))
+                    background_url = 'static/themes/parchment.png'))
     db.session.add(new_user)
     db.session.commit()
 
