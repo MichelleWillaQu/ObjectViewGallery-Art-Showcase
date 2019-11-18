@@ -1,0 +1,16 @@
+venv/
+env/
+*.pyc
+node_modules/
+package-lock.json
+.cache
+dev_notes.txt
+*.obj
+*.OBJ
+*.MTL
+*.mtl
+*.png
+secrets.sh
+uploads/
+themes/
+dist/
