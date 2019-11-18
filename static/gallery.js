@@ -198,15 +198,10 @@ function TwoDMedia(props) {
   //initialize drag and drop on component
   drag(drop(reference))
   // flex-grow will make the div take up that proportion of the wrapper with
-  // respect to other media
+  // respect to other media (flexGrow: '1')
   // background-image > img tag to be able to use background-size/position
   return(
-    <div name={props.name} style={{border: '1px solid transparent',
-                                   flexGrow: '1',
-                                   display: 'flex',
-                                   justifyContent: 'center',
-                                   alignItems: 'center',
-                                   backgroundImage: `url(${props.url})`,
+    <div name={props.name} style={{backgroundImage: `url(${props.url})`,
                                    backgroundSize: 'cover',
                                    backgroundPosition: '50%',
                                    opacity: isDragging ? '0.5' : '1'}}
@@ -218,13 +213,7 @@ function TwoDMedia(props) {
 
 function Obj(props) {
   return(
-    <div name={props.name} style={{border: '1px solid black',
-                                   flexGrow: '1',
-                                   display: 'flex',
-                                   justifyContent: 'center',
-                                   alignItems: 'center',
-                                   backgroundSize: 'cover',
-                                   backgroundPosition: '50%',}}
+    <div name={props.name} style={{}}
          className='mediaElement'>
       {props.name}
     </div>

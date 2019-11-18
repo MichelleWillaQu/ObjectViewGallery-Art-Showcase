@@ -1,19 +1,62 @@
 {% extends 'base.html' %}
 
 {% block head %}
-    <title>{user.username}</title>
-    <style> /*TO DO: MOVE TO CSS; */
-        body{
-            background-image: url({{user.pages[0].background_url}});
-        }
-    </style>
+  <title>{user.username}</title>
+  <style> /*TO DO: MOVE TO CSS; */
+    body{ /*TO DO: CHANGE DEPENDING ON PAGE */
+      background-image: url({{user.pages[0].background_url}});
+    }
+    .mediaElement{
+      box-sizing: border-box;
+      border: 1px solid transparent;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    @media(min-width: 1200px){ /* XL */
+      .mediaElement{
+        flex: 0 0 20%;
+        height: 400px;
+      }
+    }
+
+    @media(max-width: 1200px){ /* L */
+    .mediaElement{
+        flex: 0 0 25%;
+        height: 300px;
+      }
+    }
+
+    @media(max-width: 992px){ /* M */
+    .mediaElement{
+        flex: 0 0 33%;
+        height: 300px;
+      }
+    }
+
+    @media(max-width: 768px){ /* S */
+    .mediaElement{
+        flex: 0 0 50%;
+        height: 200px;
+      }
+    }
+
+    @media(max-width: 576px){ /* XS */
+    .mediaElement{
+        flex: 0 0 100%;
+        padding-top: 100%; /* aspect ration */
+      }
+    }
+
+  </style>
 {% endblock %}
 
 {% block button %}
 {% endblock %}
 
 {% block body %}
-    <div class="{{page_info | join(' ')}}" id="element"></div>
-    <!-- <script src="/static/JS/user-gallery.js"></script> -->
-    <script src="/static/JS/gallery.js"></script>
+  <div class="{{page_info | join(' ')}}" id="element"></div>
+  <!-- <script src="/static/JS/user-gallery.js"></script> -->
+  <script src="/static/JS/gallery.js"></script>
 {% endblock %}
