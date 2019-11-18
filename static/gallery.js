@@ -210,7 +210,7 @@ function TwoDMedia(props) {
                                    backgroundSize: 'cover',
                                    backgroundPosition: '50%',
                                    opacity: isDragging ? '0.5' : '1'}}
-             ref={reference}>
+         ref={reference} className='mediaElement'>
     </div>
   );
 }
@@ -224,7 +224,8 @@ function Obj(props) {
                                    justifyContent: 'center',
                                    alignItems: 'center',
                                    backgroundSize: 'cover',
-                                   backgroundPosition: '50%',}}>
+                                   backgroundPosition: '50%',}}
+         className='mediaElement'>
       {props.name}
     </div>
   );
