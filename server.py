@@ -235,13 +235,16 @@ def media(username, media_name):
                             status = js_status)
 
 
-@app.route('/api/check_current_user', methods=['GET'])
+@app.route('/api/check_current_user.json', methods=['GET'])
 def check_current_user():
     username = request.args.get('username')
+    print('USERNAME: ', username)
     if not session.get('user'):
-        return False
-    user = User.query.filter_by(id = session['user']).first()
-    return user.username == username
+        return jsonify({'data': False})
+    user = User.query.filter_by(user_id = session['user']).first()
+    print('USER: ', user)
+    print('JSON: ', jsonify({'data': user.username == username}))
+    return jsonify({'data': user.username == username})
 
 
 @app.route('/api/get-media.json', methods=['GET'])

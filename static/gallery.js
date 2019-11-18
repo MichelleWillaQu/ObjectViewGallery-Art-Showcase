@@ -17,6 +17,7 @@ class Grid extends React.Component {
   constructor(props){
     super(props);
     this.state = {isMounted: false,
+                  userVerified: false,
                   editMode: false,
                   items: [{name: 'Hi', order: 0},
                           {name: 'Hello', order: 1},
@@ -66,7 +67,16 @@ class Grid extends React.Component {
   }
 
   componentDidMount(){
-
+    const pageElement = document.querySelector('#element');
+    const pageInfo = pageElement.classList;
+    // console.log(pageInfo);
+    // console.log('HI ', pageInfo[0]);
+    $.get('/api/check_current_user.json', {username: pageInfo[0]}, (response) => {
+      // console.log('RETURN: ', response.data);
+      if(response.data){
+        this.setState({userVerified: true});
+      }
+    });
   }
 
   makeMediaElements(media){
@@ -88,11 +98,12 @@ class Grid extends React.Component {
     const media = this.makeMediaElements([]);
     return(
       <span>
-        <div>
-          <button onClick={this.editClick}>
-            {this.state.editMode ? 'Save' : 'Edit'}
-          </button>
-        </div>
+        {this.state.userVerified ? (<div>
+                                      <button onClick={this.editClick}>
+                                        {this.state.editMode ? 'Save' : 'Edit'}
+                                      </button>
+                                    </div>) 
+                                 : null}
         <DndProvider backend={HTML5Backend}>
           <div id='Grid' style={{width: '100vw',
                                  display: 'flex',
@@ -149,13 +160,13 @@ function TwoDMedia(props) {
   // flex-grow will make the div take up that proportion of the wrapper with
   // respect to other media
   // background-image > img tag to be able to use background-size/position
+  //backgroundImage: `url(${props.url})`
   return(
     <div name={props.name} style={{border: '1px solid transparent',
                                    flexGrow: '1',
                                    display: 'flex',
                                    justifyContent: 'center',
                                    alignItems: 'center',
-                                   backgroundImage: `url(${props.url})`,
                                    backgroundSize: 'cover',
                                    bacgroundPosition: '50%',
                                    opacity: isDragging ? '0.5' : '1'}}
