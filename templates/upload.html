@@ -11,20 +11,66 @@
   enctype = "multipart/form-data">
     <h3 class="form-heading">Let's upload some media!</h3>
     <div class="form-field">
-      <label>Upload Media
-        <input type="file" name="media"
-        accept=".gif, .jpg, .jpeg, .png, .obj, .gltf" required> 
+      <label>Name of Media
+        <input type="text" name="name" id="name" required>
       </label>
     </div>
     <div class="form-field">
-      <label>Name of Media
-        <input type="text" name="name" required>
+      <label>What type of media is it?
+        <label>2D
+          <input type="radio" name="type" value="2D" id="2D" checked>
+        </label>
+        <label>OBJ
+          <input type="radio" name="type" value="OBJ" id="OBJ">
+        </label>
+        <label>GLTF
+          <input type="radio" name="type" value="GLTF" id="GLTF">
+        </label>
       </label>
     </div>
-    <!-- TO DO: Handle textures and texture maps -->
+    <div id="2D-block">
+      <div class="form-fields">
+        <label>Upload 2D Media
+          <input type="file" name="2D-media" accept=".gif, .jpg, .jpeg, .png"
+          id="2D-input" required> 
+        </label>
+      </div>
+    </div>
+    <div id="obj-block" disabled hidden>
+      <div class="form-field">
+        <label>Upload Media.obj
+          <input type="file" name="obj-media" accept=".obj" id="obj-input"
+          class="obj-files"> 
+        </label>
+      </div>
+      <div class="form-field">
+        <label>Upload Media.mtl
+          <input type="file" name="obj-mtl" accept=".mtl" id="mtl"
+          class="obj-files"> 
+        </label>
+      </div>
+      <div class="form-field">
+        <label>Upload Obj Texture(s)
+          <input type="file" name="obj-textures" accept=".png, .jpeg, .jpg"
+          id="textures" class="obj-files" multiple disabled> 
+        </label>
+      </div>
+    </div>
+    <div id="gltf-block" disabled hidden>
+      <div class="form-field">
+        <label>Upload Media.gltf
+          <input type="file" name="gltf-media" accept=".gltf" class="gltf-files"> 
+        </label>
+      </div>
+      <div class="form-field">
+      <label>Upload Media.bin
+          <input type="file" name="gltf-bin" accept=".bin" class="gltf-files"> 
+        </label>
+      </div>
+    </div>
     <div class="form-field">
       <label>Media Information
-        <textarea rows="4" name="metadata"
+        <textarea rows="4" name="metadata" id="metadata"
         placeholder="You can edit this on the media's page later."></textarea>
       </label>
     </div>
@@ -40,10 +86,23 @@
     </div>
     <div class="form-field">
       <label>Date of Creation
-        <input type="date" name="creation">
+        <input type="date" name="creation" id="date">
       </label>
     </div>
-    <!-- TO DO: Add thumbnail -->
-    <button class="btn-upload" type="submit">Upload</button>
+    <div class="form-field">
+      <label>Tags
+        <textarea rows="4" name="tags" id="tags"
+        placeholder="Tags delimited by enters (line breaks)"></textarea>
+      </label>
+    </div>
+    <div class="form-field">
+        <label>Thumbnail
+          <input type="file" name="thumbnail" accept=".png, .jpg, .jpeg"
+          id="thumbnail"> 
+        </label>
+      </div>
+    <button class="btn-upload" id="submit" type="submit">Upload</button>
   </form>
+
+  <script src='static/JS/upload-form.js'></script>
 {% endblock %}
