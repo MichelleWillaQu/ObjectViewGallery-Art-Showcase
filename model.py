@@ -49,7 +49,8 @@ class Media(db.Model):
     order = db.Column(db.Integer)
 
     #Relationships
-    user = db.relationship('User', backref=db.backref('owned_media'))
+    user = db.relationship('User', backref=db.backref('owned_media',
+                                                       order_by=order))
     type_of = db.relationship('MediaType', backref=db.backref('all_media'))
     #page = db.relationship('Page', backref=db.backref('media_on'))
     #variable = db.relationship('ReactVar', backref=db.backref('which_media'))
@@ -58,6 +59,23 @@ class Media(db.Model):
         """Provide information of the Media object."""
         return (f"<Media id: {self.media_id} name: {self.media_name} " \
                 f"user: {self.user_id}>")
+
+
+class ObjToMTL(db.Model):
+    """Associated .mtl file with an .obj media"""
+
+    __tablename__ = 'objtomtl'
+
+    objtomtl_key = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    media_id = db.Column(db.Integer, db.ForeignKey('media.media_id'))
+    mtl_url = db.Column(db.Text)
+
+    #Relationships
+    media = db.relationship('Media', backref=db.backref('mtl'))
+
+    def __repr__(self):
+        """Provide information of the ObjToMTL object."""
+        return (f"<ObjToMTL media_id: {self.media_id} url: {self.mtl_url}")
 
 
 # class Page(db.Model):

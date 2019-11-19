@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 from functools import wraps
 from sqlalchemy import func
 from datetime import datetime
-from model import (connect_to_db, db, User, Media, MediaType, 
+from model import (connect_to_db, db, User, Media, MediaType, ObjToMTL,
                    WhichTag, Tag, Like, Following)
 
 import os
@@ -161,24 +161,14 @@ def upload_action():
         flash('You already have art with that name!')
         return redirect('/upload')
 
-    # Rest of form data
-    info = request.form.get('metadata')
-    downloadable = request.form.get('downloadable') == 'true'
-    date = request.form.get('creation')  #YYYY-MM-DD
-    tags = request.form.get('tags')
-    thumbnail = request.form.get('thumbnail')
-
-    # Formatting
-    tag_list = tags.split('\n')
-    # Setting date if no value, else transforming to correct DateTime
-    if date:
-        date = datetime.strptime(date, "%Y-%m-%d")
-    else:
-        date = datetime.today()
-
     # To handle media file upload
+    # Boolean for whether the file has an associated mtl
+    has_mtl = False
     # Check the type of file first
     type_of_file = request.form.get('type');
+    # Make a new directory for media
+    new_dir_path = os.path.join(user.folder_url, name)
+    os.mkdir(new_dir_path)
     if type_of_file == '2D':
         file = request.files['2D-media']  # Gets the object from form
         extension = (file.filename).rsplit('.', 1)[1].lower()
@@ -188,7 +178,7 @@ def upload_action():
         # The media name is unique for the user (using the formatted name)
         filename = name + '.' + extension
         # Save the file in the user's directory
-        file_url = os.path.join(user.folder_url, filename)
+        file_url = os.path.join(new_dir_path, filename)
         file.save(file_url)
     elif type_of_file == 'OBJ':
         file = request.files['obj-media']
@@ -197,22 +187,20 @@ def upload_action():
             flash('Not a valid file. Please follow the accepted file types.')
             return redirect('/upload')
         filename = name + '.' + extension
+        file_url = os.path.join(new_dir_path, filename)
+        file.save(file_url)
         mtl_file = request.files['obj-mtl']
-        if not mtl_file:
-            # No .mtl file given so the .obj file can go in the user folder
-            # alone
-            file_url = os.path.join(user.folder_url, filename)
-            file.save(file_url)
-        else:
-            # Make a directory for the obj + mtl + textures
-            new_dir_path = os.path.join(user.folder_url, name)
-            os.mkdir(new_dir_path)
-            file_url = os.path.join(new_dir_path, filename)
-            file.save(file_url)
-            mtl = os.path.join(new_dir_path, 
+        if mtl_file:
+            mtl_ext = (mtl_file.filename).rsplit('.', 1)[1].lower()
+            if mtl_ext != 'mtl':
+                    flash(f"Not a valid file. Please follow the accepted " \
+                          f"file types.")
+                    return redirect('/upload')
+            mtl_url = os.path.join(new_dir_path, 
                                secure_filename(mtl_file.filename
-                                                       .rsplit('/', 1)[1]))
-            mtl_file.save(mtl)
+                                                       .rsplit('/', 1)[-1]))
+            mtl_file.save(mtl_url)
+            has_mtl = True
             for texture in request.files.getlist('obj-textures'):
                 text_ext = (texture.filename).rsplit('.', 1)[1].lower()
                 if text_ext not in ['jpg', 'jpeg', 'png']:
@@ -220,11 +208,56 @@ def upload_action():
                           f"file types.")
                     return redirect('/upload')
                 #save each texture
+                texture.save(os.path.join(new_dir_path,
+                                          secure_filename(texture.filename)))
+    else: #if type_of_file == 'GLTF'
+        file = request.files['gltf-media']
+        extension = (file.filename).rsplit('.', 1)[1].lower()
+        if extension != 'gltf':
+            flash('Not a valid file. Please follow the accepted file types.')
+            return redirect('/upload')
+        filename = name + '.' + extension
+        gltf_bin = request.files['gltf-bin']
+        bin_ext = (gltf_bin.filename).rsplit('.', 1)[1].lower()
+        if bin_ext != 'bin':
+            flash('Not a valid file. Please follow the accepted file types.')
+            return redirect('/upload')
+        file_url = os.path.join(new_dir_path, filename)
+        file.save(file_url)
+        gltf_bin.save(os.path.join(new_dir_path,
+                                   secure_filename(gltf_bin.filename
+                                                            .rsplit('/', 1)[-1])))
 
+    # Rest of form data
+    info = request.form.get('metadata')
+    downloadable = request.form.get('downloadable') == 'true'
+    date = request.form.get('creation')  #YYYY-MM-DD
+    tags = request.form.get('tags')
+    thumbnail = request.files['thumbnail']
+
+    # Formatting
+    tag_list = tags.split('\n') #TO DO: handle tag validation
+    # Setting date if no value, else transforming to correct DateTime
+    if date:
+        date = datetime.strptime(date, "%Y-%m-%d")
+    else:
+        date = datetime.today()
+    # Handling if no thumbnail input
+    if thumbnail:
+        thumb_ext = (thumbnail.filename).rsplit('.', 1)[1].lower()
+        if thumb_ext not in ['jpg', 'jpeg', 'png']:
+            flash(f"Not a valid file. Please follow the accepted " \
+                  f"file types.")
+            return redirect('/upload') 
+        thumbnail_url = os.path.join(new_dir_path,
+                                     secure_filename(thumbnail.filename))
+        thumbnail.save(thumbnail_url)
+    else:
+        thumbnail_url = None
 
     #Add media to database
     ext_obj = MediaType.query.filter_by(media_ext = extension).one()
-    new_media = Media(media_name = name,  #TO DO: thumb_url, whichTag, tags
+    new_media = Media(media_name = name,
                       meta_info = info,
                       media_url = file_url,
                       is_downloadable = downloadable,
@@ -232,11 +265,12 @@ def upload_action():
                       type_of = ext_obj,
                       user = user,
                       order = len(user.owned_media),
-                      mtl_file = mtl,
-                      thumb_url = thumbnail)
-    else:
-        if file = request.files['']
-        os.mkdir()
+                      thumb_url = thumbnail_url)
+    if has_mtl:
+        new_mtl = ObjToMTL(media = new_media, mtl_url = mtl_url)
+    for tag in tag_list: #TO DO: handle tag validation
+        if tag != '':
+            new_media.tags.append(Tag(tag_name = tag.strip()))
 
     db.session.add(new_media)
     db.session.commit()
@@ -299,7 +333,8 @@ def get_media():
     user = User.query.filter_by(username = username).first()
     #print('background: ', user.background_url)
     media_dict = {}
-    for media in user.owned_media.sort(key=(lambda x: x.order)):
+    # .sort(key=(lambda x: x.order))
+    for media in user.owned_media:
         media_dict[media.media_name] = {'media_name': media.media_name,
                                         'media_url': media.media_url,
                                         'thumb_url': media.thumb_url,
