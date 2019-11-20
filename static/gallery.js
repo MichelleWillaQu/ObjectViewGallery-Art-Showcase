@@ -69,16 +69,16 @@ class Grid extends React.Component {
 
   componentDidMount(){
     const pageElement = document.querySelector('#element');
-    const pageInfo = pageElement.classList;
+    const pageInfo = pageElement.className;
     // console.log(pageInfo);
     // console.log('HI ', pageInfo[0]);
-    $.get('/api/check_current_user.json', {username: pageInfo[0]}, (response) => {
+    $.get('/api/check_current_user.json', {username: pageInfo}, (response) => {
       // console.log('RETURN: ', response.data);
       if(response.data){
         this.setState({userVerified: true});
       }
     });
-    const data = {username: pageInfo[0]}
+    const data = {username: pageInfo}
     $.get('/api/get-media.json', data, (response) => {
       // console.log('BACK: ', response.background_url);
       console.log('MEDIA: ', response.media);

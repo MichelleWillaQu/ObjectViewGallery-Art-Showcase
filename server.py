@@ -278,10 +278,16 @@ def upload_action():
     return redirect('/')
 
 
-@app.route('/settings')  #TO DO
+@app.route('/settings')  #TO DO: JS
 @must_be_logged_in
 def settings():
     return render_template('settings.html')
+
+# @app.route('/settings-action') #TO DO: ALL
+# @must_be_logged_in
+# def settings-action():
+#
+#      return redirect('/')
 
 
 @app.route('/<username>')  #TO DO
@@ -295,6 +301,7 @@ def user(username):
 
 @app.route('/<username>/<media_name>')  #TO DO, CHECK
 def media(username, media_name):
+    """ Individual Media Page """
     user = User.query.filter_by(username = username).first()
     if not user:
         flash('Invalid url')
@@ -307,7 +314,10 @@ def media(username, media_name):
         return redirect('/')
     formatted_name = ' '.join(media.media_name.split('-'))
     if media.type_of.media_ext == 'obj':
-        js_status = 'obj'
+        if media.mtl:
+            js_status = 'obj+mtl'
+        else:
+            js_status = 'obj'
     elif media.type_of.media_ext == 'gltf':
         js_status = 'gltf'
     else:
@@ -315,7 +325,7 @@ def media(username, media_name):
     return render_template('mediapage.html',
                             media=media,
                             formatted_name=formatted_name,
-                            status = js_status)
+                            status=js_status)
 
 
 @app.route('/api/check_current_user.json', methods=['GET'])

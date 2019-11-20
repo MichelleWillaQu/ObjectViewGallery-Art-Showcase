@@ -4,27 +4,78 @@
   <title>Settings</title>
 {% endblock %}
 
-
-
 {% block body %}
-  <form action='/login-action' method="GET" class="form-login">
-    <h3 class="form-heading">Please Login</h3>
-    <div class="form-field">
-      <label>Email Address
-        <input type="text" name="email" required autofocus>
+  <form action='/settings-action' method="POST" class="form-login">
+    <h3 class="form-heading">Change settings</h3>
+    <button class="email collapsible">Change My Email Address</button>
+    <div class="form-field email content">
+      <div>
+        <label>Old Email Address
+          <input type="text" name="old-email" disabled>
+        </label>
+      </div>
+      <div>
+        <label>New Email Address
+          <input type="text" name="new-email1" disabled>
+        </label>
+      </div>
+      <div>
+        <label>Confirm New Email Address
+          <input type="text" name="new-email2" disabled>
+        </label>
+      </div>
+    </div>
+    <button class="form-field password collapsible">Change My Password</button>
+    <div class="password content">
+      <div>
+        <label>Old Password
+          <input type="text" name="old-password" disabled>
+        </label>
+      </div>
+      <div>
+        <label>New Password
+          <input type="text" name="new-password1" disabled>
+        </label>
+      </div>
+      <div>
+        <label>Confirm New Password
+          <input type="text" name="new-password2" disabled>
+        </label>
+      </div>
+      <button class="btn-password" type="submit">Save</button>
+    </div>
+    <div class="form-field bio">
+      <label>Bio
+        <textarea rows="4" name="bio"
+        placeholder="Who are you?"></textarea>
       </label>
     </div>
-    <div class="form-field">
-      <label>Password
-        <input type="password" name="password" required>
-      </label>
-    </div>
-    <div class="form-field">
+    <div class="form-field avatar">
       <label>Upload Avatar
-        <input type="file" name="media"
-        accept=".gif, .jpg, .jpeg, .png" required>
+        <input type="file" name="avatar"
+        accept=".gif, .jpg, .jpeg, .png">
       </label>
     </div>
-    <button class="btn-login" type="submit">Save</button>
+    <div class="form-field background">
+      <label>Select a Theme For Your Gallery
+        <select>
+          <option value="/static/themes/circles.jpg">Circles</option>
+          <option value="/static/themes/cosmos.jpg">Cosmos</option>
+          <option value="/static/themes/gravel.jpg">Gravel</option>
+          <option value="/static/themes/paint.jpg">Paint</option>
+          <option value="/static/themes/parchment.png">Parchment
+          </option>
+          <option value="/static/themes/wood.jpg">Wood</option>
+          <option value="other">Upload an Image</option>
+      </label>
+      <div class="form-field background" id="background-block"
+      disabled>
+        <label>Upload a Theme Image
+          <input type="file" name="background"
+          accept=".gif, .jpg, .jpeg, .png">
+        </label>
+      </div>
+    </div>
+    <button class="btn-settings" type="submit">Save</button>
   </form>
 {% endblock %}
