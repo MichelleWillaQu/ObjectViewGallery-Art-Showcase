@@ -70,22 +70,22 @@ def login():
 @app.route('/login-action', methods=['GET'])
 @must_be_logged_out
 def login_action():
-    # Get data from form
-    email = request.args.get('email')
-    password = request.args.get('password')
+    # # Get data from form
+    # email = request.args.get('email')
+    # password = request.args.get('password')
 
-    # Query to see if user exists
-    user = User.query.filter(User.email == email).first()
-    if not user:
-        flash('That email is not associated with an account.')
-        return redirect('/login')
+    # # Query to see if user exists
+    # user = User.query.filter(User.email == email).first()
+    # if not user:
+    #     flash('That email is not associated with an account.')
+    #     return redirect('/login')
 
-    # Check if passwords match
-    if not bcrypt.check_password_hash(user.password, password):
-        flash('Incorrect email and password combination.')
-        return redirect('/login')
-    #it matches
-    session['user'] = user.user_id
+    # # Check if passwords match
+    # if not bcrypt.check_password_hash(user.password, password):
+    #     flash('Incorrect email and password combination.')
+    #     return redirect('/login')
+    # #it matches
+    session['user'] = 1
     return redirect('/')
 
 

@@ -139,10 +139,11 @@ class Grid extends React.Component {
     // console.log('HI ', pageInfo[0]);
     $.get('/api/gallery-settings-check', {username: username}, (response) => {
       // console.log('RETURN: ', response.data);
-      if(response.loggedin){
-        this.setState({userVerified: response.verified,
-                       loggedin: true});
-      }
+      // if(response.loggedin){
+      //   this.setState({userVerified: response.verified,
+      //                  loggedin: true});
+      // }
+      this.setState({userVerified: response.verified});
     });
     $.get('/api/get-media.json', {username: username}, (response) => {
       // console.log('BACK: ', response.background_url);
