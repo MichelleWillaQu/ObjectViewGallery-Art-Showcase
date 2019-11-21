@@ -50,7 +50,8 @@ class Media(db.Model):
 
     #Relationships
     user = db.relationship('User', backref=db.backref('owned_media',
-                                                       order_by=order))
+                                                       order_by="Media.order",
+                                                       primaryjoin="User.user_id==Media.user_id"))
     type_of = db.relationship('MediaType', backref=db.backref('all_media'))
     #page = db.relationship('Page', backref=db.backref('media_on'))
     #variable = db.relationship('ReactVar', backref=db.backref('which_media'))

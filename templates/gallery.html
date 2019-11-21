@@ -3,15 +3,22 @@
 {% block head %}
   <title>{user.username}</title>
   <style> /*TO DO: MOVE TO CSS; */
+    /*#thisImg{
+   cursor: pointer;
+    }*/
     body{ /*TO DO: CHANGE DEPENDING ON PAGE */
       background-image: url({{user.background_url}});
     }
-    .mediaElement{
+    .mediaElement, .media{
       box-sizing: border-box;
       border: 1px solid transparent;
       display: flex;
       justify-content: center;
       align-items: center;
+    }
+    .media{
+      flex: 0 0 100%;
+      height: 100%;
     }
 
     @media(min-width: 1200px){ /* XL */
@@ -45,7 +52,7 @@
     @media(max-width: 576px){ /* XS */
     .mediaElement{
         flex: 0 0 100%;
-        padding-top: 100%; /* aspect ration */
+        height: 200px; /* aspect ration */
       }
     }
 

@@ -19,7 +19,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
 # Secure_filename
-UPLOAD_FOLDER = 'static/uploads'
+UPLOAD_FOLDER = '/static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Required to use Flask sessions and the debug toolbar
@@ -270,7 +270,11 @@ def upload_action():
         new_mtl = ObjToMTL(media = new_media, mtl_url = mtl_url)
     for tag in tag_list: #TO DO: handle tag validation
         if tag != '':
-            new_media.tags.append(Tag(tag_name = tag.strip()))
+            tag_existing = Tag.query.filter_by(tag_name = tag.strip()).first()
+            if not tag_existing:
+                new_media.tags.append(Tag(tag_name = tag.strip()))
+            else:
+                new_media.tags.append(tag_existing)
 
     db.session.add(new_media)
     db.session.commit()
@@ -328,13 +332,16 @@ def media(username, media_name):
                             status=js_status)
 
 
-@app.route('/api/check_current_user.json', methods=['GET'])
+@app.route('/api/gallery-settings-check.json', methods=['GET'])
 def check_current_user():
     username = request.args.get('username')
     if not session.get('user'):
-        return jsonify({'data': False})
+        return jsonify({'loggedin': False})
     user = User.query.filter_by(user_id = session['user']).first()
-    return jsonify({'data': user.username == username})
+    gallery_user = User.query.filter_by(username = username).first()
+    return jsonify({'user': True,
+                    'verified': user.username == username,
+                    'following': "" })  #TO DO: gallery_user to user following
 
 
 @app.route('/api/get-media.json', methods=['GET'])
@@ -342,23 +349,31 @@ def get_media():
     username = request.args.get('username')
     user = User.query.filter_by(username = username).first()
     #print('background: ', user.background_url)
-    media_dict = {}
+    media_lst = []
     # .sort(key=(lambda x: x.order))
     for media in user.owned_media:
-        media_dict[media.media_name] = {'media_name': media.media_name,
-                                        'media_url': media.media_url,
-                                        'thumb_url': media.thumb_url,
-                                        'type': media.type_of.media_ext,
-                                        'order': media.order}
-    print('media: ', media_dict)
+        media_lst.append({'media_id': media.media_id,
+                          'media_name': media.media_name,
+                          'media_url': media.media_url,
+                          'thumb_url': media.thumb_url,
+                          'type': media.type_of.media_ext,
+                          'order': media.order})
+    #print('media: ', media_dict)
     return jsonify({'background_url': user.background_url,
-                    'media': media_dict}) #TO DO: fix for page
+                    'media': media_lst}) #TO DO: fix for page
 
 
 @app.route('/api/post-media-changes', methods=['POST'])
 @must_be_logged_in
 def post_media_changes():
-    return ''
+    data =  request.get_json()
+    for media in data['postData']:
+        entry = Media.query.filter_by(media_id = media['id']).first()
+        if not entry:
+            return "ERROR"
+        entry.order = media['order']
+    db.session.commit()
+    return "CONFIRMED"
 
 
 # @app.route('/api/upload-name-check.json', methods=['GET'])
