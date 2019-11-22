@@ -118,8 +118,11 @@ class Grid extends React.Component {
       dataType: 'json',
       success: (response) => {
         console.log(response);
-        if (response === "CONFIRMED"){
+        if (response === "FOLLOWED"){
           alert('You are now a follower!');
+        }
+        else if (response === "UNFOLLOWED"){
+          alert(`You have unfollowed ${this.state.username}.`)
         }
         else {
           alert('Could not follow. Please try again later.');

@@ -8,7 +8,7 @@ import {MtlObjBridge} from 'three/examples/jsm/loaders/obj2/bridge/MtlObjBridge.
 // Following the tutorial from
 // https://threejsfundamentals.org/threejs/lessons/threejs-load-obj.html
 
-const canvas = document.querySelector('#obj'); //Find canvas
+const canvas = document.querySelector('#obj+mtl'); //Find canvas
 const [url, mtl_url] = canvas.classList;
 
 // Takes all the data provided and renders it to canvas

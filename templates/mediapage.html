@@ -3,8 +3,8 @@
 {% block head %}
   <title>{{formatted_name}}</title>
   <style>
-    canvas {
-      width: 80vw;
+    canvas, img {
+      width: 70vw;
       height: 70vh;
     }
   </style> <!-- TO DO: moved to CSS later -->
@@ -13,24 +13,28 @@
 {% block body %}
   {% if status == None %}
     <h1>{{formatted_name}}</h1>
-    <img src={{media.media_url}}>
+    <img src="{{'/' + media.media_url}}" class="{{'/' + media.media_url}}"
+    id="image">
+    <br>
+    Themes<div id="colors"></div>
+    <script src="/static/JS/vibrant.js"></script>
   {% endif %}
 
   {% if status == 'obj' %}
     <h1>{{formatted_name}}</h1>
-    <canvas class={{media.media_url}} id="obj"></canvas>
+    <canvas class="{{'/' + media.media_url}}" id="obj"></canvas>
     <script src="/static/JS/obj-3D.js"></script>
   {% endif %}
 
   {% if status == 'obj+mtl' %}
     <h1>{{formatted_name}}</h1>
-    <canvas class='{{media.media_url, media.mtl.mtl_url}}' id="obj"></canvas>
+    <canvas class="{{'/' + media.media_url, '/' + media.mtl.mtl_url}}" id="obj+mtl"></canvas>
     <script src="/static/JS/obj-3D-mtl.js"></script>
   {% endif %}
 
   {% if status == 'gltf' %}
     <h1>{{formatted_name}}</h1>
-    <canvas class={{media.media_url}} id="gltf"></canvas>
+    <canvas class="{{'/' + media.media_url}}" id="gltf"></canvas>
     <script src="/static/JS/gltf-3D.js"></script>
   {% endif %}
 {% endblock %}

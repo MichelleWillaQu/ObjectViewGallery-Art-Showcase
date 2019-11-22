@@ -19,7 +19,7 @@ app = Flask(__name__)
 bcrypt = Bcrypt(app)
 
 # Set the initial upload location
-UPLOAD_FOLDER = '/static/uploads'
+UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 # Required to use Flask sessions and the debug toolbar
@@ -298,10 +298,11 @@ def settings():
 @app.route('/<username>')  #TO DO
 def user(username):
     user = User.query.filter_by(username = username).first()
+    print('WHO? ', username, '\n', "USER: ", user)
     if not user:
-        flash('Invalid url')
+        flash('G Invalid url')
         return redirect('/')
-    return render_template('gallery.html', user=user, page_info=[user.username])
+    return render_template('gallery.html', user=user, username=user.username)
 
 
 @app.route('/<username>/<media_name>')  #TO DO, CHECK
@@ -309,13 +310,13 @@ def media(username, media_name):
     """ Individual Media Page """
     user = User.query.filter_by(username = username).first()
     if not user:
-        flash('Invalid url')
+        flash('P Invalid url')
         return redirect('/')
     media = (Media.query.filter(Media.user_id == user.user_id,
                                Media.media_name == media_name)
                         .first())
     if not media:
-        flash('Invalid url')
+        flash('H Invalid url')
         return redirect('/')
     formatted_name = ' '.join(media.media_name.split('-'))
     if media.type_of.media_ext == 'obj':
@@ -371,11 +372,13 @@ def follow_changes():
         if not follow:
             return jsonify("ERROR")
         db.session.delete(follow)
+        message = "FOLLOWED"
     else:  # If the user is not following
         user = User.query.filter_by(user_id = session['user']).first()
         user.following.append(Follow(user_followed = gallery_user))
+        message = "UNFOLLOWED"
     db.session.commit()
-    return jsonify("FOLLOWED")
+    return jsonify(message)
 
 
 @app.route('/api/get-media.json', methods=['GET'])
