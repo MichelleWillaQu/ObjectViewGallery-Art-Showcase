@@ -139,7 +139,8 @@ class Grid extends React.Component {
       console.log('RETURN: ', response);
       if(response.loggedin){
         this.setState({userVerified: response.verified,
-                       loggedin: true});
+                       loggedin: true,
+                       following: response.following});
       }
     });
     $.get('/api/get-media.json', {username: username}, (response) => {

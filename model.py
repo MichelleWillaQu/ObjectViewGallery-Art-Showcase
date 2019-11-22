@@ -178,10 +178,10 @@ class Like(db.Model):
                 f"user_id: {self.user_id}>")
 
 
-class Following(db.Model):
+class Follow(db.Model):
     """A following stores information on which users have liked a certain user."""
 
-    __tablename__ = 'following'
+    __tablename__ = 'follows'
 
     f_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_followed_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))

@@ -1,5 +1,4 @@
-from model import (User, Media, MediaType, WhichTag, 
-                   Tag, Like, Following)
+from model import (User, Media, MediaType, WhichTag, Tag, Like, Follow)
 from model import connect_to_db, db
 from server import app
 from datetime import datetime

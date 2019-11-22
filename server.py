@@ -5,7 +5,7 @@ from functools import wraps
 from sqlalchemy import func
 from datetime import datetime
 from model import (connect_to_db, db, User, Media, MediaType, ObjToMTL,
-                   WhichTag, Tag, Like, Following)
+                   WhichTag, Tag, Like, Follow)
 
 import os
 from werkzeug.utils import secure_filename
@@ -236,12 +236,13 @@ def upload_action():
     thumbnail = request.files['thumbnail']
 
     # Formatting
-    tag_list = tags.split('\n') #TO DO: handle tag validation
+    tag_list = tags.split('\n')
     # Setting date if no value, else transforming to correct DateTime
     if date:
         date = datetime.strptime(date, "%Y-%m-%d")
     else:
         date = datetime.today()
+
     # Handling if no thumbnail input
     if thumbnail:
         thumb_ext = (thumbnail.filename).rsplit('.', 1)[1].lower()
@@ -331,17 +332,50 @@ def media(username, media_name):
                             formatted_name=formatted_name,
                             status=js_status)
 
+############################################################
 
 @app.route('/api/gallery-settings-check.json', methods=['GET'])
 def check_current_user():
     username = request.args.get('username')
     if not session.get('user'):
         return jsonify({'loggedin': False})
-    user = User.query.filter_by(user_id = session['user']).first()
     gallery_user = User.query.filter_by(username = username).first()
+    if session['user'] == gallery_user.user_id:
+        following = False
+        verified = True
+    else:
+        verified = False
+        follow = (Follow.query.filter(Follow.user_followed_id == gallery_user.user_id,
+                                     Follow.follower_id == session['user'])
+                             .first())
+        if not follow:
+            following = False
+        else:
+            following = True
     return jsonify({'loggedin': True,
-                    'verified': user.username == username,
-                    'following': "" })  #TO DO: gallery_user to user following
+                    'verified': verified,
+                    'following': following})
+
+@app.route('/api/follow-changes', methods=['POST'])
+@must_be_logged_in
+def follow_changes():
+    data =  request.get_json()
+    gallery_user = User.query.filter_by(username = data['postData'][1]).first()
+    # Short-circuit check for errors
+    if not gallery_user or (session['user'] == gallery_user.user_id):
+        return jsonify("ERROR")
+    if data['postData'][0]:  # If the user is following
+        follow = (Follow.query.filter(Follow.user_followed_id == gallery_user.user_id,
+                                     Follow.follower_id == session['user'])
+                              .first())
+        if not follow:
+            return jsonify("ERROR")
+        db.session.delete(follow)
+    else:  # If the user is not following
+        user = User.query.filter_by(user_id = session['user']).first()
+        user.following.append(Follow(user_followed = gallery_user))
+    db.session.commit()
+    return jsonify("FOLLOWED")
 
 
 @app.route('/api/get-media.json', methods=['GET'])
@@ -357,12 +391,12 @@ def get_media():
                           'thumb_url': media.thumb_url,
                           'type': media.type_of.media_ext,
                           'order': media.order})
-    return jsonify({'media': media_lst}) #TO DO: fix for page
-
+    return jsonify({'media': media_lst})
 
 @app.route('/api/post-media-changes', methods=['POST'])
 @must_be_logged_in
 def post_media_changes():
+    # TO DO: PASS USERNAME TOO
     data =  request.get_json()
     for media in data['postData']:
         entry = Media.query.filter_by(media_id = media['id']).first()
@@ -373,16 +407,51 @@ def post_media_changes():
     return jsonify("CONFIRMED")
 
 
-# @app.route('/api/upload-name-check.json', methods=['GET'])
+# @app.route('/api/get-kudos.json', methods=['GET'])
 # @must_be_logged_in
-# def upload_name_check():
+# def get_kudos():
 #     return ''
+
+# @app.route('/api/post-kudos.json', methods=['POST])
+# @must_be_logged_in
+# def post_kudos():
+#     return ''
+
+
+@app.route('/api/upload-name-check.json', methods=['GET'])
+@must_be_logged_in
+def upload_name_check():
+    name_to_check = request.args.get('checkName')
+    user = User.query.filter_by(user_id = session['user']).first()
+    entry = Media.query.filter_by(media_name = name_to_check).first()
+    if entry:  # If there is already an entry with the same name
+        return False
+    return True
 
 
 # @app.route('/api/signup-check.json', methods=['GET'])
 # @must_be_logged_out
 # def signup_check():
 #     return ''
+
+
+@app.route('/api/change-media-data', methods=['POST'])
+@must_be_logged_in
+def change_media_data():
+    media_id = request.form.get('mediaId')
+    media = Media.query.filter_by(media_id = media_id).first()
+    user = User.query.filter_by(user_id = session['user']).first()
+    if media.user != user:  # If there is already an entry with the same name
+        return jsonify("ERROR")
+    # Get the rest of the data
+    description = request.form.get('meta-change')
+    tags = request.form.get('tags-change')
+    is_downloadable = request.form.get('downloadable-change')
+    date = request.form.get('date-change')  #TO DO: PASS NONE if no change
+    thumbnail = request.files['thumb-change'] #TO DO: HANDLE
+    name = request.form.get('name-change') #TO DO: HANDLE via upload-name-check
+    # HANDLE CHANGES
+    return jsonify("CONFIRMED")
 
 
 if __name__ == "__main__":
