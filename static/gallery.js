@@ -16,10 +16,6 @@ const ItemTypes = {
 class Grid extends React.Component {
   constructor(props){
     super(props);
-    //tester: items: [{name: 'Hi', order: 0},
-                 // {name: 'Hello', order: 1},
-                 // {name: 'Welcome', order: 2},
-                 // {name: 'Konichiwa', order: 3}]
     this.state = {isMounted: false,
                   username: "",
                   userVerified: false,
@@ -79,7 +75,6 @@ class Grid extends React.Component {
   }
 
   editClick(){
-    //TO DO: Post to Server
     const currentState = this.state.editMode;
     if (currentState){  // If currently in Edit Mode
       const data = {postData: this.state.items};

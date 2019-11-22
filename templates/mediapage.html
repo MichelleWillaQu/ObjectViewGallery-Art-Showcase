@@ -3,17 +3,22 @@
 {% block head %}
   <title>{{formatted_name}}</title>
   <style>
-    canvas, img {
+    img {
       width: 70vw;
       height: 70vh;
     }
-  </style> <!-- TO DO: moved to CSS later -->
+    canvas{
+      /* If this is not made important, the JS will overwrite the CSS */
+      width: 70vw !important;
+      height: 70vh !important;
+    }
+  </style> <!-- TO DO: move to CSS later -->
 {% endblock %}
 
 {% block body %}
   {% if status == None %}
     <h1>{{formatted_name}}</h1>
-    <img src="{{'/' + media.media_url}}" class="{{'/' + media.media_url}}"
+    <img src={{media.media_url}} class="{{media.media_url}}"
     id="image">
     <br>
     Themes<div id="colors"></div>
@@ -22,19 +27,19 @@
 
   {% if status == 'obj' %}
     <h1>{{formatted_name}}</h1>
-    <canvas class="{{'/' + media.media_url}}" id="obj"></canvas>
+    <canvas class={{media.media_url}} id="obj"></canvas>
     <script src="/static/JS/obj-3D.js"></script>
   {% endif %}
 
   {% if status == 'obj+mtl' %}
     <h1>{{formatted_name}}</h1>
-    <canvas class="{{'/' + media.media_url, '/' + media.mtl.mtl_url}}" id="obj+mtl"></canvas>
+    <canvas class="{{media.media_url}} {{media.mtl.mtl_url}}" id="objMtl"></canvas>
     <script src="/static/JS/obj-3D-mtl.js"></script>
   {% endif %}
 
   {% if status == 'gltf' %}
     <h1>{{formatted_name}}</h1>
-    <canvas class="{{'/' + media.media_url}}" id="gltf"></canvas>
+    <canvas class={{media.media_url}} id="gltf"></canvas>
     <script src="/static/JS/gltf-3D.js"></script>
   {% endif %}
 {% endblock %}

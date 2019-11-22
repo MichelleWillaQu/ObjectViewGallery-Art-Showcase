@@ -72,7 +72,7 @@ class ObjToMTL(db.Model):
     mtl_url = db.Column(db.Text)
 
     #Relationships
-    media = db.relationship('Media', backref=db.backref('mtl'))
+    media = db.relationship('Media', backref=db.backref('mtl', uselist=False))
 
     def __repr__(self):
         """Provide information of the ObjToMTL object."""

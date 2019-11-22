@@ -8,7 +8,7 @@ import {MtlObjBridge} from 'three/examples/jsm/loaders/obj2/bridge/MtlObjBridge.
 // Following the tutorial from
 // https://threejsfundamentals.org/threejs/lessons/threejs-load-obj.html
 
-const canvas = document.querySelector('#obj+mtl'); //Find canvas
+const canvas = document.querySelector('#objMtl'); //Find canvas
 const [url, mtl_url] = canvas.classList;
 
 // Takes all the data provided and renders it to canvas
@@ -19,12 +19,13 @@ document.body.appendChild(renderer.domElement);
 // Scene: root of a form of scene graph; everything needs to be added to
 // a scene
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x7F7F7F);  // gray
+scene.background = new THREE.Color(0x7F7F7F);  // Gray
 
 // Get a camera
 const fov = 45;  // Field of view (in vertical dimension in degrees)
-const aspect = 2;   // display aspect (width/height); default (300x150px)
-const near = 0.1;  // space in front of camera that will be rendered (start)
+// Display aspect (width/height); default (300x150px)
+const aspect = canvas.clientWidth / canvas.clientHeight;
+const near = 0.1;  // Space in front of camera that will be rendered (start)
 // Space in front of camera that will be rendered (end), aka draw distance
 const far = 100; 
 // All 4 settings = frustum (name of a 3D shape that looks like a pyramid
@@ -109,14 +110,14 @@ mtlLoader.load(mtl_url, (mtlParseResult) => {
     // Does not cast shadows
     const skyColor = 0xFFFFFF;  // White
     const groundColor = 0x000000;  // Black
-    const intensity = 2;
+    const intensity = 1;
     const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
     scene.add(light);
   }
 
   {
     const color = 0xFFFFFF;  // White
-    const intensity = 1;
+    const intensity = 0.5;
     const light = new THREE.DirectionalLight(color, intensity);
     light.position.set(5, 10, 2);
     scene.add(light);
@@ -125,8 +126,26 @@ mtlLoader.load(mtl_url, (mtlParseResult) => {
 }
 
 
+// Check if the camera needs to be adjusted
+function resizeRendererToDisplaySize(renderer) {
+    const canvas = renderer.domElement;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+}
+
 // Render loop - anything updated will cause the browser to re-render
 function render() {
+  // Dynamically resize the camera to the CSS
+  if (resizeRendererToDisplaySize(renderer)) {
+    const canvas = renderer.domElement;
+    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+    camera.updateProjectionMatrix();
+  }
   renderer.render(scene, camera);
   requestAnimationFrame(render);
 }

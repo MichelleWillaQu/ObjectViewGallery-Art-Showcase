@@ -7,8 +7,8 @@ import $ from 'jquery';
 // props affect the dynamic state of a DOM without changing the HTML attribute
 const handleRadioButtonClick = (buttonStr) => {
   if (buttonStr === '2D'){
-    $('#2D-block').prop({'disabled': false, 'hidden': false});
-    $('#2D-input').prop('required', true);
+    $('#twoD-block').prop({'disabled': false, 'hidden': false});
+    $('#twoD-input').prop('required', true);
     $('#obj-block').prop({'disabled': true, 'hidden': true});
     $('.obj-files').prop('required', false);
     $('.obj-files').val('');
@@ -18,9 +18,9 @@ const handleRadioButtonClick = (buttonStr) => {
   }
 
   else if (buttonStr === 'OBJ'){
-    $('#2D-block').prop({'disabled': true, 'hidden': true});
-    $('#2D-input').prop('required', false);
-    $('#2D-input').val('');
+    $('#twoD-block').prop({'disabled': true, 'hidden': true});
+    $('#twoD-input').prop('required', false);
+    $('#twoD-input').val('');
     $('#obj-block').prop({'disabled': false, 'hidden': false});
     $('#obj-input').prop('required', true);
     $('#gltf-block').prop({'disabled': true, 'hidden': true});
@@ -29,9 +29,9 @@ const handleRadioButtonClick = (buttonStr) => {
   }
 
   else { //GLTF
-    $('#2D-block').prop({'disabled': true, 'hidden': true});
-    $('#2D-input').prop('required', false);
-    $('#2D-input').val('');
+    $('#twoD-block').prop({'disabled': true, 'hidden': true});
+    $('#twoD-input').prop('required', false);
+    $('#twoD-input').val('');
     $('#obj-block').prop({'disabled': true, 'hidden': true});
     $('.obj-files').prop('required', false);
     $('.obj-files').val('');
@@ -40,7 +40,7 @@ const handleRadioButtonClick = (buttonStr) => {
   }
 };
 
-$('#2D').on('click', () => handleRadioButtonClick('2D'));
+$('#twoD').on('click', () => handleRadioButtonClick('2D'));
 $('#OBJ').on('click', () => handleRadioButtonClick('OBJ'));
 $('#GLTF').on('click', () => handleRadioButtonClick('GLTF'));
 

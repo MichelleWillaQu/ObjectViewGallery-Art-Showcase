@@ -170,7 +170,7 @@ def upload_action():
     new_dir_path = os.path.join(user.folder_url, name)
     os.mkdir(new_dir_path)
     if type_of_file == '2D':
-        file = request.files['2D-media']  # Gets the object from form
+        file = request.files['twoD-media']  # Gets the object from form
         extension = (file.filename).rsplit('.', 1)[1].lower()
         if extension not in ['jpg', 'jpeg', 'png']:
             flash('Not a valid file. Please follow the accepted file types.')
@@ -196,9 +196,8 @@ def upload_action():
                     flash(f"Not a valid file. Please follow the accepted " \
                           f"file types.")
                     return redirect('/upload')
-            mtl_url = os.path.join(new_dir_path, 
-                               secure_filename(mtl_file.filename
-                                                       .rsplit('/', 1)[-1]))
+            mtl_url = os.path.join(new_dir_path, (mtl_file.filename
+                                                          .rsplit('/', 1)[-1]))
             mtl_file.save(mtl_url)
             has_mtl = True
             for texture in request.files.getlist('obj-textures'):
@@ -208,8 +207,8 @@ def upload_action():
                           f"file types.")
                     return redirect('/upload')
                 #save each texture
-                texture.save(os.path.join(new_dir_path,
-                                          secure_filename(texture.filename)))
+                texture.save(os.path.join(new_dir_path, (texture.filename
+                                                                .rsplit('/', 1)[-1])))
     else: #if type_of_file == 'GLTF'
         file = request.files['gltf-media']
         extension = (file.filename).rsplit('.', 1)[1].lower()
@@ -224,9 +223,8 @@ def upload_action():
             return redirect('/upload')
         file_url = os.path.join(new_dir_path, filename)
         file.save(file_url)
-        gltf_bin.save(os.path.join(new_dir_path,
-                                   secure_filename(gltf_bin.filename
-                                                            .rsplit('/', 1)[-1])))
+        gltf_bin.save(os.path.join(new_dir_path, (gltf_bin.filename
+                                                          .rsplit('/', 1)[-1])))
 
     # Rest of form data
     info = request.form.get('metadata')
@@ -260,7 +258,7 @@ def upload_action():
     ext_obj = MediaType.query.filter_by(media_ext = extension).one()
     new_media = Media(media_name = name,
                       meta_info = info,
-                      media_url = file_url,
+                      media_url = ('/' + file_url),
                       is_downloadable = downloadable,
                       date_created = date,
                       type_of = ext_obj,
@@ -268,7 +266,7 @@ def upload_action():
                       order = len(user.owned_media),
                       thumb_url = thumbnail_url)
     if has_mtl:
-        new_mtl = ObjToMTL(media = new_media, mtl_url = mtl_url)
+        new_mtl = ObjToMTL(media = new_media, mtl_url = ('/' + mtl_url))
     for tag in tag_list: #TO DO: handle tag validation
         if tag != '':
             tag_existing = Tag.query.filter_by(tag_name = tag.strip()).first()
@@ -295,12 +293,11 @@ def settings():
 #      return redirect('/')
 
 
-@app.route('/<username>')  #TO DO
+@app.route('/gallery/<username>')  #TO DO
 def user(username):
     user = User.query.filter_by(username = username).first()
-    print('WHO? ', username, '\n', "USER: ", user)
     if not user:
-        flash('G Invalid url')
+        flash('Invalid url')
         return redirect('/')
     return render_template('gallery.html', user=user, username=user.username)
 
@@ -310,13 +307,13 @@ def media(username, media_name):
     """ Individual Media Page """
     user = User.query.filter_by(username = username).first()
     if not user:
-        flash('P Invalid url')
+        flash('Invalid url')
         return redirect('/')
     media = (Media.query.filter(Media.user_id == user.user_id,
                                Media.media_name == media_name)
                         .first())
     if not media:
-        flash('H Invalid url')
+        flash('Invalid url')
         return redirect('/')
     formatted_name = ' '.join(media.media_name.split('-'))
     if media.type_of.media_ext == 'obj':
