@@ -135,18 +135,14 @@ class Grid extends React.Component {
     const pageElement = document.querySelector('#element');
     const username = pageElement.className;
     this.setState({username: username});
-    // console.log(pageInfo);
-    // console.log('HI ', pageInfo[0]);
-    $.get('/api/gallery-settings-check', {username: username}, (response) => {
-      // console.log('RETURN: ', response.data);
-      // if(response.loggedin){
-      //   this.setState({userVerified: response.verified,
-      //                  loggedin: true});
-      // }
-      this.setState({userVerified: response.verified});
+    $.get('/api/gallery-settings-check.json', {username: username}, (response) => {
+      console.log('RETURN: ', response);
+      if(response.loggedin){
+        this.setState({userVerified: response.verified,
+                       loggedin: true});
+      }
     });
     $.get('/api/get-media.json', {username: username}, (response) => {
-      // console.log('BACK: ', response.background_url);
       console.log('MEDIA: ', response.media);
       const updatedItems = [];
       let dimensions = '';
@@ -171,7 +167,7 @@ class Grid extends React.Component {
             url = item.media_url;
           }
         }
-        else {//TO DO: handle gifs
+        else {  //OBJ     //TO DO: handle gifs
           if (item.thumb_url){
             dimensions = ItemTypes.TWOD;
             url = item.thumb_url;
@@ -240,24 +236,6 @@ class Grid extends React.Component {
 }
 
 
-// class MediaWrapper extends React.Component {
-//   // a row of media
-//   render(){
-//     // flex is the shorthand for (grow, shrink, and basis) 
-//     // box-sizing: border-box specifies to account for border and padding in this
-//     // element's width and height
-//     return(
-//       <div className="wrapper" style={{flex: '0 0 20%',
-//                                        display: 'flex',
-//                                        justifyContent: 'center',
-//                                        alignItems: 'stretch',
-//                                        boxSizing: 'border-box'}}>
-//       </div>
-//     );
-//   }
-// }
-
-
 function TwoDMedia(props) {
   const reference = useRef(null);
   const [{isDragging}, drag] = useDrag({
@@ -282,7 +260,7 @@ function TwoDMedia(props) {
       // console.log("Hovered over item with order: ", props.order);
     }
   });
-  //initialize drag and drop on component
+  // Initialize drag and drop reference component
   drag(drop(reference))
   // flex-grow will make the div take up that proportion of the wrapper with
   // respect to other media (flexGrow: '1')

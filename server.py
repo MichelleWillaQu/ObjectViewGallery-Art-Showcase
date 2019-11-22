@@ -18,7 +18,7 @@ app = Flask(__name__)
 # Bcrypt
 bcrypt = Bcrypt(app)
 
-# Secure_filename
+# Set the initial upload location
 UPLOAD_FOLDER = '/static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
@@ -69,23 +69,23 @@ def login():
 
 @app.route('/login-action', methods=['GET'])
 @must_be_logged_out
-def login_action():
-    # # Get data from form
-    # email = request.args.get('email')
-    # password = request.args.get('password')
+def login_action(): #TO CHANGE BACK
+    # Get data from form
+    email = request.args.get('email')
+    password = request.args.get('password')
 
-    # # Query to see if user exists
-    # user = User.query.filter(User.email == email).first()
-    # if not user:
-    #     flash('That email is not associated with an account.')
-    #     return redirect('/login')
+    # Query to see if user exists
+    user = User.query.filter(User.email == email).first()
+    if not user:
+        flash('That email is not associated with an account.')
+        return redirect('/login')
 
-    # # Check if passwords match
-    # if not bcrypt.check_password_hash(user.password, password):
-    #     flash('Incorrect email and password combination.')
-    #     return redirect('/login')
-    # #it matches
-    session['user'] = 1
+    # Check if passwords match
+    if not bcrypt.check_password_hash(user.password, password):
+        flash('Incorrect email and password combination.')
+        return redirect('/login')
+    # It matches
+    session['user'] = user.user_id
     return redirect('/')
 
 
@@ -339,7 +339,7 @@ def check_current_user():
         return jsonify({'loggedin': False})
     user = User.query.filter_by(user_id = session['user']).first()
     gallery_user = User.query.filter_by(username = username).first()
-    return jsonify({'user': True,
+    return jsonify({'loggedin': True,
                     'verified': user.username == username,
                     'following': "" })  #TO DO: gallery_user to user following
 
@@ -348,9 +348,8 @@ def check_current_user():
 def get_media():
     username = request.args.get('username')
     user = User.query.filter_by(username = username).first()
-    #print('background: ', user.background_url)
     media_lst = []
-    # .sort(key=(lambda x: x.order))
+    # .sort(key=(lambda x: x.order)) #CHECK
     for media in user.owned_media:
         media_lst.append({'media_id': media.media_id,
                           'media_name': media.media_name,
@@ -358,9 +357,7 @@ def get_media():
                           'thumb_url': media.thumb_url,
                           'type': media.type_of.media_ext,
                           'order': media.order})
-    #print('media: ', media_dict)
-    return jsonify({'background_url': user.background_url,
-                    'media': media_lst}) #TO DO: fix for page
+    return jsonify({'media': media_lst}) #TO DO: fix for page
 
 
 @app.route('/api/post-media-changes', methods=['POST'])
@@ -370,10 +367,10 @@ def post_media_changes():
     for media in data['postData']:
         entry = Media.query.filter_by(media_id = media['id']).first()
         if not entry:
-            return "ERROR"
+            return jsonify("ERROR")
         entry.order = media['order']
     db.session.commit()
-    return "CONFIRMED"
+    return jsonify("CONFIRMED")
 
 
 # @app.route('/api/upload-name-check.json', methods=['GET'])
