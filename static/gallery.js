@@ -1,8 +1,11 @@
-import React, {useRef, createContext} from 'react'
+import React, {useRef, useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import { DndProvider, useDrag, useDrop } from 'react-dnd'
 import HTML5Backend from 'react-dnd-html5-backend'
 import $ from 'jquery';
+
+import * as THREE from 'three'
+import {OBJLoader2} from 'three/examples/jsm/loaders/OBJLoader2';
 
 
 // Declares my draggable items
@@ -112,7 +115,6 @@ class Grid extends React.Component {
       contentType: 'application/json; charset=utf-8',
       dataType: 'json',
       success: (response) => {
-        console.log(response);
         if (response === "FOLLOWED"){
           alert('You are now a follower!');
         }
@@ -198,11 +200,19 @@ class Grid extends React.Component {
                               username={this.state.username}
                               editMode={this.state.editMode} />);
       }
-      else {
+      else if (item.type === ItemTypes.OBJ){
         media.push(<Obj key={item.name} id={item.id} name={item.name} 
-                              order={item.order} url={item.url}
-                              username={this.state.username}
-                              editMode={this.state.editMode} />);
+                        order={item.order} url={item.url}
+                        onHover={this.moveMedia}
+                        username={this.state.username}
+                        editMode={this.state.editMode} />);
+      }
+      else { // GLTF
+        media.push(<GLTF key={item.name} id={item.id} name={item.name} 
+                         order={item.order} url={item.url}
+                         onHover={this.moveMedia}
+                         username={this.state.username}
+                         editMode={this.state.editMode} />);
       }
     }
     return media;
@@ -218,7 +228,7 @@ class Grid extends React.Component {
                                  : null}
         {(!this.state.userVerified && this.state.loggedin) ?
             (<button onClick={this.followClick}>
-               {this.state.following ? 'Following' : 'Follow'}
+               {this.state.following ? 'Unfollow' : 'Follow'}
              </button>)
           : null
         }
@@ -236,7 +246,10 @@ class Grid extends React.Component {
 
 
 function TwoDMedia(props) {
+  // A mutable ref object that is initialized to null and will persist for the
+  // entire lifetiime of thte component
   const reference = useRef(null);
+
   const [{isDragging}, drag] = useDrag({
     item: {id: props.id,
            name: props.name,
@@ -248,6 +261,7 @@ function TwoDMedia(props) {
       isDragging: !!monitor.isDragging()
     })
   });
+
   const [, drop] = useDrop({
     accept: [ItemTypes.TWOD, ItemTypes.OBJ, ItemTypes.GLTF],
     canDrop: () => props.editMode,
@@ -286,13 +300,121 @@ function TwoDMedia(props) {
 
 
 function Obj(props) {
+  const reference = useRef(null);
+  const canvasRef = useRef(null);
+
+  const [{isDragging}, drag] = useDrag({
+    item: {id: props.id,
+           name: props.name,
+           order: props.order, 
+           type: ItemTypes.OBJ,
+           url: props.url},
+    canDrag: () => props.editMode,
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging()
+    })
+  });
+
+  const [, drop] = useDrop({
+    accept: [ItemTypes.TWOD, ItemTypes.OBJ, ItemTypes.GLTF],
+    canDrop: () => props.editMode,
+    hover(item) {
+      if (item.order !== props.order){
+        props.onHover(item, props);
+      }
+    }
+  });
+
+  // Use useEffect hook for the same side effect regardless of mounted or updated
+  // (every render) - this is inside a compoonent to access the props
+  // If this returns a function, React will run the function during clean up
+  // (unmount and before running the new effect)
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (canvas != null){
+      const scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x7F7F7F);
+      const renderer = new THREE.WebGLRenderer({canvas});
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      //canvas.appendChild(renderer.domElement);
+      const camera = new THREE.PerspectiveCamera(45, (canvas.clientWidth /
+        canvas.clientHeight), 0.1, 100);
+      camera.position.set(10, 0, 0);
+      function cameraOnObj(sizeToFitOnScreen, boxSize, boxCenter, camera) {
+        const halfSizeToFitOnScreen = sizeToFitOnScreen * 0.5;
+        const halfFovY = THREE.Math.degToRad(camera.fov * .5);
+        const distance = halfSizeToFitOnScreen / Math.tan(halfFovY);
+        const direction = (new THREE.Vector3())
+            .subVectors(camera.position, boxCenter)
+            .multiply(new THREE.Vector3(1, 0, 1))
+            .normalize();
+        camera.position.copy(direction.multiplyScalar(distance).add(boxCenter));
+        camera.near = boxSize / 100;
+        camera.far = boxSize * 100;
+        camera.updateProjectionMatrix();
+        camera.lookAt(boxCenter.x, boxCenter.y, boxCenter.z);
+      }
+      const objLoader = new OBJLoader2();
+      objLoader.load(props.url,
+        (root) => {
+          root.updateMatrixWorld();
+          scene.add(root);
+          const box = new THREE.Box3().setFromObject(root);
+          const boxSize = box.getSize(new THREE.Vector3()).length();
+          const boxCenter = box.getCenter(new THREE.Vector3());
+          cameraOnObj(boxSize * 1.1, boxSize, boxCenter, camera);
+          function render() {
+            if (resizeRendererToDisplaySize(renderer)) {
+              const canvas = renderer.domElement;
+              camera.aspect = canvas.clientWidth / canvas.clientHeight;
+              camera.updateProjectionMatrix();
+            }
+            root.rotation.y += 0.005;
+            renderer.render(scene, camera);
+            requestAnimationFrame(render);
+          }
+          requestAnimationFrame(render);
+        }
+      );
+      function resizeRendererToDisplaySize(renderer) {
+        const canvas = renderer.domElement;
+        const width = canvas.clientWidth;
+        const height = canvas.clientHeight;
+        const needResize = canvas.width !== width || canvas.height !== height;
+        if (needResize) {
+          renderer.setSize(width, height, false);
+        }
+        return needResize;
+      }
+    }
+  });
+
+  drag(drop(reference))
+
+  const imageElement = (
+    <canvas name={props.name} id={props.name} className='media' ref={canvasRef}
+         style={{height: '100%', width: '100%'}}>
+    </canvas>);
+
   return(
-    <span className='mediaElement'>
-      <div name={props.name} style={{}}
-           className='media'>
-        {props.name}
-      </div>
+    <span className='mediaElement' ref={reference}>
+      {props.editMode ? (<span style={{height: '100%', width: '100%'}}>
+                           {imageElement}
+                         </span>)
+                      : (<a href={`/${props.username}/${props.name}`}
+                          style={{height: '100%', width: '100%'}}>
+                           {imageElement}
+                         </a>)}
     </span>
+  );
+}
+
+
+function GLTF(props){
+  return(
+    <div className='mediaElement'>
+      <div style={{height: '100%', width: '100%'}}>{props.name}</div>
+    </div>
   );
 }
 

@@ -53,9 +53,9 @@ function cameraOnObj(sizeToFitOnScreen, boxSize, boxCenter, camera) {
   // in the xz plane from the center of the box (no y axis since ideally the
   // camera should not be under the object)
   const direction = (new THREE.Vector3())
-      .subVectors(camera.position, boxCenter)
-      .multiply(new THREE.Vector3(1, 0, 1))
-      .normalize();
+    .subVectors(camera.position, boxCenter)
+    .multiply(new THREE.Vector3(1, 0, 1))
+    .normalize();
 
   // Update the camera
   // Move the camera away from the box center equal to the calculated distance

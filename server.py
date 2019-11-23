@@ -369,11 +369,11 @@ def follow_changes():
         if not follow:
             return jsonify("ERROR")
         db.session.delete(follow)
-        message = "FOLLOWED"
+        message = "UNFOLLOWED"
     else:  # If the user is not following
         user = User.query.filter_by(user_id = session['user']).first()
         user.following.append(Follow(user_followed = gallery_user))
-        message = "UNFOLLOWED"
+        message = "FOLLOWED"
     db.session.commit()
     return jsonify(message)
 

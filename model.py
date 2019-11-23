@@ -1,11 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
 
 
-#Connect to the psql db via Flask-SQLAlchemy library
+# Connect to the psql db via Flask-SQLAlchemy library
 db = SQLAlchemy() 
 
 
-#Data Model Definitions
+# Data Model Definitions
 class User(db.Model):
     """User of showcase website."""
 
@@ -42,19 +42,15 @@ class Media(db.Model):
     is_downloadable = db.Column(db.Boolean, default=False)
     date_created = db.Column(db.DateTime)
     thumb_url = db.Column(db.Text, nullable=True)
-    #react_var_id = db.Column(db.Integer, db.ForeignKey('reactvar.react_var_id'))
+    order = db.Column(db.Integer)
     type_id = db.Column(db.Integer, db.ForeignKey('mediatypes.type_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    #page_id = db.Column(db.Integer, db.ForeignKey('userpages.page_id'))
-    order = db.Column(db.Integer)
 
-    #Relationships
+    # Relationships
     user = db.relationship('User', backref=db.backref('owned_media',
                                                        order_by="Media.order",
                                                        primaryjoin="User.user_id==Media.user_id"))
     type_of = db.relationship('MediaType', backref=db.backref('all_media'))
-    #page = db.relationship('Page', backref=db.backref('media_on'))
-    #variable = db.relationship('ReactVar', backref=db.backref('which_media'))
 
     def __repr__(self):
         """Provide information of the Media object."""
@@ -71,7 +67,9 @@ class ObjToMTL(db.Model):
     media_id = db.Column(db.Integer, db.ForeignKey('media.media_id'))
     mtl_url = db.Column(db.Text)
 
-    #Relationships
+    # Relationships
+    # This relationship is one to one but will be a list by default so must set
+    # uselist to false
     media = db.relationship('Media', backref=db.backref('mtl', uselist=False))
 
     def __repr__(self):
@@ -149,7 +147,7 @@ class Tag(db.Model):
     tag_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     tag_name = db.Column(db.String(64), unique=True)
 
-    #Relationship
+    # Relationship
     all_media = db.relationship('Media', 
                                 secondary='whichtags', 
                                 backref=db.backref('tags'))
@@ -168,7 +166,7 @@ class Like(db.Model):
     media_id = db.Column(db.Integer, db.ForeignKey('media.media_id'))
     user_who_liked = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
-    #Relationships
+    # Relationships
     user = db.relationship('User', backref=db.backref('likes'))
     media = db.relationship('Media', backref=db.backref('likes'))
 
@@ -187,7 +185,7 @@ class Follow(db.Model):
     user_followed_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
     follower_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
-    #Relationship
+    # Relationship
     user_followed = db.relationship('User',
                                     foreign_keys=[user_followed_id],
                                     backref=db.backref('followers'))
