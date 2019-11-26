@@ -111,11 +111,7 @@ export function threejsEntry(itemList){
 
   const clearColor = new THREE.Color('#000');
   function render() {
-    if (resizeRendererToDisplaySize(renderer)) {
-      const canvas = renderer.domElement;
-      camera.aspect = canvas.clientWidth / canvas.clientHeight;
-      camera.updateProjectionMatrix();
-    }
+    resizeRendererToDisplaySize(renderer);
 
     renderer.setScissorTest(false);
     renderer.setClearColor(clearColor, 0);
