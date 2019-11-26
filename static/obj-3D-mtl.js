@@ -14,7 +14,6 @@ const [url, mtl_url] = canvas.classList;
 // Takes all the data provided and renders it to canvas
 const renderer = new THREE.WebGLRenderer({canvas});
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-document.body.appendChild(renderer.domElement);
 
 // Scene: root of a form of scene graph; everything needs to be added to
 // a scene
