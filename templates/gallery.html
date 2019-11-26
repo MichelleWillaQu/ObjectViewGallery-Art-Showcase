@@ -32,36 +32,36 @@
 
     @media(min-width: 1200px){ /* XL */
       .mediaElement{
-        flex: 0 0 20%;
+        flex: 0 0 25%;
         height: 400px;
       }
     }
 
     @media(max-width: 1200px){ /* L */
-    .mediaElement, .media{
-        flex: 0 0 25%;
+      .mediaElement{
+        flex: 0 0 33%;
         height: 300px;
       }
     }
 
     @media(max-width: 992px){ /* M */
-    .mediaElement{
+      .mediaElement{
         flex: 0 0 33%;
         height: 300px;
       }
     }
 
     @media(max-width: 768px){ /* S */
-    .mediaElement{
+      .mediaElement{
         flex: 0 0 50%;
         height: 200px;
       }
     }
 
     @media(max-width: 576px){ /* XS */
-    .mediaElement{
+      .mediaElement{
         flex: 0 0 100%;
-        height: 200px; /* aspect ration */
+        height: 200px;
       }
     }
 
@@ -74,5 +74,5 @@
 {% block body %}
   <canvas id="c"></canvas>
   <div class={{username}} id="element"></div>
-  <script src="/static/dist/gallery.js"></script>
+  <script src="/static/JS/gallery.js"></script>
 {% endblock %}

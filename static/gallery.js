@@ -33,7 +33,6 @@ class Grid extends React.Component {
 
   moveMedia(item, hoveringOverItem){
     this.setState((prevState) => {
-      console.log('Item: ', item, ' Hovering: ', hoveringOverItem);
       const itemOrder = item.order;
       const hoveringOrder = hoveringOverItem.order;
       const itemAfterHoveringItemBool = itemOrder > hoveringOrder;
@@ -41,11 +40,8 @@ class Grid extends React.Component {
       if (itemAfterHoveringItemBool){
         // The item is moved to an earlier position and everything else is moved back
         const itemsBefore = prevState.items.slice(0, hoveringOrder);
-        console.log('BEFORE: ', itemsBefore);
         const toChange = prevState.items.slice(hoveringOrder, itemOrder);
-        console.log('TOCHANGE: ', toChange);
         const itemsAfter = prevState.items.slice(itemOrder + 1);  // empty if > len
-        console.log('AFTER: ', itemsAfter);
         changedList = [].concat(itemsBefore);
         item.order = hoveringOrder;
         changedList.push(item);
@@ -58,11 +54,8 @@ class Grid extends React.Component {
       else {
         // The item is moved to a later position and move everything forward
         const itemsBefore = prevState.items.slice(0, itemOrder);
-        console.log('before: ', itemsBefore);
         const toChange = prevState.items.slice(itemOrder + 1, hoveringOrder + 1);
-        console.log('tochange: ', toChange);
         const itemsAfter = prevState.items.slice(hoveringOrder + 1);  // empty if > len
-        console.log('after: ', itemsAfter);
         changedList = [].concat(itemsBefore);
         for (const otherMedia of toChange){
           otherMedia.order -= 1;
@@ -72,7 +65,6 @@ class Grid extends React.Component {
         changedList.push(item);
         changedList = changedList.concat(itemsAfter);
       }
-      console.log('SET STATE: ', changedList);
       return {items: changedList};
     });
   }
@@ -81,7 +73,6 @@ class Grid extends React.Component {
     const currentState = this.state.editMode;
     if (currentState){  // If currently in Edit Mode
       const data = {postData: this.state.items};
-      console.log(data);
       $.ajax({
         url: '/api/post-media-changes',
         type: 'POST',
@@ -89,7 +80,6 @@ class Grid extends React.Component {
         contentType: 'application/json; charset=utf-8',
         dataType: 'json',
         success: (response) => {
-          console.log(response);
           if (response === "CONFIRMED"){
             alert('Changes saved!');
           }
@@ -136,7 +126,6 @@ class Grid extends React.Component {
     const username = pageElement.className;
     this.setState({username: username});
     $.get('/api/gallery-settings-check.json', {username: username}, (response) => {
-      console.log('RETURN: ', response);
       if(response.loggedin){
         this.setState({userVerified: response.verified,
                        loggedin: true,
@@ -144,13 +133,13 @@ class Grid extends React.Component {
       }
     });
     $.get('/api/get-media.json', {username: username}, (response) => {
-      console.log('MEDIA: ', response.media);
       const updatedItems = [];
       const newThreeItems = [];
       let dimensions = '';
       let url = '';
       for (const item of response.media) {
-        if(item.type === 'png' || item.type === 'jpg' || item.type === 'jpeg'){
+        if(item.type === 'png' || item.type === 'jpg' || item.type === 'jpeg' ||
+           item.type === 'webp' || item.type === 'gif'){
           dimensions = ItemTypes.TWOD;
           if (item.thumb_url){
             url = item.thumb_url;
@@ -166,7 +155,10 @@ class Grid extends React.Component {
           }
           else {
             dimensions = ItemTypes.GLTF;
-            url = item.media_url; //TO DO
+            url = item.media_url;
+            newThreeItems.push({name: item.media_name,
+                                url: url,
+                                type: dimensions});
           }
         }
         else {  //OBJ     //TO DO: handle gifs
@@ -189,24 +181,21 @@ class Grid extends React.Component {
                            type: dimensions,
                            order: item.order});
       }
-      //console.log('UPDATED: ', updatedItems);
       this.setState({items: updatedItems,
                      threeItems: newThreeItems});
     });
   }
 
   componentDidUpdate(){
-    console.log('THREEACTIVE: ', this.state.threeActive);
-    console.log('THREEITEMS: ', this.state.threeItems);
     if (!this.state.threeActive && this.state.threeItems.length){
-      // length not zero
+      // Length is not zero
       threejsEntry(this.state.threeItems);
+      // Only want three.js to start one render loop
       this.setState({threeActive: true});
     }
   }
 
   makeMediaElements(media){
-    console.log('MAKING:', this.state.items);
     for (const item of this.state.items){
       if (item.type === ItemTypes.TWOD){
         media.push(<TwoDMedia key={item.name} id={item.id} name={item.name}
@@ -284,15 +273,11 @@ function TwoDMedia(props) {
       if (item.order !== props.order){
         props.onHover(item, props);
       }
-      // console.log("Hovering order: ", item.order, " name: ", item.name);
-      // console.log("Hovered over item with order: ", props.order);
     }
   });
   // Initialize drag and drop reference component
   drag(drop(reference))
-  // flex-grow will make the div take up that proportion of the wrapper with
-  // respect to other media (flexGrow: '1')
-  // background-image > img tag to be able to use background-size/position
+  // Background-image > img tag to be able to use background-size/position
   const imageElement = (
     <div name={props.name} className='media' 
          style={{backgroundImage: `url(${props.url})`,
@@ -361,10 +346,47 @@ function Obj(props) {
 
 
 function GLTF(props){
+  const reference = useRef(null);
+
+  const [{isDragging}, drag] = useDrag({
+    item: {id: props.id,
+           name: props.name,
+           order: props.order, 
+           type: ItemTypes.GLTF,
+           url: props.url},
+    canDrag: () => props.editMode,
+    collect: (monitor) => ({
+      isDragging: !!monitor.isDragging()
+    })
+  });
+
+  const [, drop] = useDrop({
+    accept: [ItemTypes.TWOD, ItemTypes.OBJ, ItemTypes.GLTF],
+    canDrop: () => props.editMode,
+    hover(item) {
+      if (item.order !== props.order){
+        props.onHover(item, props);
+      }
+    }
+  });
+
+  drag(drop(reference))
+
+  const imageElement = (
+    <div name={props.name} id={props.name} className='media'
+         style={{height: '100%', width: '100%'}}>
+    </div>);
+
   return(
-    <div className='mediaElement'>
-      <div style={{height: '100%', width: '100%'}}>{props.name}</div>
-    </div>
+    <span className='mediaElement' ref={reference}>
+      {props.editMode ? (<span style={{height: '100%', width: '100%'}}>
+                           {imageElement}
+                         </span>)
+                      : (<a href={`/${props.username}/${props.name}`}
+                          style={{height: '100%', width: '100%'}}>
+                           {imageElement}
+                         </a>)}
+    </span>
   );
 }
 

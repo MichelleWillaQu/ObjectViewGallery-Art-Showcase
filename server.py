@@ -172,7 +172,7 @@ def upload_action():
     if type_of_file == '2D':
         file = request.files['twoD-media']  # Gets the object from form
         extension = (file.filename).rsplit('.', 1)[1].lower()
-        if extension not in ['jpg', 'jpeg', 'png']:
+        if extension not in {'jpg', 'jpeg', 'png', 'webp', 'gif'}:
             flash('Not a valid file. Please follow the accepted file types.')
             return redirect('/upload')
         # The media name is unique for the user (using the formatted name)
@@ -202,7 +202,7 @@ def upload_action():
             has_mtl = True
             for texture in request.files.getlist('obj-textures'):
                 text_ext = (texture.filename).rsplit('.', 1)[1].lower()
-                if text_ext not in ['jpg', 'jpeg', 'png']:
+                if text_ext not in {'jpg', 'jpeg', 'png'}:
                     flash(f"Not a valid file. Please follow the accepted " \
                           f"file types.")
                     return redirect('/upload')
@@ -244,7 +244,7 @@ def upload_action():
     # Handling if no thumbnail input
     if thumbnail:
         thumb_ext = (thumbnail.filename).rsplit('.', 1)[1].lower()
-        if thumb_ext not in ['jpg', 'jpeg', 'png']:
+        if thumb_ext not in {'jpg', 'jpeg', 'png'}:
             flash(f"Not a valid file. Please follow the accepted " \
                   f"file types.")
             return redirect('/upload') 
@@ -254,7 +254,7 @@ def upload_action():
     else:
         thumbnail_url = None
 
-    #Add media to database
+    # Add media to database
     ext_obj = MediaType.query.filter_by(media_ext = extension).one()
     new_media = Media(media_name = name,
                       meta_info = info,

@@ -9,7 +9,8 @@ def set_acceptable_media_types():
                        MediaType(media_ext='jpeg'),
                        MediaType(media_ext='png'),
                        MediaType(media_ext='obj'),
-                       MediaType(media_ext='gltf')]
+                       MediaType(media_ext='gltf')
+                       MediaType(media_ext='webp')]
     db.session.add_all(acceptable_list)
     db.session.commit()
 
