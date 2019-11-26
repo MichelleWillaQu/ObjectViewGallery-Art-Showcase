@@ -7,39 +7,42 @@
 {% block body %}
   <form action='/settings-action' method="POST" class="form-login">
     <h3 class="form-heading">Change settings</h3>
-    <button class="email collapsible">Change My Email Address</button>
-    <div class="form-field email content">
+    <button class="collapsible" value="email">Change My Email Address
+    </button>
+    <button class="form-field collapsible" value="password">
+    Change My Password</button>
+    <div class="form-field email-content" hidden>
       <div>
         <label>Old Email Address
-          <input type="text" name="old-email" disabled>
+          <input type="email" name="old-email" class="email" disabled>
         </label>
       </div>
       <div>
         <label>New Email Address
-          <input type="text" name="new-email1" disabled>
+          <input type="email" name="new-email1" class="email" disabled>
         </label>
       </div>
       <div>
         <label>Confirm New Email Address
-          <input type="text" name="new-email2" disabled>
+          <input type="email" name="new-email2" class="email" disabled>
         </label>
       </div>
+      <button class="btn-email" type="submit">Save</button>
     </div>
-    <button class="form-field password collapsible">Change My Password</button>
-    <div class="password content">
+    <div class="password-content" hidden>
       <div>
         <label>Old Password
-          <input type="text" name="old-password" disabled>
+          <input type="password" name="old-password" class="password" disabled>
         </label>
       </div>
       <div>
         <label>New Password
-          <input type="text" name="new-password1" disabled>
+          <input type="password" name="new-password1" class="password" disabled>
         </label>
       </div>
       <div>
         <label>Confirm New Password
-          <input type="text" name="new-password2" disabled>
+          <input type="password" name="new-password2" class="password" disabled>
         </label>
       </div>
       <button class="btn-password" type="submit">Save</button>
@@ -53,7 +56,7 @@
     <div class="form-field avatar">
       <label>Upload Avatar
         <input type="file" name="avatar"
-        accept=".gif, .jpg, .jpeg, .png">
+        accept=".gif, .jpg, .jpeg, .png, .webp">
       </label>
     </div>
     <div class="form-field background">
@@ -67,15 +70,17 @@
           </option>
           <option value="/static/themes/wood.jpg">Wood</option>
           <option value="other">Upload an Image</option>
+        </select>
+        <div class="form-field background" id="background-block" hidden>
+          <label>Upload a Theme Image
+            <input type="file" name="background"
+            accept=".gif, .jpg, .jpeg, .png, .webp" disabled>
+          </label>
+        </div>
       </label>
-      <div class="form-field background" id="background-block"
-      disabled>
-        <label>Upload a Theme Image
-          <input type="file" name="background"
-          accept=".gif, .jpg, .jpeg, .png">
-        </label>
-      </div>
     </div>
     <button class="btn-settings" type="submit">Save</button>
   </form>
+
+  <script src='static/JS/settings.js'></script>
 {% endblock %}

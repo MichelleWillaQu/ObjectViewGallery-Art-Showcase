@@ -383,7 +383,6 @@ def get_media():
     username = request.args.get('username')
     user = User.query.filter_by(username = username).first()
     media_lst = []
-    # .sort(key=(lambda x: x.order)) #CHECK
     for media in user.owned_media:
         media_lst.append({'media_id': media.media_id,
                           'media_name': media.media_name,
