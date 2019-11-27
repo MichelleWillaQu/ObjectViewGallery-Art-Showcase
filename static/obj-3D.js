@@ -70,7 +70,6 @@ function cameraOnObj(sizeToFitOnScreen, boxSize, boxCenter, camera) {
 
 // Load an obj into scene
 const objLoader = new OBJLoader2();
-console.log('Hello');
 objLoader.load(url,
   (root) => {
     root.updateMatrixWorld();
@@ -115,6 +114,7 @@ objLoader.load(url,
     scene.add(light.target);
   }
 }
+
 
 
 // Check if the camera needs to be adjusted

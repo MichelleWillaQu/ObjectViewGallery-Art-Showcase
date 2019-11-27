@@ -14,6 +14,7 @@
     {% if session.get('user') %}
       <button><a href="/">Home</a></button>
       <button><a href="/upload">Upload</a></button>
+      <button><a href="/gallery/{{theUsername}}">Gallery</a></button>
       <button><a href="/settings">Settings</a></button>
       <button><a href="/logout">Logout</a></button>
     {% else %}

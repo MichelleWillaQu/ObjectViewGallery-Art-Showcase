@@ -72,7 +72,8 @@ class Grid extends React.Component {
   editClick(){
     const currentState = this.state.editMode;
     if (currentState){  // If currently in Edit Mode
-      const data = {postData: this.state.items};
+      const data = {username: this.state.username,
+                    postData: this.state.items};
       $.ajax({
         url: '/api/post-media-changes',
         type: 'POST',

@@ -56,6 +56,16 @@ def must_be_logged_out(func):
         return func(*args, **kwargs)
     return decorated_function
 
+# Way to inject new variables/functions into the context of templates automatically
+# Runs before templates are rendered
+@app.context_processor
+def the_username():
+    if session.get('user'):
+        user = User.query.filter_by(user_id = session['user']).one()
+        return dict(theUsername=user.username)
+    return dict(theUsername=None)
+
+############################################################
 
 @app.route('/')
 def homepage():  #TO DO
@@ -145,7 +155,7 @@ def logout():
 def upload():
     return render_template('upload.html') #TO DO: form validation(names, tags, metadata)
 
-@app.route('/upload-action', methods=['POST'])  #TO DO, CHECK
+@app.route('/upload-action', methods=['POST'])
 @must_be_logged_in
 def upload_action():
     # The user
@@ -209,7 +219,7 @@ def upload_action():
                 #save each texture
                 texture.save(os.path.join(new_dir_path, (texture.filename
                                                                 .rsplit('/', 1)[-1])))
-    else: #if type_of_file == 'GLTF'
+    else: # if type_of_file == 'GLTF'
         file = request.files['gltf-media']
         extension = (file.filename).rsplit('.', 1)[1].lower()
         if extension != 'gltf':
@@ -281,19 +291,19 @@ def upload_action():
     return redirect('/')
 
 
-@app.route('/settings')  #TO DO: JS
+@app.route('/settings')  #TO DO: Validation
 @must_be_logged_in
 def settings():
     return render_template('settings.html')
 
-# @app.route('/settings-action') #TO DO: ALL
-# @must_be_logged_in
-# def settings-action():
-#
-#      return redirect('/')
+@app.route('/settings-action', methods=['POST']) #TO DO: ALL
+@must_be_logged_in
+def settings_action():
+
+    return redirect('/')
 
 
-@app.route('/gallery/<username>')  #TO DO
+@app.route('/gallery/<username>')
 def user(username):
     user = User.query.filter_by(username = username).first()
     if not user:
@@ -302,7 +312,7 @@ def user(username):
     return render_template('gallery.html', user=user, username=user.username)
 
 
-@app.route('/<username>/<media_name>')  #TO DO, CHECK
+@app.route('/<username>/<media_name>')  #TO DO, edit/kudos, and add other elements
 def media(username, media_name):
     """ Individual Media Page """
     user = User.query.filter_by(username = username).first()
@@ -395,8 +405,10 @@ def get_media():
 @app.route('/api/post-media-changes', methods=['POST'])
 @must_be_logged_in
 def post_media_changes():
-    # TO DO: PASS USERNAME TOO
     data =  request.get_json()
+    user = User.query.filter_by(username = data['username']).first()
+    if session['user'] != user.user_id:
+        return jsonify("ERROR")
     for media in data['postData']:
         entry = Media.query.filter_by(media_id = media['id']).first()
         if not entry:
@@ -415,6 +427,24 @@ def post_media_changes():
 # @must_be_logged_in
 # def post_kudos():
 #     return ''
+
+
+@app.route('/api/password-check.json', methods=['GET'])
+@must_be_logged_in
+def password_check():
+    user = User.query.filter_by(user_id = session['user']).first()
+    password = request.args.get('password')
+    if bcrypt.check_password_hash(user.password, password):
+        return jsonify({'bool': 'TRUE'})
+    return jsonify({'bool': 'FALSE'})
+
+@app.route('/api/email-check.json', methods=['GET'])
+def email_check():
+    email_to_check = request.args.get('email')
+    user = User.query.filter_by(email = email_to_check).first()
+    if user:
+        return jsonify({'bool': 'TRUE'})
+    return jsonify({'bool': 'FALSE'})
 
 
 @app.route('/api/upload-name-check.json', methods=['GET'])

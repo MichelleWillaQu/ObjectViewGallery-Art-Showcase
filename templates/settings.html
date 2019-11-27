@@ -2,10 +2,11 @@
 
 {% block head %}
   <title>Settings</title>
+  <link rel="stylesheet" type="text/css" href="static/CSS/form.css"></link>
 {% endblock %}
 
 {% block body %}
-  <form action='/settings-action' method="POST" class="form-login">
+  <form action='/settings-action' method="POST" class="form-settings">
     <h3 class="form-heading">Change settings</h3>
     <button class="collapsible" value="email">Change My Email Address
     </button>
@@ -14,17 +15,20 @@
     <div class="form-field email-content" hidden>
       <div>
         <label>Old Email Address
-          <input type="email" name="old-email" class="email" disabled>
+          <input type="email" name="old-email" id="old-email"
+          class="old-email email" disabled>
         </label>
       </div>
       <div>
         <label>New Email Address
-          <input type="email" name="new-email1" class="email" disabled>
+          <input type="email" name="email1" id="new-email1"
+          class="new-email email" disabled>
         </label>
       </div>
       <div>
         <label>Confirm New Email Address
-          <input type="email" name="new-email2" class="email" disabled>
+          <input type="email" name="email2" id="new-email2"
+          class="new-email email" disabled>
         </label>
       </div>
       <button class="btn-email" type="submit">Save</button>
@@ -32,17 +36,20 @@
     <div class="password-content" hidden>
       <div>
         <label>Old Password
-          <input type="password" name="old-password" class="password" disabled>
+          <input type="password" name="old-password" id="old-password"
+          class="password" disabled>
         </label>
       </div>
       <div>
         <label>New Password
-          <input type="password" name="new-password1" class="password" disabled>
+          <input type="password" name="password1" id="new-password1"
+          class="password" disabled>
         </label>
       </div>
       <div>
         <label>Confirm New Password
-          <input type="password" name="new-password2" class="password" disabled>
+          <input type="password" name="password2" id="new-password2"
+          class="password" disabled>
         </label>
       </div>
       <button class="btn-password" type="submit">Save</button>

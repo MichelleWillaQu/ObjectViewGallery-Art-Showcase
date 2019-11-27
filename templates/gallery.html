@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-  <title>{user.username}</title>
+  <title>{{user.username}}</title>
   <style> /*TO DO: MOVE TO CSS; */
     body{
       background-image: url({{user.background_url}});
