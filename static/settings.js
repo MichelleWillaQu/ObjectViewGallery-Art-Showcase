@@ -1,6 +1,7 @@
 "use strict";
 
 import $ from 'jquery';
+import {passwordCheck} from './functions'
 
 const handleClick = (evt) => {
   evt.preventDefault();
@@ -49,22 +50,13 @@ $('select').on('change', (evt) => {
 // Validation of form
 $('form').on('submit', (evt) => {
   let validation = true;
-  const data = {};
+
   if(!$('.email').prop('disabled')){
     if($('#new-email1').val() !== $('#new-email2').val()){
       validation = false;
       $('#new-email1').addClass('invalid');
       $('#new-email2').addClass('invalid');
     }
-    // Get request to check if email exists in database (expects true since user
-    // exists)
-    $.get('/api/email-check.json',
-        {email: $('#old-email').val()}, (response) => {
-      if (response.bool === 'FALSE'){
-          validation = false;
-          $('#old-email').addClass('invalid')
-      }
-    });
   }
 
   if (!$('.password').prop('disabled')){
@@ -113,16 +105,6 @@ $('form').on('submit', (evt) => {
   }
 });
 
-function passwordCheck(inputValue){
-  if (inputValue.length < 8){
-    return false;
-  }
-  const validRegex = /[\w\!\@\#\$\%\^\&\*]+/;
-  if (!validRegex.test(inputValue)){
-    return false;
-  }
-  return true;
-}
 
 $('input').on('focusin', (evt) => {
   $(evt.target).removeClass('invalid');

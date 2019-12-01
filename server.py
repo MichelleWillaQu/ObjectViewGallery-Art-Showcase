@@ -159,7 +159,7 @@ def upload():
 @must_be_logged_in
 def upload_action():
     # The user
-    user = User.query.filter_by(user_id = session['user']).one()
+    user = User.query.filter_by(user_id = session['user']).first()
     # Get data
     name = request.form.get('name')
     # Format name for urls
@@ -294,7 +294,8 @@ def upload_action():
 @app.route('/settings')  #TO DO: Validation
 @must_be_logged_in
 def settings():
-    return render_template('settings.html')
+    user = User.query.filter_by(user_id = session['user']).first()
+    return render_template('settings.html', bio=user.info)
 
 @app.route('/settings-action', methods=['POST']) #TO DO: ALL
 @must_be_logged_in
@@ -442,6 +443,14 @@ def password_check():
 def email_check():
     email_to_check = request.args.get('email')
     user = User.query.filter_by(email = email_to_check).first()
+    if user:
+        return jsonify({'bool': 'TRUE'})
+    return jsonify({'bool': 'FALSE'})
+
+@app.route('/api/username-check.json', methods=['GET'])
+def username_check():
+    username_to_check = request.args.get('username')
+    user = User.query.filter_by(username = username_to_check).first()
     if user:
         return jsonify({'bool': 'TRUE'})
     return jsonify({'bool': 'FALSE'})

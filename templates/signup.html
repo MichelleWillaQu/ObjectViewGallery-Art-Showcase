@@ -2,6 +2,7 @@
 
 {% block head %}
   <title>Signup</title>
+  <link rel="stylesheet" type="text/css" href="static/CSS/form.css"></link>
 {% endblock %}
 
 {% block button %}{% endblock %}
@@ -11,17 +12,24 @@
     <h3 class="form-heading">Please Signup</h3>
     <div class="form-field">
       <label>Username
-        <input type="text" name="username" required autofocus>
+        <input type="text" name="username" id="username" required autofocus>
       </label>
     </div>
     <div class="form-field">
       <label>Email Address
-        <input type="text" name="email" required>
+        <input type="email" name="email" id="email" required>
       </label>
     </div>
     <div class="form-field">
       <label>Password
-        <input type="password" name="password" required>
+        <input type="password" name="password" class="password" id="password"
+        required>
+      </label>
+    </div>
+    <div class="form-field">
+      <label>Confirm Password
+        <input type="password" name="password2" class="password" id="password2"
+        required>
       </label>
     </div>
     <div class="form-field">
@@ -32,4 +40,5 @@
     </div>
     <button class="btn-signup" type="submit">Submit</button>
   </form>
+  <script src="static/JS/signup.js"></script>
 {% endblock %}

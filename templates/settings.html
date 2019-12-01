@@ -14,12 +14,6 @@
     Change My Password</button>
     <div class="form-field email-content" hidden>
       <div>
-        <label>Old Email Address
-          <input type="email" name="old-email" id="old-email"
-          class="old-email email" disabled>
-        </label>
-      </div>
-      <div>
         <label>New Email Address
           <input type="email" name="email1" id="new-email1"
           class="new-email email" disabled>
@@ -55,9 +49,8 @@
       <button class="btn-password" type="submit">Save</button>
     </div>
     <div class="form-field bio">
-      <label>Bio
-        <textarea rows="4" name="bio"
-        placeholder="Who are you?"></textarea>
+      <label>Bio: Who are you?<br>
+        <textarea rows="4" name="bio" value={{bio}}></textarea>
       </label>
     </div>
     <div class="form-field avatar">
@@ -89,5 +82,5 @@
     <button class="btn-settings" type="submit">Save</button>
   </form>
 
-  <script src='static/JS/settings.js'></script>
+  <script src="static/JS/settings.js"></script>
 {% endblock %}
