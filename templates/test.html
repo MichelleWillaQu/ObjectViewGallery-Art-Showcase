@@ -1,13 +1,17 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+</head>
+<body>
 
-Hi<br>
-
-{% block body %}
   {% if g.jasmine_tests %}
-    <!-- stuff for testing -->
-    <script src="/Testing/jasmine.min.js"></script>
-    <script src="/Testing/jasmine-html.min.js"></script>
-    <script src="/Testing/boot.min.js"></script>
-    <script src="/Testing/test-js.js"></script>
+    <link rel="stylesheet" href="/static/Testing/jasmine.min.css">
+    <script src="/static/Testing/jasmine.min.js"></script>
+    <script src="/static/Testing/jasmine-html.min.js"></script>
+    <script src="/static/Testing/boot.min.js"></script>
+    <script src="/static/Testing/test-js.js"></script>
   {% endif %}
-{% endblock %}
+
+</body>
+</html>

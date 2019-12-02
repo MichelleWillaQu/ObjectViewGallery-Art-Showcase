@@ -589,7 +589,7 @@ if __name__ == "__main__":
     app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 
     # Use the DebugToolbar
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
     # For testing
     if sys.argv[-1] == "jstest":
         JS_TESTING_MODE = True
