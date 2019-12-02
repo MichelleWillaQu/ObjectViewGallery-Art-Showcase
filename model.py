@@ -77,40 +77,6 @@ class ObjToMTL(db.Model):
         return (f"<ObjToMTL media_id: {self.media_id} url: {self.mtl_url}")
 
 
-# class Page(db.Model):
-#     """A page in a user's gallery."""
-
-#     __tablename__ = 'userpages'
-
-#     page_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     page_num = db.Column(db.Integer)  #which page in the user's gallery?
-#     background_url = db.Column(db.Text)
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-
-#     #Relationship
-#     user = db.relationship('User', backref=db.backref('pages'))
-
-#     def __repr__(self):
-#         """Provide information of the Page object."""
-#         return (f"<Page id: {self.page_id} num: {self.page_num} " \
-#                 f"user: {self.user_id}>")
-
-
-# class ReactVar(db.Model):
-#     """Variables for the persistance of elements in React"""
-
-#     __tablename__ = 'reactvar'
-
-#     react_var_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
-#     #TO BE EDITED
-#     order = db.Column(db.Integer)
-
-#     def __repr__(self):
-#         """Provide information of the ReactVar object."""
-#         return (f"<ReactVar order: {self.order}" \
-#                 f">")
-
-
 class MediaType(db.Model):
     """A type of media."""
 
@@ -200,7 +166,7 @@ class Follow(db.Model):
                 f"follower_id: {self.follower_id}>")
 
 
-#Helper Functions
+# Helper Functions
 def connect_to_db(app):
     """Connect the database to the Flask app."""
 

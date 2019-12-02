@@ -5,7 +5,9 @@
   <link rel="stylesheet" type="text/css" href="static/CSS/form.css"></link>
 {% endblock %}
 
-{% block button %}{% endblock %}
+{% block button %}
+  <button><a href="/">Home</a></button>
+{% endblock %}
 
 {% block body %}
   <form action='/signup-action' method="POST" class="form-signup">

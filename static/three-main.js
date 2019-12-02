@@ -9,6 +9,8 @@ export function threejsEntry(itemList){
   const renderer = new THREE.WebGLRenderer({canvas, alpha: true});
   renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
+  // This is the innermost function and will move up in the hierarchy until
+  // addSubject()
   function defaultScene(){
     // Default scene setup (including light)
 
@@ -23,6 +25,7 @@ export function threejsEntry(itemList){
     return scene;
   }
 
+  // This will create the scene for a subject (including loading the 3D object)
   function makeSceneSubject(type, elem, url){
     const scene = defaultScene();
     const camera = new THREE.PerspectiveCamera(45,
@@ -78,6 +81,8 @@ export function threejsEntry(itemList){
     });
   }
 
+  // For each 3D object (subject), it will make it a scene then add it to a list
+  // for the render loop with a callback that changes the camera and rotation
   function addSubject(idString, type, url){
     const elem = document.querySelector(`#${idString}`);
     makeSceneSubject(type, elem, url).then(({scene, camera, root}) => {
@@ -98,6 +103,7 @@ export function threejsEntry(itemList){
   }
 
 
+  // Resizes the canvas
   function resizeRendererToDisplaySize(renderer) {
     const canvas = renderer.domElement;
     const width = canvas.clientWidth;
@@ -110,6 +116,9 @@ export function threejsEntry(itemList){
   }
 
   const clearColor = new THREE.Color('#000');
+  // The render loop which will check if the canvas needs to be resized, reset
+  // the canvas to clear, then for each 3D object, check the location of its div
+  // and generate the loaded 3D object where it needs to be
   function render() {
     resizeRendererToDisplaySize(renderer);
 
@@ -118,12 +127,15 @@ export function threejsEntry(itemList){
     renderer.clear(true, true);
     renderer.setScissorTest(true);
 
+    // Any scrolling will move the top of the canvas (position must be absolute
+    // and not fixed or else the canvas will not scroll at all causing the 3D
+    // objects not to stick to the generated divs)
     const transform = `translateY(${window.scrollY}px)`;
     renderer.domElement.style.transform = transform;
 
     for (const {idString, fn} of subjectList) {
       const elem = document.querySelector(`#${idString}`);
-      // get the viewport relative position of this element
+      // Get the viewport relative position of this subject
       const rect = elem.getBoundingClientRect();
       const {left, right, top, bottom, width, height} = rect;
 
@@ -138,12 +150,14 @@ export function threejsEntry(itemList){
         renderer.setScissor(left, distanceToBottom, width, height);
         renderer.setViewport(left, distanceToBottom, width, height);
 
+        // This is the callback of the 3D object and will also rotate the object
+        // and affect the camera
         fn(rect);
       }
     }
     requestAnimationFrame(render);
   }
 
-  // Calls
+  // Calls which starts of the render loop
   requestAnimationFrame(render);
 }

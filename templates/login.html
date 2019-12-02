@@ -4,14 +4,16 @@
   <title>Login</title>
 {% endblock %}
 
-{% block button %}{% endblock %}
+{% block button %}
+<button><a href="/">Home</a></button>
+{% endblock %}
 
 {% block body %}
   <form action='/login-action' method="GET" class="form-login">
     <h3 class="form-heading">Please Login</h3>
     <div class="form-field">
       <label>Email Address
-      <input type="text" name="email" required autofocus>
+      <input type="email" name="email" required autofocus>
       </label>
     </div>
     <div class="form-field">

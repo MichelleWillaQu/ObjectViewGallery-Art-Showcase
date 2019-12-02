@@ -23,7 +23,8 @@ Vibrant.from(url).getPalette().then((palette) => {
     // colorObj[prevalence] is undefined so use the new prevalence
     colorObj[prevalence] = hexColor;
   }
-  // Sort the keys in order of prevalence (aka occurance)
+  // Sort the keys in order of prevalence (aka occurance) and then create the DOM
+  // element for the display
   for (const occurance of Object.keys(colorObj).sort((a, b) => b - a)){
     const node = document.createElement('div');
     node.id = colorObj[occurance];

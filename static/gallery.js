@@ -14,11 +14,15 @@ const ItemTypes = {
 }
 
 
+// The big container class that holds everything and maintains the truth
 class Grid extends React.Component {
   constructor(props){
     super(props);
-    this.state = {isMounted: false,
-                  username: "",
+    // The first 5 state keys are for the functionality of the page (what kind
+    // of buttons are present) then items holds the truth for the location of
+    // media while threeItems and threeActive affects the three.js functionality
+    // (threeItems is the list of 3D items passed to three.js code)
+    this.state = {username: "",
                   userVerified: false,
                   editMode: false,
                   loggedin: false,
@@ -31,6 +35,8 @@ class Grid extends React.Component {
     this.followClick = this.followClick.bind(this);
   }
 
+  // The logic for changing the position of items when something is dragged and
+  // dropped
   moveMedia(item, hoveringOverItem){
     this.setState((prevState) => {
       const itemOrder = item.order;
@@ -38,10 +44,12 @@ class Grid extends React.Component {
       const itemAfterHoveringItemBool = itemOrder > hoveringOrder;
       let changedList = [];
       if (itemAfterHoveringItemBool){
-        // The item is moved to an earlier position and everything else is moved back
+        // The item is moved to an earlier position and everything else is moved
+        // back
         const itemsBefore = prevState.items.slice(0, hoveringOrder);
         const toChange = prevState.items.slice(hoveringOrder, itemOrder);
-        const itemsAfter = prevState.items.slice(itemOrder + 1);  // empty if > len
+        // Empty if > len
+        const itemsAfter = prevState.items.slice(itemOrder + 1);
         changedList = [].concat(itemsBefore);
         item.order = hoveringOrder;
         changedList.push(item);
@@ -55,7 +63,8 @@ class Grid extends React.Component {
         // The item is moved to a later position and move everything forward
         const itemsBefore = prevState.items.slice(0, itemOrder);
         const toChange = prevState.items.slice(itemOrder + 1, hoveringOrder + 1);
-        const itemsAfter = prevState.items.slice(hoveringOrder + 1);  // empty if > len
+        // Empty if > len
+        const itemsAfter = prevState.items.slice(hoveringOrder + 1);
         changedList = [].concat(itemsBefore);
         for (const otherMedia of toChange){
           otherMedia.order -= 1;
@@ -69,9 +78,12 @@ class Grid extends React.Component {
     });
   }
 
+  // The edit button will only show if this is the current user's gallery
   editClick(){
     const currentState = this.state.editMode;
-    if (currentState){  // If currently in Edit Mode
+    // If currently in Edit Mode - post the changes before reverting back to view
+    // mode
+    if (currentState){
       const data = {username: this.state.username,
                     postData: this.state.items};
       $.ajax({
@@ -97,6 +109,8 @@ class Grid extends React.Component {
     });
   }
 
+  // The follow button will only show if there is a user logged in and this is
+  // not their gallery
   followClick(){
     const data = {postData: [this.state.following, this.state.username]}
     $.ajax({
@@ -122,6 +136,7 @@ class Grid extends React.Component {
     });
   }
 
+  // This is where the data is fetched for the gallery page and processed
   componentDidMount(){
     const pageElement = document.querySelector('#element');
     const username = pageElement.className;
@@ -138,6 +153,7 @@ class Grid extends React.Component {
       const newThreeItems = [];
       let dimensions = '';
       let url = '';
+      // Division of media types into the corresponding kind of React components
       for (const item of response.media) {
         if(item.type === 'png' || item.type === 'jpg' || item.type === 'jpeg' ||
            item.type === 'webp' || item.type === 'gif'){
@@ -162,7 +178,7 @@ class Grid extends React.Component {
                                 type: dimensions});
           }
         }
-        else {  //OBJ     //TO DO: handle gifs
+        else {  //OBJ
           if (item.thumb_url){
             dimensions = ItemTypes.TWOD;
             url = item.thumb_url;
@@ -188,15 +204,19 @@ class Grid extends React.Component {
   }
 
   componentDidUpdate(){
+    // Length is not zero
     if (!this.state.threeActive && this.state.threeItems.length){
-      // Length is not zero
       threejsEntry(this.state.threeItems);
-      // Only want three.js to start one render loop
+      // Only want three.js to start one render loop - not one everytime the
+      // component updates
       this.setState({threeActive: true});
     }
   }
 
-  makeMediaElements(media){
+  // Generates the components for each item in the state and compiles it into
+  // one big list for rendering in render()
+  makeMediaElements(){
+    const media = [];
     for (const item of this.state.items){
       if (item.type === ItemTypes.TWOD){
         media.push(<TwoDMedia key={item.name} id={item.id} name={item.name}
@@ -224,7 +244,7 @@ class Grid extends React.Component {
   }
 
   render(){
-    const media = this.makeMediaElements([]);
+    const media = this.makeMediaElements();
     return(
       <span>
         {this.state.userVerified ? (<button onClick={this.editClick}>
@@ -250,6 +270,8 @@ class Grid extends React.Component {
 }
 
 
+// In view mode, the components will have a link to their individual media page
+// and in edit mode, they will be draggable
 function TwoDMedia(props) {
   // A mutable ref object that is initialized to null and will persist for the
   // entire lifetime of the component
@@ -278,7 +300,7 @@ function TwoDMedia(props) {
   });
   // Initialize drag and drop reference component
   drag(drop(reference))
-  // Background-image > img tag to be able to use background-size/position
+  // Background-image over img tag to be able to use background-size/position
   const imageElement = (
     <div name={props.name} className='media' 
          style={{backgroundImage: `url(${props.url})`,

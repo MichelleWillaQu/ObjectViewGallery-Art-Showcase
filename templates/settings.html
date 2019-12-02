@@ -6,7 +6,8 @@
 {% endblock %}
 
 {% block body %}
-  <form action='/settings-action' method="POST" class="form-settings">
+  <form action='/settings-action' method="POST" class="form-settings"
+  enctype = "multipart/form-data">
     <h3 class="form-heading">Change settings</h3>
     <button class="collapsible" value="email">Change My Email Address
     </button>
@@ -23,6 +24,12 @@
         <label>Confirm New Email Address
           <input type="email" name="email2" id="new-email2"
           class="new-email email" disabled>
+        </label>
+      </div>
+      <div>
+        <label>Password to confirm
+          <input type="password" name="confirm-password" id="confirm-password"
+          class="email" disabled>
         </label>
       </div>
       <button class="btn-email" type="submit">Save</button>
@@ -50,7 +57,7 @@
     </div>
     <div class="form-field bio">
       <label>Bio: Who are you?<br>
-        <textarea rows="4" name="bio" value={{bio}}></textarea>
+        <textarea rows="4" name="bio">{{bio}}</textarea>
       </label>
     </div>
     <div class="form-field avatar">
@@ -61,20 +68,20 @@
     </div>
     <div class="form-field background">
       <label>Select a Theme For Your Gallery
-        <select>
+        <select name="background">
           <option value="/static/themes/circles.jpg">Circles</option>
           <option value="/static/themes/cosmos.jpg">Cosmos</option>
           <option value="/static/themes/gravel.jpg">Gravel</option>
           <option value="/static/themes/paint.jpg">Paint</option>
-          <option value="/static/themes/parchment.png">Parchment
+          <option value="/static/themes/parchment.png" selected>Parchment
           </option>
           <option value="/static/themes/wood.jpg">Wood</option>
           <option value="other">Upload an Image</option>
         </select>
         <div class="form-field background" id="background-block" hidden>
           <label>Upload a Theme Image
-            <input type="file" name="background"
-            accept=".gif, .jpg, .jpeg, .png, .webp" disabled>
+            <input type="file" name="background-other" id="background-input"
+            accept=".jpg, .jpeg, .png" disabled>
           </label>
         </div>
       </label>

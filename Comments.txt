@@ -1,0 +1,29 @@
+Unfinished features:
+1. regex on the python side to match the JS patterns since the JS can be turned
+off
+2. Form validation for the upload form (the media name + tags/metadata regex that
+would be added to functions.js + file extension validation)
+3. The kudo/likes system (on the individual media page)
+4. The edit system (on the individual media page)
+5. Preventing download unless user specifies it is downloadable feature
+(individual media page and gallery)
+6. Tag validation beyond stripping surrounding whitespace on both ends and
+investigating ideas on how to merge similar meaning tags (very hard - AO3?)
+7. More testing - selenium for walking through
+8. Login validation (ajax request for email validation may take too long)
+9. Discover page for media (with all the filters) - likely similar to the React
+page in that there would be a virtual canvas over the whole page and React would
+render the different components in the content div and then call three.js code
+
+
+
+Reflection Notes:
+1. Perhaps disable form inputs in the beginning of JS script instead of inherently
+in the HTML just in case users have the JS disabled so they can have access to
+the input fields
+2. Investigate alternatives, since the features are not fully supported in some
+browsers, to the 'input' event and setCustomValidity/reportValidity (and look into
+the bug with input type 'email' popping its error message sometimes when the input
+changes and the focus is maintained)
+3. Look into refactoring a lot of the python validation to be in functions since
+the checks are similar

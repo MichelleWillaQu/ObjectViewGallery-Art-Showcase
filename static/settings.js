@@ -1,8 +1,11 @@
 "use strict";
 
 import $ from 'jquery';
-import {passwordCheck} from './functions'
+import {passwordRegexCheck} from './functions'
 
+
+// This is the callback for handling the enabling/disabling and hiding for form
+// sections
 const handleClick = (evt) => {
   evt.preventDefault();
   const element = $(evt.target);
@@ -32,17 +35,20 @@ const handleClick = (evt) => {
   }
 };
 
+// Event handler for the hidden form sections
 $('.collapsible').on('click', (evt) => handleClick(evt));
 
 
+// This shows another section of the form if the other option in the select is
+// chosen
 $('select').on('change', (evt) => {
   if ($(evt.target).val() === 'other'){
     $('#background-block').prop({'hidden': false});
-    $('input[name="background"]').prop({'disabled': false, 'required': true});
+    $('#background-input').prop({'disabled': false, 'required': true});
   }
   else {
     $('#background-block').prop({'hidden': true});
-    $('input[name="background"]').prop({'disabled': true, 'required': false});
+    $('#background-input').prop({'disabled': true, 'required': false});
   }
 })
 
@@ -61,7 +67,7 @@ $('form').on('submit', (evt) => {
 
   if (!$('.password').prop('disabled')){
     $('.password').each(function() {
-      if (!passwordCheck($(this).val())){
+      if (!passwordRegexCheck($(this).val())){
         validation = false;
         $(this).addClass('invalid');
       }
@@ -71,20 +77,13 @@ $('form').on('submit', (evt) => {
       $('#new-password1').addClass('invalid');
       $('#new-password2').addClass('invalid');
     }
-    $.get('/api/password-check.json',
-        {password: $('#old-password').val()}, (response) => {
-      if (response.bool === 'FALSE'){
-        validation = false;
-        $('#old-password').addClass('invalid');
-      }
-    });
   }
 
-  if (!$('input[name="background"]').prop('disabled')){
+  if (!$('#background-input').prop('disabled')){
     const validTypes = ['jpg', 'jpeg', 'png'];
-    const background = $('input[name="background"]');
+    const background = $('#background-input');
     const backArr = background.val().split('.');
-    if (!validTypes.includes(backArr[backArr.length - 1])){
+    if (!validTypes.includes(backArr[backArr.length - 1].toLowerCase())){
       validation = false;
       background.addClass('invalid');
     }
@@ -94,7 +93,7 @@ $('form').on('submit', (evt) => {
   const avatar = $('input[name="avatar"]');
   if (avatar.val()){
     const avaArr = $('input[name="avatar"]').val().split('.');
-    if (!validTypes2.includes(avaArr[avaArr.length - 1])){
+    if (!validTypes2.includes(avaArr[avaArr.length - 1].toLowerCase())){
       validation = false;
       $('input[name="avatar"]').addClass('invalid');
     }
@@ -106,6 +105,6 @@ $('form').on('submit', (evt) => {
 });
 
 
-$('input').on('focusin', (evt) => {
+$('input').on('focus', (evt) => {
   $(evt.target).removeClass('invalid');
 })

@@ -40,10 +40,13 @@ const handleRadioButtonClick = (buttonStr) => {
   }
 };
 
+// These will toggle the form to show the upload section for the specific media
+// type (enabling/disabling and hiding fields)
 $('#twoD').on('click', () => handleRadioButtonClick('2D'));
 $('#OBJ').on('click', () => handleRadioButtonClick('OBJ'));
 $('#GLTF').on('click', () => handleRadioButtonClick('GLTF'));
 
+// This will allow for the upload of textures once a mtl file is chosen
 $('#mtl').on('change', (evt) => {
   if ($(evt.target).val() === ""){
     $('#textures').prop({'disabled': true, 'required': false})
@@ -53,16 +56,6 @@ $('#mtl').on('change', (evt) => {
   }
 });
 
-//TO DO: handle form validation for media name (ajax),
-//tags/metadata alphanumerical (metadata allows symbols)
-  // const nameValue = $('#name').val();
-  // console.log('Name: ', nameValue);
-  // const metadata = $('#metadata').val();
-  // console.log('MD: ', metadata);
-  // const downloadable = $('input[name="downloadable"]').val();
-  // console.log('dl: ', downloadable);
-  // const date = $('#date').val();
-  // console.log('DATE: ', date);
-  // const thumbnail = $('#thumbnail').val();
-  // console.log('Thumb: ', thumbnail);
-  // const tags = $('#tags').val();
+// TO DO: handle form validation for media name (ajax),
+// tags/metadata regex words (metadata allows symbols),
+// proper file extensions in each file upload

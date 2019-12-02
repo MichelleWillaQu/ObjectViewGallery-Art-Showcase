@@ -103,26 +103,21 @@ mtlLoader.load(mtl_url, (mtlParseResult) => {
   );
 });
 
-// Lights for the scene
-{
-  {
-    // Does not cast shadows
-    const skyColor = 0xFFFFFF;  // White
-    const groundColor = 0x000000;  // Black
-    const intensity = 1;
-    const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
-    scene.add(light);
-  }
 
-  {
-    const color = 0xFFFFFF;  // White
-    const intensity = 0.5;
-    const light = new THREE.DirectionalLight(color, intensity);
-    light.position.set(5, 10, 2);
-    scene.add(light);
-    scene.add(light.target);
-  }
-}
+// Lights for the scene
+const skyColor = 0xFFFFFF;  // White
+const groundColor = 0x000000;  // Black
+const intensity = 1;
+// Does not cast shadows
+const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
+scene.add(light);
+
+const color = 0xFFFFFF;  // White
+const intensity2 = 0.5;
+const light2 = new THREE.DirectionalLight(color, intensity2);
+light2.position.set(5, 10, 2);
+scene.add(light2);
+scene.add(light2.target);
 
 
 // Check if the camera needs to be adjusted

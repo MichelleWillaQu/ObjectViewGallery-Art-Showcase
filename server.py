@@ -1,5 +1,5 @@
 from flask import (Flask, render_template, redirect, request, flash, session, 
-                  jsonify)
+                  jsonify, g)
 from flask_bcrypt import Bcrypt
 from functools import wraps
 from sqlalchemy import func
@@ -8,6 +8,7 @@ from model import (connect_to_db, db, User, Media, MediaType, ObjToMTL,
                    WhichTag, Tag, Like, Follow)
 
 import os
+import sys
 from werkzeug.utils import secure_filename
 from flask_debugtoolbar import DebugToolbarExtension
 from jinja2 import StrictUndefined
@@ -29,6 +30,14 @@ app.secret_key = "ABC"
 # silently. This is horrible. Fix this so that, instead, it raises an
 # error.
 app.jinja_env.undefined = StrictUndefined
+# For testing, the setup
+JS_TESTING_MODE = False
+@app.before_request
+def add_tests():
+    g.jasmine_tests = JS_TESTING_MODE
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 
 #Custom decorators
@@ -67,19 +76,21 @@ def the_username():
 
 ############################################################
 
+# TO DO: Finish the logic for media and the media filters
 @app.route('/')
-def homepage():  #TO DO
-    return render_template('homepage.html')
+def homepage():
+    tags = Tag.query.all()
+    return render_template('homepage.html', tags=tags)
 
 
 @app.route('/login')
 @must_be_logged_out
 def login():
-    return render_template('login.html') #TO DO: accept username too
+    return render_template('login.html')
 
 @app.route('/login-action', methods=['GET'])
 @must_be_logged_out
-def login_action(): #TO CHANGE BACK
+def login_action():
     # Get data from form
     email = request.args.get('email')
     password = request.args.get('password')
@@ -102,7 +113,7 @@ def login_action(): #TO CHANGE BACK
 @app.route('/signup')
 @must_be_logged_out
 def signup():
-    return render_template('signup.html') #TO DO: form changes
+    return render_template('signup.html')
 
 @app.route('/signup-action', methods=['POST'])
 @must_be_logged_out
@@ -111,6 +122,7 @@ def signup_action():
     username = request.form.get('username')
     email = request.form.get('email')
     password = request.form.get('password')
+    password2 = request.form.get('password2')
     bio = request.form.get('bio')
 
     # Query to confirm that username and email do not already exist
@@ -121,6 +133,9 @@ def signup_action():
     user = User.query.filter(User.email == email).first()
     if user:
         flash('That email is already used.')
+        return redirect('/signup')
+    if password != password2:
+        flash('The two passwords do not match.')
         return redirect('/signup')
 
     # Make a user directory
@@ -150,10 +165,11 @@ def logout():
     return redirect('/')
 
 
+# TO DO: form validation (name, tags/metadata, file extensions)
 @app.route('/upload')
 @must_be_logged_in
 def upload():
-    return render_template('upload.html') #TO DO: form validation(names, tags, metadata)
+    return render_template('upload.html')
 
 @app.route('/upload-action', methods=['POST'])
 @must_be_logged_in
@@ -277,7 +293,7 @@ def upload_action():
                       thumb_url = thumbnail_url)
     if has_mtl:
         new_mtl = ObjToMTL(media = new_media, mtl_url = ('/' + mtl_url))
-    for tag in tag_list: #TO DO: handle tag validation
+    for tag in tag_list:
         if tag != '':
             tag_existing = Tag.query.filter_by(tag_name = tag.strip()).first()
             if not tag_existing:
@@ -291,16 +307,77 @@ def upload_action():
     return redirect('/')
 
 
-@app.route('/settings')  #TO DO: Validation
+# TO DO: metadata validation
+@app.route('/settings')
 @must_be_logged_in
 def settings():
     user = User.query.filter_by(user_id = session['user']).first()
     return render_template('settings.html', bio=user.info)
 
-@app.route('/settings-action', methods=['POST']) #TO DO: ALL
+@app.route('/settings-action', methods=['POST'])
 @must_be_logged_in
 def settings_action():
+    user = User.query.filter_by(user_id = session['user']).first()
+    
+    # Update the email
+    email1 = request.form.get('email1')
+    if email1:
+        email2 = request.form.get('email2')
+        if email1 != email2:
+            flash('The two emails are not the same.')
+            return redirect('/settings')
+        confirmation_password = request.form.get('confirm-password')
+        if not bcrypt.check_password_hash(user.password, confirmation_password):
+            flash('Incorrect password to change the email.')
+            return redirect('/settings')
+        user.email = email1
 
+    # Change the password
+    password_to_check = request.form.get('old-password')
+    if password_to_check:
+        if not bcrypt.check_password_hash(user.password, password_to_check):
+            flash('Incorrect password to change the password.')
+            return redirect('/settings')
+        password1 = request.form.get('password1')
+        password2 = request.form.get('password2')
+        if password1 != password2:
+            flash('The two passwords are not the same.')
+            return redirect('/settings')
+        user.password = bcrypt.generate_password_hash(password1)
+
+    # Update the bio
+    info = request.form.get('bio')
+    user.info = info
+    
+    # Update the avatar
+    avatar = request.files['avatar']
+    if avatar:
+        extension = (avatar.filename).rsplit('.', 1)[1].lower()
+        if extension not in {'jpg', 'jpeg', 'png', 'webp', 'gif'}:
+            flash('Not a valid file. Please follow the accepted file types.')
+            return redirect('/settings')
+        avatar_name = 'avatar.' + extension
+        # Save the file in the user's directory
+        avatar_url = os.path.join(user.folder_url, avatar_name)
+        avatar.save(avatar_url)
+        user.avatar_url = '/' + avatar_url
+    
+    # Update the background
+    background_choice = request.form.get('background')
+    if background_choice == 'other':
+        file = request.files['background-other']
+        extension = (file.filename).rsplit('.', 1)[1].lower()
+        if extension not in {'jpg', 'jpeg', 'png'}:
+            flash('Not a valid file. Please follow the accepted file types.')
+            return redirect('/settings')
+        filename = 'background.' + extension
+        file_url = os.path.join(user.folder_url, filename)
+        file.save(file_url)
+        user.background_url = '/' + file_url
+    else:
+        user.background_url = background_choice
+
+    db.session.commit()
     return redirect('/')
 
 
@@ -310,10 +387,11 @@ def user(username):
     if not user:
         flash('Invalid url')
         return redirect('/')
-    return render_template('gallery.html', user=user, username=user.username)
+    return render_template('gallery.html', user=user)
 
 
-@app.route('/<username>/<media_name>')  #TO DO, edit/kudos, and add other elements
+# TO DO: edit mode, kudos/likes
+@app.route('/<username>/<media_name>')
 def media(username, media_name):
     """ Individual Media Page """
     user = User.query.filter_by(username = username).first()
@@ -335,14 +413,20 @@ def media(username, media_name):
     elif media.type_of.media_ext == 'gltf':
         js_status = 'gltf'
     else:
-        js_status = None 
+        js_status = None
+
+    formatted_date = media.date_created.strftime('%m/%d/%Y')
     return render_template('mediapage.html',
+                            user=user,
                             media=media,
+                            formatted_date=formatted_date,
                             formatted_name=formatted_name,
                             status=js_status)
 
 ############################################################
 
+# This route handles all the checks for whether there is a user, the user matches
+# the gallery, and if the user is following the gallery user
 @app.route('/api/gallery-settings-check.json', methods=['GET'])
 def check_current_user():
     username = request.args.get('username')
@@ -365,6 +449,8 @@ def check_current_user():
                     'verified': verified,
                     'following': following})
 
+
+# This is the route that handles the update of following/unfollowing
 @app.route('/api/follow-changes', methods=['POST'])
 @must_be_logged_in
 def follow_changes():
@@ -389,6 +475,8 @@ def follow_changes():
     return jsonify(message)
 
 
+# These are the routes of the gallery page (provides data and will respond to any
+# changes)
 @app.route('/api/get-media.json', methods=['GET'])
 def get_media():
     username = request.args.get('username')
@@ -419,6 +507,7 @@ def post_media_changes():
     return jsonify("CONFIRMED")
 
 
+# # TO DO: The kudo system
 # @app.route('/api/get-kudos.json', methods=['GET'])
 # @must_be_logged_in
 # def get_kudos():
@@ -430,15 +519,7 @@ def post_media_changes():
 #     return ''
 
 
-@app.route('/api/password-check.json', methods=['GET'])
-@must_be_logged_in
-def password_check():
-    user = User.query.filter_by(user_id = session['user']).first()
-    password = request.args.get('password')
-    if bcrypt.check_password_hash(user.password, password):
-        return jsonify({'bool': 'TRUE'})
-    return jsonify({'bool': 'FALSE'})
-
+# These are the routes for dynamic form validation checks
 @app.route('/api/email-check.json', methods=['GET'])
 def email_check():
     email_to_check = request.args.get('email')
@@ -455,41 +536,46 @@ def username_check():
         return jsonify({'bool': 'TRUE'})
     return jsonify({'bool': 'FALSE'})
 
-
-@app.route('/api/upload-name-check.json', methods=['GET'])
-@must_be_logged_in
-def upload_name_check():
-    name_to_check = request.args.get('checkName')
-    user = User.query.filter_by(user_id = session['user']).first()
-    entry = Media.query.filter_by(media_name = name_to_check).first()
-    if entry:  # If there is already an entry with the same name
-        return False
-    return True
-
-
-# @app.route('/api/signup-check.json', methods=['GET'])
-# @must_be_logged_out
-# def signup_check():
-#     return ''
+# # TO DO: implement with the upload media form validation
+# @app.route('/api/upload-name-check.json', methods=['GET'])
+# @must_be_logged_in
+# def upload_name_check():
+#     name_to_check = request.args.get('checkName')
+#     user = User.query.filter_by(user_id = session['user']).first()
+#     entry = Media.query.filter_by(media_name = name_to_check).first()
+#     if entry:  # If there is already an entry with the same name
+#         return False
+#     return True
 
 
-@app.route('/api/change-media-data', methods=['POST'])
-@must_be_logged_in
-def change_media_data():
-    media_id = request.form.get('mediaId')
-    media = Media.query.filter_by(media_id = media_id).first()
-    user = User.query.filter_by(user_id = session['user']).first()
-    if media.user != user:  # If there is already an entry with the same name
-        return jsonify("ERROR")
-    # Get the rest of the data
-    description = request.form.get('meta-change')
-    tags = request.form.get('tags-change')
-    is_downloadable = request.form.get('downloadable-change')
-    date = request.form.get('date-change')  #TO DO: PASS NONE if no change
-    thumbnail = request.files['thumb-change'] #TO DO: HANDLE
-    name = request.form.get('name-change') #TO DO: HANDLE via upload-name-check
-    # HANDLE CHANGES
-    return jsonify("CONFIRMED")
+# # TO DO: implement the individual media change edits - this is a draft
+# @app.route('/api/change-media-data', methods=['POST'])
+# @must_be_logged_in
+# def change_media_data():
+#     media_id = request.form.get('mediaId')
+#     media = Media.query.filter_by(media_id = media_id).first()
+#     user = User.query.filter_by(user_id = session['user']).first()
+#     if media.user != user:  # If there is already an entry with the same name
+#         return jsonify("ERROR")
+#     # Get the rest of the data
+#     description = request.form.get('meta-change')
+#     tags = request.form.get('tags-change')
+#     is_downloadable = request.form.get('downloadable-change')
+#     date = request.form.get('date-change')  #TO DO: PASS NONE if no change
+#     thumbnail = request.files['thumb-change'] #TO DO: HANDLE
+#     name = request.form.get('name-change') #TO DO: HANDLE via upload-name-check
+#     # HANDLE CHANGES
+#     return jsonify("CONFIRMED")
+
+
+@app.route('/api/discover-artists.json', methods=['GET'])
+def discover_artists():
+    users = User.query.order_by(User.username).all()
+    data = []
+    for user in users:
+        data.append({'username': user.username,
+                     'url': user.avatar_url})
+    return jsonify({'data': data})
 
 
 if __name__ == "__main__":
@@ -504,5 +590,8 @@ if __name__ == "__main__":
 
     # Use the DebugToolbar
     DebugToolbarExtension(app)
+    # For testing
+    if sys.argv[-1] == "jstest":
+        JS_TESTING_MODE = True
 
     app.run(port=5000, host='0.0.0.0')

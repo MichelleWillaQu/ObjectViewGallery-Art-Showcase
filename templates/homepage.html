@@ -1,10 +1,50 @@
 {% extends 'base.html' %}
 
 {% block head %}
-  <title>Homepage</title>
+  <title>Discover</title>
+  <style>
+    .artist-data{
+      width: 100px;
+      height: 100px;
+    }
+    img{
+      max-width: 100%;
+      max-height: 100%;
+    }
+  </style>
 {% endblock %}
 
 {% block body %}
-  <h1>Homepage</h1>
-  Welcome!
+  <h1>Discover</h1>
+  <label>What are you looking for?
+    <select id="type">
+      <option value="artist" selected>Artists</option>
+      <option value="media">Media</option>
+    </select>
+  </label>
+  <span id="media-filters" hidden>
+    <label>How would you like to search?
+      <select id="how">
+        <option value="date" selected>Date</option>
+        <option value="tag">Tags</option>
+      </select>
+    </label>
+    <label class="tag-content" hidden>What tag?
+      <select id="tags">
+        {% for tag in tags %}
+          <option>{{tag.tag_name}}</option>
+        {% endfor %}
+      </select>
+    </label>
+    <label class="date-content">In what order?
+      <select id="order">
+        <option value="recent" selected>Recent</option>
+        <option value="oldest">Oldest</option>
+      </select>
+    </label>
+  </span>
+
+  <div id="content">Welcome!</div>
+
+  <script src="static/JS/homepage.js"></script>
 {% endblock %}

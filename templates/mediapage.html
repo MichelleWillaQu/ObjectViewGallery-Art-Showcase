@@ -16,30 +16,46 @@
 {% endblock %}
 
 {% block body %}
-  {% if status == None %}
-    <h1>{{formatted_name}}</h1>
-    <img src={{media.media_url}} class="{{media.media_url}}"
-    id="image">
-    <br>
-    Themes<div id="colors"></div>
-    <script src="/static/JS/vibrant.js"></script>
-  {% endif %}
+  <div id="content">
+    {% if status == None %}
+      <h1>{{formatted_name}}</h1>
+      <img src={{media.media_url}} class="{{media.media_url}}"
+      id="image">
+      <br>
+      Themes<div id="colors"></div>
+      <script src="/static/JS/vibrant.js"></script>
+    {% endif %}
 
-  {% if status == 'obj' %}
-    <h1>{{formatted_name}}</h1>
-    <canvas class={{media.media_url}} id="obj"></canvas>
-    <script src="/static/JS/obj-3D.js"></script>
-  {% endif %}
+    {% if status == 'obj' %}
+      <h1>{{formatted_name}}</h1>
+      <canvas class={{media.media_url}} id="obj"></canvas>
+      <script src="/static/JS/obj-3D.js"></script>
+    {% endif %}
 
-  {% if status == 'obj+mtl' %}
-    <h1>{{formatted_name}}</h1>
-    <canvas class="{{media.media_url}} {{media.mtl.mtl_url}}" id="objMtl"></canvas>
-    <script src="/static/JS/obj-3D-mtl.js"></script>
-  {% endif %}
+    {% if status == 'obj+mtl' %}
+      <h1>{{formatted_name}}</h1>
+      <canvas class="{{media.media_url}} {{media.mtl.mtl_url}}" id="objMtl"></canvas>
+      <script src="/static/JS/obj-3D-mtl.js"></script>
+    {% endif %}
 
-  {% if status == 'gltf' %}
-    <h1>{{formatted_name}}</h1>
-    <canvas class={{media.media_url}} id="gltf"></canvas>
-    <script src="/static/JS/gltf-3D.js"></script>
-  {% endif %}
+    {% if status == 'gltf' %}
+      <h1>{{formatted_name}}</h1>
+      <canvas class={{media.media_url}} id="gltf"></canvas>
+      <script src="/static/JS/gltf-3D.js"></script>
+    {% endif %}
+  </div>
+
+  <div id="user">
+    <a href="/gallery/{{user.username}}">
+      {{user.username}}<br>
+      <img src={{user.avatar_url}}>
+    </a>
+  </div>
+  <div id="meta_info">
+    Info:
+    {{media.meta_info}}
+  </div>
+  <div id="date">
+    Date Created: {{formatted_date}}
+  </div>
 {% endblock %}

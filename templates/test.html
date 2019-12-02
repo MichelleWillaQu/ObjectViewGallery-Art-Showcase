@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+Hi<br>
+
+{% block body %}
+  {% if g.jasmine_tests %}
+    <!-- stuff for testing -->
+    <script src="/Testing/jasmine.min.js"></script>
+    <script src="/Testing/jasmine-html.min.js"></script>
+    <script src="/Testing/boot.min.js"></script>
+    <script src="/Testing/test-js.js"></script>
+  {% endif %}
+{% endblock %}
