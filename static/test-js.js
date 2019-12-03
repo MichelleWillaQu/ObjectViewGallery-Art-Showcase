@@ -2,6 +2,9 @@
 
 import {passwordRegexCheck, usernameRegexCheck} from '../static/functions'
 
+
+// This is the testing file for functions.js via Jasmine - each function is checked
+// with something too short, invalid input(s), and valid input
 describe('Testing Password Regex', () => {
   it('should be too short', () => {
     expect(passwordRegexCheck('osetu0')).toBe(false);

@@ -364,18 +364,19 @@ def settings_action():
     
     # Update the background
     background_choice = request.form.get('background')
-    if background_choice == 'other':
-        file = request.files['background-other']
-        extension = (file.filename).rsplit('.', 1)[1].lower()
-        if extension not in {'jpg', 'jpeg', 'png'}:
-            flash('Not a valid file. Please follow the accepted file types.')
-            return redirect('/settings')
-        filename = 'background.' + extension
-        file_url = os.path.join(user.folder_url, filename)
-        file.save(file_url)
-        user.background_url = '/' + file_url
-    else:
-        user.background_url = background_choice
+    if background_choice != 'none':
+        if background_choice == 'other':
+            file = request.files['background-other']
+            extension = (file.filename).rsplit('.', 1)[1].lower()
+            if extension not in {'jpg', 'jpeg', 'png'}:
+                flash('Not a valid file. Please follow the accepted file types.')
+                return redirect('/settings')
+            filename = 'background.' + extension
+            file_url = os.path.join(user.folder_url, filename)
+            file.save(file_url)
+            user.background_url = '/' + file_url
+        else:
+            user.background_url = background_choice
 
     db.session.commit()
     return redirect('/')
@@ -390,6 +391,8 @@ def user(username):
     return render_template('gallery.html', user=user)
 
 
+# Be careful with routes like this where its all variables since it way catch
+# something unexpected
 # TO DO: edit mode, kudos/likes
 @app.route('/<username>/<media_name>')
 def media(username, media_name):

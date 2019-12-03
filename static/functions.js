@@ -2,6 +2,8 @@
 
 import $ from 'jquery';
 
+
+// These are the functions that will perform regex checks on inputs
 export function passwordRegexCheck(inputValue){
   if (inputValue.length < 8){
     return false;

@@ -11,41 +11,56 @@ let firstSubmit = false;
 let check1passed = false;
 let check2passed = false;
 
+const usernameInput = $('#username');
+function checkUsername () {
+  return new Promise((resolve, reject) => {
+    $.get('/api/username-check.json',
+      {username: usernameInput.val()}, resolve)});
+}
+
+function usernameResolution (response){
+  if (response.bool === 'TRUE'){
+    check1passed = false;
+    usernameInput.addClass('invalid');
+    usernameInput[0].setCustomValidity('That username is already taken')
+  }
+  else {
+    check1passed = true;
+  }
+}
+
+const emailInput = $('#email');
+function checkEmail() {
+  return new Promise((resolve, reject) => {
+    $.get('/api/email-check.json',
+      {email: emailInput.val()}, resolve)});
+}
+
+function emailResolution (response){
+  if (response.bool === 'TRUE'){
+    check2passed = false;
+    emailInput.addClass('invalid');
+    emailInput[0].setCustomValidity('That email is already taken');
+  }
+  else {
+    check2passed = true;
+  }
+}
+
 // Event type 'input' is not fully supported on Edge and IE - alternative is to
 // put the async checks on blur which may not always check one of the inputs if
 // it is focused while being submitted
-const usernameInput = $('#username');
 usernameInput.on('input', () => {
   // Ajax call to see if username exists (false is the wanted return)
-  $.get('/api/username-check.json',
-      {username: usernameInput.val()}, (response) => {
-    if (response.bool === 'TRUE'){
-      check1passed = false;
-      usernameInput.addClass('invalid');
-      usernameInput[0].setCustomValidity('That username is already taken')
-    }
-    else {
-      check1passed = true;
-    }
-  });
+  checkUsername().then(usernameResolution);
 });
 
-const emailInput = $('#email');
+
 emailInput.on('input', () => {
   // Check to make sure there is not a user with that email (false is the wanted
   // response)
   firstType = true;
-  $.get('/api/email-check.json',
-      {email: emailInput.val()}, (response) => {
-    if (response.bool === 'TRUE'){
-      check2passed = false;
-      emailInput.addClass('invalid');
-      emailInput[0].setCustomValidity('That email is already taken');
-    }
-    else {
-      check2passed = true;
-    }
-  });
+  checkEmail().then(emailResolution);
 });
 
 // Prevent form submission unless all validations are done
@@ -83,6 +98,9 @@ $('form').on('submit', (evt) => {
     $('.password')[1].setCustomValidity('Password Mismatch');
   }
 
+  checkUsername().then(usernameResolution);
+  checkUsername().then(emailResolution);
+
   // If there is an error, this will prevent form submission
   if(!validation || !check1passed || !check2passed){
     // I only want reports of the validity after the first submit press
@@ -116,9 +134,11 @@ $('#username').on('focus', (evt) => {
   evt.target.reportValidity();
 });
 
-// Bug: Occasionally may report type email specific errors when typing though
+// Chrome browser bug: Occasionally may report type email specific errors when typing though
 $('#email').on('focus', (evt) => {
+  console.log('hi')
   if (firstType){
+    console.log('me')
     evt.target.reportValidity();
   }
 });

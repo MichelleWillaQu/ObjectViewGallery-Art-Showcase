@@ -14,6 +14,7 @@ investigating ideas on how to merge similar meaning tags (very hard - AO3?)
 9. Discover page for media (with all the filters) - likely similar to the React
 page in that there would be a virtual canvas over the whole page and React would
 render the different components in the content div and then call three.js code
+10. AWS S3 storage for file saving rather than on my local OS
 
 
 
@@ -27,3 +28,5 @@ the bug with input type 'email' popping its error message sometimes when the inp
 changes and the focus is maintained)
 3. Look into refactoring a lot of the python validation to be in functions since
 the checks are similar
+4. I generated a random string for secrets.sh but never got around to using it -
+not quite sure how secrets are maintained during deployment
