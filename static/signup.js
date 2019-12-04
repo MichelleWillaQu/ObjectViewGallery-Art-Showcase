@@ -11,6 +11,8 @@ let firstSubmit = false;
 let check1passed = false;
 let check2passed = false;
 
+// A promise for modular code and reusability - the resolve is the callback that
+// is attached to the .then
 const usernameInput = $('#username');
 function checkUsername () {
   return new Promise((resolve, reject) => {
@@ -98,6 +100,7 @@ $('form').on('submit', (evt) => {
     $('.password')[1].setCustomValidity('Password Mismatch');
   }
 
+  // Recheck the username and email just in case
   checkUsername().then(usernameResolution);
   checkUsername().then(emailResolution);
 
