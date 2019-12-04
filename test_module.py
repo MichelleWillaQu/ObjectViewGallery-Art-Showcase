@@ -2,26 +2,13 @@ from unittest import TestCase
 from server import app
 from model import (db, connect_to_db, User, Media, MediaType, ObjToMTL,
                    WhichTag, Tag, Like, Follow)
-# from seed import set_acceptable_media_types
+from seed import set_acceptable_media_types
 from datetime import datetime
 from flask_bcrypt import Bcrypt
 from selenium import webdriver
-from flask import json, jsonify, session
-from time import sleep
+from flask import json, jsonify
 
 bcrypt = Bcrypt(app)
-
-def set_acceptable_media_types():
-    MediaType.query.delete()
-    acceptable_list = [MediaType(media_ext='gif'),
-                       MediaType(media_ext='jpg'),
-                       MediaType(media_ext='jpeg'),
-                       MediaType(media_ext='png'),
-                       MediaType(media_ext='obj'),
-                       MediaType(media_ext='gltf'),
-                       MediaType(media_ext='webp')]
-    db.session.add_all(acceptable_list)
-    db.session.commit()
 
 def create_data():
     """Creating the test data."""
@@ -222,7 +209,6 @@ class FlaskTestsLoggedin(TestCase):
         set_acceptable_media_types()
         create_data()
 
-
     def tearDown(self):
         """Done after every test."""
         db.session.remove()
@@ -245,12 +231,14 @@ class FlaskTestsLoggedin(TestCase):
 
     def test_logout(self):
         """Test logout page."""
-
+    
         result = self.client.get("/logout", follow_redirects=True)
         # This refers to a button that will be only present when there is no
         # user in the session
-        self.assertNotIn(b'user', session)
-        self.assertIn(b"Log in", result.data)
+        with self.client as c:
+            with c.session_transaction() as sess:
+                self.assertNotIn(b'user', sess)
+        self.assertIn(b"Log In", result.data)
 
     def test_upload(self):
         """Test upload page."""
@@ -270,8 +258,6 @@ class FlaskTestsLoggedout(TestCase):
         connect_to_db(app, "postgresql:///testdb")
         db.create_all()
         set_acceptable_media_types()
-        create_data()
-
 
     def tearDown(self):
         """Done after every test."""

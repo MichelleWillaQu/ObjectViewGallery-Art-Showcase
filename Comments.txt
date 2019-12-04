@@ -15,6 +15,7 @@ investigating ideas on how to merge similar meaning tags (very hard - AO3?)
 page in that there would be a virtual canvas over the whole page and React would
 render the different components in the content div and then call three.js code
 10. AWS S3 storage for file saving rather than on my local OS
+11. DeviantArt API (does not seem to work without a domain and https)
 
 
 
