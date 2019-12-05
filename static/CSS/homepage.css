@@ -1,0 +1,69 @@
+body {
+  /*center both horizontally and vertically*/
+  background: url(/static/francisco-delgado-unsplash.jpg) no-repeat center center;
+  background-size: cover;
+ /* Unless this property is here, the image will sometimes not cover the whole page*/
+  height: 100vh;
+}
+
+#content {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.artist-data {
+  width: 200px;
+  height: 200px;
+  border: 1px black solid;
+  margin: 3px;
+  display: flex;
+  align-items: flex-end;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+a {
+  /*To stretch to the div size and has flex in case*/
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex: 1 1 100%;
+}
+
+.inside {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  flex: 1 1 100%;
+}
+
+.img-container {
+  width: 100%;
+  display: flex;
+  flex: 1 1 auto;
+  align-self: stretch;
+}
+
+.img-container img {
+  height: 100%;
+  width: 100%;
+}
+
+.text {
+  width: 100%;
+  display: flex;
+  align-self: flex-end;
+  text-align: center;
+  justify-content: center;
+}
+
+label {
+  /*For readability*/
+  font-weight: bold;
+}
+
+span {
+  /*sets the bottom of the span to the bottom of the body (the parent)*/
+  position: absolute;
+  bottom: 0px;
+}

@@ -3,7 +3,10 @@ from model import connect_to_db, db
 from server import app
 from datetime import datetime
 
+
 def set_acceptable_media_types():
+  """This is to set the MediaTypes accepted by the app."""
+  
     acceptable_list = [MediaType(media_ext='gif'),
                        MediaType(media_ext='jpg'),
                        MediaType(media_ext='jpeg'),

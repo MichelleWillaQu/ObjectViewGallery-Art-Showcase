@@ -103,6 +103,7 @@ class FlaskTestsDatabase(TestCase):
         app.config['SECRET_KEY'] = 'testingSecrets'
         with self.client as c:
             with c.session_transaction() as sess:
+                # Log in as 'Potato' user
                 sess['user'] = 2
 
         # Connect to test database

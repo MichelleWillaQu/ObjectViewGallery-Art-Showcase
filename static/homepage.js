@@ -43,12 +43,19 @@ function getArtists(){
       const anchor = document.createElement('a');
       anchor.setAttribute('href', `/gallery/${artist.username}`);
       const node = document.createElement('div');
-      node.innerHTML = `${artist.username}`;
+      node.classList.add('inside');
       if (artist.url){
+        const divImg = document.createElement('div');
+        divImg.classList.add('img-container');
         const img = document.createElement('img');
         img.setAttribute('src', artist.url);
-        node.appendChild(img);
+        divImg.appendChild(img);
+        node.appendChild(divImg);
       }
+      const text = document.createElement('div')
+      text.innerHTML = `${artist.username}`;
+      text.classList.add('text');
+      node.appendChild(text);
       anchor.appendChild(node);
       outer.appendChild(anchor);
       locationEl.append(outer);
