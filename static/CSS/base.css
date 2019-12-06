@@ -55,6 +55,8 @@ nav {
 .navbar-light .navbar-nav .nav-link, .navbar-light .nav-item {
   /* Readability */
   color: rgba(0, 0, 0, .64);
+  /* Gets rid of the dynamic padding since .nav-item and buttons do not match */
+  padding: 0px 0px;
 }
 
 .navbar-light .navbar-nav .nav-link:hover, .navbar-light .nav-item:hover {
@@ -65,7 +67,7 @@ nav {
 
 .nav-item, button.navbar-toggler, .navbar-brand {
   /* Some left and right margins for making things space from the border nicely */
-  margin: 0px 5px;
+  margin: 0px 10px;
 }
 
 .nav-link, .nav-item {

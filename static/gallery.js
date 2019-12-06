@@ -250,12 +250,12 @@ class Grid extends React.Component {
     }
 
     if (this.state.userVerified){
-      inside.push(<button class="my-button" onClick={this.editClick}>
+      inside.push(<button class="my-button ml-auto" onClick={this.editClick}>
                     {this.state.editMode ? 'Save' : 'Edit'}
                   </button>);
     }
     else {
-      inside.push(<button class="my-button" onClick={this.followClick}>
+      inside.push(<button class="my-button ml-auto" onClick={this.followClick}>
                     {this.state.following ? 'Unfollow' : 'Follow'}
                   </button>);
     }
@@ -272,12 +272,13 @@ class Grid extends React.Component {
         (<nav class="navbar navbar-expand-sm navbar-light d-flex">
             <a class="navbar-brand" href="/">
               <img class="home-icon" src="/static/my_flavicon.ico" />Home</a>
+            {loggedIn}
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
-            {loggedIn}
             <div class="collapse navbar-collapse" id="navbarNav">
               <div class="navbar-nav">
+                <a class="nav-item ml-auto" href={"/gallery/" + this.state.username}>Gallery</a>
                 <a class="nav-item nav-link ml-auto" href="/upload">Upload</a>
                 <a class="nav-item nav-link ml-auto" href="/settings">Settings</a>
                 <a class="nav-item nav-link ml-auto" href="/logout">Logout</a>
@@ -298,7 +299,7 @@ class Grid extends React.Component {
             </div>
             </nav>)}
         <DndProvider backend={HTML5Backend}>
-          <div id='Grid' style={{width: '100vw',
+          <div id='Grid' style={{width: '100%',
                                  display: 'flex',
                                  flexWrap: 'wrap',
                                  justifyContent: 'flex-start'}}>

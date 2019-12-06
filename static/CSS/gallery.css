@@ -1,8 +1,11 @@
 /* Virtual Canvas specific */
 #c {
+  /* Not fixed or else the rendering will slide around during scrolling */
   position: absolute;
+  /* Makes sure the canvas' top and left are at the top and left of its ancestor */
   left: 0;
   top: 0;
+  /* Makes sure the width/height will not change */
   width: 100vw !important;
   height: 100vh !important;
   display: block;
@@ -11,17 +14,28 @@
 }
 
 .mediaElement, .media{
+  /* Border-box considers padding and borders in the calculation of height/width
+     BUT not margins */
   box-sizing: border-box;
-  border: 1px solid transparent;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.mediaElement {
+  /* Padding instead of margin because margins will break the flex format (will
+     cause the divs to wrap because they are too big) */
+  padding: 1px;
+}
+
 .media{
+  border: 1px solid black;
   width: 100%;
   height: 100%;
 }
+
+
+/* Responsiveness */
 
 @media(min-width: 1200px){ /* XL */
   .mediaElement{
@@ -56,4 +70,15 @@
     flex: 0 0 100%;
     height: 200px;
   }
+}
+
+
+/* Navbar */
+
+.my-button {
+  margin: 0px 5px;
+  border-radius: 5px;
+  /* Makes the button not inherit thus being smaller vertically */
+  line-height: normal;
+  padding: 1px 6px;
 }
