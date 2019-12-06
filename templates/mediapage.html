@@ -2,60 +2,62 @@
 
 {% block head %}
   <title>{{formatted_name}}</title>
-  <style>
-    img {
-      width: 70vw;
-      height: 70vh;
-    }
-    canvas{
-      /* If this is not made important, the JS will overwrite the CSS */
-      width: 70vw !important;
-      height: 70vh !important;
-    }
-  </style> <!-- TO DO: move to CSS later -->
+{% endblock %}
+
+{% block otherCSS %}
+  <link rel="stylesheet" type="text/css" href="/static/CSS/mediapage.css"></link>
 {% endblock %}
 
 {% block body %}
-  <div id="content">
-    {% if status == None %}
-      <h1>{{formatted_name}}</h1>
-      <img src={{media.media_url}} class="{{media.media_url}}"
-      id="image">
-      <br>
-      Themes<div id="colors"></div>
-      <script src="/static/JS/vibrant.js"></script>
-    {% endif %}
+  <h1>{{formatted_name}}</h1>
+  <div class="page">
+    <div id="content">
+      {% if status == None %}
+        <img src={{media.media_url}} class="{{media.media_url}}"
+        id="image">
+        <br>
+        Themes<div id="colors"></div>
+        <script src="/static/JS/vibrant.js"></script>
+      {% endif %}
 
-    {% if status == 'obj' %}
-      <h1>{{formatted_name}}</h1>
-      <canvas class={{media.media_url}} id="obj"></canvas>
-      <script src="/static/JS/obj-3D.js"></script>
-    {% endif %}
+      {% if status == 'obj' %}
+        <canvas class={{media.media_url}} id="obj"></canvas>
+        <script src="/static/JS/obj-3D.js"></script>
+      {% endif %}
 
-    {% if status == 'obj+mtl' %}
-      <h1>{{formatted_name}}</h1>
-      <canvas class="{{media.media_url}} {{media.mtl.mtl_url}}" id="objMtl"></canvas>
-      <script src="/static/JS/obj-3D-mtl.js"></script>
-    {% endif %}
+      {% if status == 'obj+mtl' %}
+        <canvas class="{{media.media_url}} {{media.mtl.mtl_url}}" id="objMtl"></canvas>
+        <script src="/static/JS/obj-3D-mtl.js"></script>
+      {% endif %}
 
-    {% if status == 'gltf' %}
-      <h1>{{formatted_name}}</h1>
-      <canvas class={{media.media_url}} id="gltf"></canvas>
-      <script src="/static/JS/gltf-3D.js"></script>
-    {% endif %}
-  </div>
+      {% if status == 'gltf' %}
+        <canvas class={{media.media_url}} id="gltf"></canvas>
+        <script src="/static/JS/gltf-3D.js"></script>
+      {% endif %}
+    </div>
 
-  <div id="user">
-    <a href="/gallery/{{user.username}}">
-      {{user.username}}<br>
-      <img src={{user.avatar_url}}>
-    </a>
-  </div>
-  <div id="meta_info">
-    Info:
-    {{media.meta_info}}
-  </div>
-  <div id="date">
-    Date Created: {{formatted_date}}
+    <div class="mediaData">
+      <div id="gallery">
+        <a class="link" href="/gallery/{{user.username}}">
+          <div class="inside">
+            <div class="img-container">
+              <img src={{user.avatar_url}}>
+            </div>
+            <div class="text">
+              {{user.username}}
+            </div>
+          </div>
+        </a>
+      </div>
+      {% if media.meta_info %}
+        <div id="metadata">
+          Info:
+          {{media.meta_info}}
+        </div>
+      {% endif %}
+      <div id="date">
+        Date Created: {{formatted_date}}
+      </div>
+    </div>
   </div>
 {% endblock %}

@@ -1,0 +1,86 @@
+body {
+  /* So divs do not touch the bottom directly if the height is large */
+  padding-bottom: 10px;
+  background: url(/static/seamless_paper_texture_merry.png);
+  background-repeat: repeat;
+  height: 100%;
+  position: relative;
+}
+
+img {
+  width: 75vw;
+  height: 70vh;
+}
+
+canvas{
+  /* If this is not made important, the JS may overwrite the CSS */
+  width: 70vw !important;
+  height: 70vh !important;
+}
+
+.page {
+  display: flex;
+}
+
+#content, .mediaData {
+  display: inline-block;
+}
+
+.mediaData {
+  display: flex;
+  flex-direction: column;
+  padding-left: 5px;
+}
+
+#gallery {
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+  border: 1px solid black;
+  margin-bottom: 5px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+a.link {
+  /* To stretch to the div size and has flex in case */
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex: 1 1 100%;
+}
+
+.inside {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.img-container {
+  display: flex;
+  /* Will grow to fill the rest of the .inside height and width */
+  flex: 1 1 auto;
+}
+
+.img-container img {
+  /* Fill the container */
+  height: 100%;
+  width: 100%;
+}
+
+.text {
+  display: flex;
+  /* Will push the child text to the center of the div */
+  justify-content: center;
+}
+
+a.link:hover {
+  text-decoration: none;
+}
+
+#metadata, #date {
+  display: flex;
+  border: 1px solid black;
+  margin-bottom: 5px;
+  padding: 0px 2px;
+  background: rgba(255, 255, 255, 0.3);
+}
