@@ -23,8 +23,9 @@ bcrypt = Bcrypt(app)
 UPLOAD_FOLDER = 'static/uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-# Required to use Flask sessions and the debug toolbar
-app.secret_key = os.environ.get('SECRET_KEY')
+# Required to use Flask sessions and the debug toolbar - make sure to source in
+# each terminal tab open (esp. the one running the server)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 
 # Normally, if you use an undefined variable in Jinja2, it fails
 # silently. This is horrible. Fix this so that, instead, it raises an

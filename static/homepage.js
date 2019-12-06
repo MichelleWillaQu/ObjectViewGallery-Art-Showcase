@@ -41,6 +41,7 @@ function getArtists(){
       const outer = document.createElement('div');
       outer.classList.add('artist-data');
       const anchor = document.createElement('a');
+      anchor.classList.add('link')
       anchor.setAttribute('href', `/gallery/${artist.username}`);
       const node = document.createElement('div');
       node.classList.add('inside');

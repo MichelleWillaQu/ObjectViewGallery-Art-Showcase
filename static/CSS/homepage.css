@@ -3,12 +3,17 @@ body {
   background: url(/static/francisco-delgado-unsplash.jpg) no-repeat center center;
   background-size: cover;
  /* Unless this property is here, the image will sometimes not cover the whole page*/
-  height: 100vh;
+  height: 100%;
+  position: relative;
 }
 
 #content {
   display: flex;
   flex-wrap: wrap;
+  /* The padding bottom matches the margin-top of the footer */
+  padding-bottom: 50px;
+   /* The flex equivalent of text-align */
+  justify-content: center;
 }
 
 .artist-data {
@@ -21,12 +26,16 @@ body {
   background: rgba(255, 255, 255, 0.5);
 }
 
-a {
-  /*To stretch to the div size and has flex in case*/
+a.link {
+  /* To stretch to the div size and has flex in case */
   display: flex;
   width: 100%;
   height: 100%;
   flex: 1 1 100%;
+}
+
+a.link:hover {
+  text-decoration: none;
 }
 
 .inside {
@@ -38,32 +47,32 @@ a {
 }
 
 .img-container {
-  width: 100%;
   display: flex;
+  /* Will grow to fill the rest of the .inside height and width */
   flex: 1 1 auto;
-  align-self: stretch;
 }
 
 .img-container img {
+  /* Fill the container */
   height: 100%;
   width: 100%;
 }
 
 .text {
-  width: 100%;
   display: flex;
-  align-self: flex-end;
-  text-align: center;
+  /* Will push the child text to the center of the div */
   justify-content: center;
 }
 
 label {
   /*For readability*/
   font-weight: bold;
-}
+  color: white;
+} 
 
-span {
-  /*sets the bottom of the span to the bottom of the body (the parent)*/
+.artist {
+  /* Sets the bottom of the span to the bottom of the body (the parent) */
   position: absolute;
   bottom: 0px;
+  margin-top: -50px;
 }

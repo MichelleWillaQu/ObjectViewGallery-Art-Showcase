@@ -9,7 +9,6 @@ dev_notes.txt
 *.OBJ
 *.MTL
 *.mtl
-*.png
 secrets.sh
 uploads/
 themes/

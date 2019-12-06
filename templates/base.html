@@ -16,23 +16,39 @@
 
 </head>
 <body>
+  {% block button %}
+    <nav class="navbar navbar-expand-sm navbar-light d-flex">
+      <a class="navbar-brand" href="/">
+        <img class="home-icon" src="/static/my_flavicon.ico">Home</a>
+        {% if session.get('user') %}
+            <a class="nav-item ml-auto" href="/gallery/{{theUsername}}">Gallery</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon ml-auto"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <div class="navbar-nav">
+                <a class="nav-item nav-link ml-auto" href="/upload">Upload</a>
+                <a class="nav-item nav-link ml-auto" href="/settings">Settings</a>
+                <a class="nav-item nav-link ml-auto" href="/logout">Logout</a>
+              </div>
+            </div>
+        {% else %}
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <div class="navbar-nav ml-auto">
+              <a class="nav-item nav-link ml-auto" href="/login">Log In</a>
+              <a class="nav-item nav-link ml-auto" href="/signup">Sign Up</a>
+            </div>
+          </div>
+        {% endif %}
+    </nav>
+  {% endblock %}
+  
   {% for message in get_flashed_messages() %}
     <h2>******{{message}}******</h2>
   {% endfor %}
-    
-  {% block button %}
-    {% if session.get('user') %}
-      <button><a href="/">Home</a></button>
-      <button><a href="/upload">Upload</a></button>
-      <button><a href="/gallery/{{theUsername}}">Gallery</a></button>
-      <button><a href="/settings">Settings</a></button>
-      <button><a href="/logout">Logout</a></button>
-    {% else %}
-      <button><a href="/">Home</a></button>
-      <button><a href="/login">Log In</a></button>
-      <button><a href="/signup">Sign Up</a></button>
-    {% endif %}
-  {% endblock %}
 
   {% block body %}
     To be filled.

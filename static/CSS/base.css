@@ -5,3 +5,52 @@ h3, h1 {
 body, button, select {
   font-family: 'Open Sans Condensed', sans-serif;
 }
+
+body {
+  padding: 0px 16px;
+}
+
+select {
+  border-radius: 5px;
+}
+
+.navbar-toggler {
+  padding: 0px;
+}
+
+.navbar-brand {
+  padding: 0px 0px;
+}
+
+nav {
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.65);
+  font-family: 'Baskervville', serif;
+}
+
+.navbar {
+   padding: 2px 2px;
+   flex-wrap: wrap;
+}
+
+.navbar-collapse {
+  flex-grow: 0;
+}
+
+.navbar-light .navbar-nav .nav-link, .navbar-light .nav-item {
+  color: rgba(0,0,0,.64);
+}
+
+.navbar-light .navbar-nav .nav-link:hover, .navbar-light .nav-item:hover {
+  color: rgba(0,0,0,.9);
+  text-decoration: none;
+}
+
+.nav-item, button.navbar-toggler {
+  margin: 0px 5px;
+}
+
+.home-icon {
+  height: 100%;
+  width: auto;
+}
