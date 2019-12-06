@@ -243,20 +243,60 @@ class Grid extends React.Component {
     return media;
   }
 
+  loggedInButtons(){
+    const inside = [];
+    if (!this.state.loggedin){
+      return null;
+    }
+
+    if (this.state.userVerified){
+      inside.push(<button class="my-button" onClick={this.editClick}>
+                    {this.state.editMode ? 'Save' : 'Edit'}
+                  </button>);
+    }
+    else {
+      inside.push(<button class="my-button" onClick={this.followClick}>
+                    {this.state.following ? 'Unfollow' : 'Follow'}
+                  </button>);
+    }
+
+    return inside;
+  }
+
   render(){
     const media = this.makeMediaElements();
+    const loggedIn = this.loggedInButtons();
     return(
       <span>
-        {this.state.userVerified ? (<button onClick={this.editClick}>
-                                      {this.state.editMode ? 'Save' : 'Edit'}
-                                    </button>)
-                                 : null}
-        {(!this.state.userVerified && this.state.loggedin) ?
-            (<button onClick={this.followClick}>
-               {this.state.following ? 'Unfollow' : 'Follow'}
-             </button>)
-          : null
-        }
+      {this.state.loggedin ?
+        (<nav class="navbar navbar-expand-sm navbar-light d-flex">
+            <a class="navbar-brand" href="/">
+              <img class="home-icon" src="/static/my_flavicon.ico" />Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            {loggedIn}
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <div class="navbar-nav">
+                <a class="nav-item nav-link ml-auto" href="/upload">Upload</a>
+                <a class="nav-item nav-link ml-auto" href="/settings">Settings</a>
+                <a class="nav-item nav-link ml-auto" href="/logout">Logout</a>
+              </div>
+            </div>
+          </nav>)
+        : (<nav class="navbar navbar-expand-sm navbar-light d-flex">
+            <a class="navbar-brand" href="/">
+              <img class="home-icon" src="/static/my_flavicon.ico" />Home</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <div class="navbar-nav ml-auto">
+                <a class="nav-item nav-link ml-auto" href="/login">Log In</a>
+                <a class="nav-item nav-link ml-auto" href="/signup">Sign Up</a>
+              </div>
+            </div>
+            </nav>)}
         <DndProvider backend={HTML5Backend}>
           <div id='Grid' style={{width: '100vw',
                                  display: 'flex',

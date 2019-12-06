@@ -4,19 +4,21 @@
   <title>Uploading Media</title>
 {% endblock %}
 
-{% block button %}{% endblock %}
+{% block otherCSS %}
+  <link rel="stylesheet" type="text/css" href="/static/CSS/upload.css"></link>
+{% endblock %}
 
 {% block body %}
   <form action='/upload-action' method="POST" class="form-upload"
   enctype = "multipart/form-data">
-    <h3 class="form-heading">Let's upload some media!</h3>
+    <h3 class="form-heading">Let's upload some art!</h3>
     <div class="form-field">
-      <label>Name of Media
+      <label>Name of Art
         <input type="text" name="name" id="name" required>
       </label>
     </div>
     <div class="form-field">
-      <label>What type of media is it?
+      <label class="radio">What type of media is it?
         <label>2D
           <input type="radio" name="type" value="2D" id="twoD" checked>
         </label>
@@ -69,7 +71,7 @@
       </div>
     </div>
     <div class="form-field">
-      <label>Media Information
+      <label class="text">Media Information 
         <textarea rows="4" name="metadata" id="metadata"
         placeholder="You can edit this on the media's page later."></textarea>
       </label>
@@ -90,7 +92,7 @@
       </label>
     </div>
     <div class="form-field">
-      <label>Tags
+      <label class="text">Tags
         <textarea rows="4" name="tags" id="tags"
         placeholder="Tags delimited by enters (line breaks)"></textarea>
       </label>

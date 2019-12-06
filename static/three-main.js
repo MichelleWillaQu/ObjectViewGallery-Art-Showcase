@@ -18,7 +18,7 @@ export function threejsEntry(itemList){
     scene.background = new THREE.Color(0x7F7F7F);  // Gray
     const skyColor = 0xFFFFFF;  // White
     const groundColor = 0x000000;  // Black
-    const intensity = 1;
+    const intensity = 2;
     const light = new THREE.HemisphereLight(skyColor, groundColor, intensity);
     scene.add(light);
 

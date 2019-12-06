@@ -2,67 +2,16 @@
 
 {% block head %}
   <title>{{user.username}}</title>
-  <style> /*TO DO: MOVE TO CSS; */
-    body{
+  <style>
+    body {
+      /* Jinja is the only one with access to the variable */
       background-image: url({{user.background_url}});
     }
-    #c{
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100vw !important;
-      height: 100vh !important;
-      display: block;
-      z-index: -1; /* So it will be behind other elements */
-    }
-    .mediaElement, .media{
-      box-sizing: border-box;
-      border: 1px solid transparent;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-    .media{
-      width: 100%;
-      height: 100%;
-    }
-
-    @media(min-width: 1200px){ /* XL */
-      .mediaElement{
-        flex: 0 0 25%;
-        height: 400px;
-      }
-    }
-
-    @media(max-width: 1200px){ /* L */
-      .mediaElement{
-        flex: 0 0 33%;
-        height: 300px;
-      }
-    }
-
-    @media(max-width: 992px){ /* M */
-      .mediaElement{
-        flex: 0 0 33%;
-        height: 300px;
-      }
-    }
-
-    @media(max-width: 768px){ /* S */
-      .mediaElement{
-        flex: 0 0 50%;
-        height: 200px;
-      }
-    }
-
-    @media(max-width: 576px){ /* XS */
-      .mediaElement{
-        flex: 0 0 100%;
-        height: 200px;
-      }
-    }
-
   </style>
+{% endblock %}
+
+{% block otherCSS %}
+  <link rel="stylesheet" type="text/css" href="/static/CSS/gallery.css"></link>
 {% endblock %}
 
 {% block button %}
