@@ -1,3 +1,4 @@
+/* Set my fonts */
 h3, h1 {
   font-family: 'Baskervville', serif;
 }
@@ -7,50 +8,74 @@ body, button, select {
 }
 
 body {
+  /* So the words are not directly on the edge of the page */
   padding: 0px 16px;
 }
 
 select {
+  /* Nice curved edges */
   border-radius: 5px;
 }
 
-.navbar-toggler {
+/* The flash messages */
+.error {
+  text-align: center;
+  border: 1px solid red;
+  background-color: rgba(255, 255, 255, .9);
+}
+
+
+/* Bootstrap */
+
+.navbar-toggler, .navbar-brand {
+  /* So the icon fills the hamburger button completely - no need for the button
+     to be so big and no upper padding*/
   padding: 0px;
 }
 
-.navbar-brand {
-  padding: 0px 0px;
-}
-
 nav {
+  /* Nice curved bar for navigation */
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.65);
   font-family: 'Baskervville', serif;
 }
 
 .navbar {
-   padding: 2px 2px;
-   flex-wrap: wrap;
+  /* So the borders of the hamburger and icon are not touching the bottom of the
+     bar */
+  padding: 2px 0px;
 }
 
 .navbar-collapse {
+  /* Prevents the nav-items inside the collapsible from expanding and overpowering
+     the auto margin */
   flex-grow: 0;
 }
 
 .navbar-light .navbar-nav .nav-link, .navbar-light .nav-item {
+  /* Readability */
   color: rgba(0,0,0,.64);
 }
 
 .navbar-light .navbar-nav .nav-link:hover, .navbar-light .nav-item:hover {
+  /* No hyperlinks and reactive to user with a color change */
   color: rgba(0,0,0,.9);
   text-decoration: none;
 }
 
-.nav-item, button.navbar-toggler {
+.nav-item, button.navbar-toggler, .navbar-brand {
+  /* Some left and right margins for making things space from the border nicely */
   margin: 0px 5px;
 }
 
+.nav-link, .nav-item {
+  /* The top/bottom padding was too large - 8px  when collapsed; added nav-item
+     for consistency */
+  padding: 2px 0px;
+}
+
 .home-icon {
+  /* Size to nav */
   height: 100%;
   width: auto;
 }

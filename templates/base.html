@@ -47,7 +47,7 @@
   {% endblock %}
   
   {% for message in get_flashed_messages() %}
-    <h2>******{{message}}******</h2>
+    <h2 class="error">******{{message}}******</h2>
   {% endfor %}
 
   {% block body %}
