@@ -6,7 +6,12 @@
   left: 0;
   top: 0;
   /* Makes sure the width/height will not change */
+  /* vw includes scrollbars so the horizontal scroll is added to allow the viewer
+     to see under the vertical scroll - this somehow causes an infinite scrolling
+     bug that is fixed when there is no horizontal scroll bar */
   width: 100vw !important;
+  max-width: 100%;
+  /* or simply width: 100%; */
   height: 100vh !important;
   display: block;
   /* So it will be behind other elements */
