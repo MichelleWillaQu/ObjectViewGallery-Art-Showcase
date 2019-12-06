@@ -1,0 +1,66 @@
+----Parcel----
+At end, edit package.json's scripts to show parcel bundles:
+{
+  "scripts": {
+    "dev": "parcel <your entry file>",
+    "build": "parcel build <your entry file>"
+  }
+}
+
+Build (builds the assets once, it also enabled minification and sets the NODE_ENV=production environment variable. It creates the same bundles as serve, but it doesn't watch or serve assets)
+To specify output directory (build/output = directory):
+> parcel build entry.js -d build/output
+
+Watch (similar to serve, with the main difference being it doesn't start up a server)
+> parcel watch index.html
+
+Port (default 1234)
+> parcel serve entry.js --port 1111
+
+Disable source-maps (the wrong location is set)
+> parcel build entry.js --no-source-maps
+
+
+
+
+----NPM Commands----
+npm init (makes package.json)
+npm install -g parcel-bundler
+sudo npm install --save react react-dom
+
+npm i babel-preset-env babel-preset-react --save-dev
+npm install @babel/preset-env @babel/preset-react babel-loader
+[create .babelrc and write: 
+    {
+        "presets": ["env", "react"]
+    }
+]
+ACTUAL WORKING THO
+[.babelrc
+{
+    "presets": ["@babel/react"]
+}
+]
+
+npm install three react-dnd react-dnd-html5-backend
+npm install bootstrap jquery popper.js
+npm install --save-dev parcel-bundler @fortawesome/fontawesome-free
+        import '@fortawesome/fontawesome-free/css/all.css' in .js
+npm install react-router-dom
+
+
+
+
+----FLASK----
+IF flask breaks down and throws 'Exec format error' then
+$ export FLASK_APP=server.py
+$ export FLASK_ENV=development //production by default (debug=false)
+$ flask run --host=0.0.0.0
+
+
+
+
+----GIT----
+IF git pushing from Windows side, the warnings are good!!!
+(line endings in different OS files) - CRLF endings in Windows checkouts and LF endings in Mac/Linux/repository
+git config --global core.autocrlf true

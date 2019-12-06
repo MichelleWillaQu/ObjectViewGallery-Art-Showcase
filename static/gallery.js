@@ -27,6 +27,8 @@ class Grid extends React.Component {
                   editMode: false,
                   loggedin: false,
                   following: false,
+                  info: "",
+                  avatar: "",
                   items: [],
                   threeItems: [],
                   threeActive: false};
@@ -148,6 +150,10 @@ class Grid extends React.Component {
                        following: response.following});
       }
     });
+    $.get('/api/get-user-info.json', {username: username}, (response) => {
+        this.setState({info: response.data.info,
+                       avatar: response.data.avatar});
+    });
     $.get('/api/get-media.json', {username: username}, (response) => {
       const updatedItems = [];
       const newThreeItems = [];
@@ -268,36 +274,45 @@ class Grid extends React.Component {
     const loggedIn = this.loggedInButtons();
     return(
       <span>
-      {this.state.loggedin ?
-        (<nav class="navbar navbar-expand-sm navbar-light d-flex">
-            <a class="navbar-brand" href="/">
-              <img class="home-icon" src="/static/my_flavicon.ico" />Home</a>
-            {loggedIn}
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-              <div class="navbar-nav">
-                <a class="nav-item ml-auto" href={"/gallery/" + this.state.username}>Gallery</a>
-                <a class="nav-item nav-link ml-auto" href="/upload">Upload</a>
-                <a class="nav-item nav-link ml-auto" href="/settings">Settings</a>
-                <a class="nav-item nav-link ml-auto" href="/logout">Logout</a>
+        {this.state.loggedin ?
+          (<nav class="navbar navbar-expand-sm navbar-light d-flex">
+              <a class="navbar-brand" href="/">
+                <img class="home-icon" src="/static/my_flavicon.ico" />Home</a>
+              {loggedIn}
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav">
+                  <a class="nav-item ml-auto" href={"/gallery/" + this.state.username}>Gallery</a>
+                  <a class="nav-item nav-link ml-auto" href="/upload">Upload</a>
+                  <a class="nav-item nav-link ml-auto" href="/settings">Settings</a>
+                  <a class="nav-item nav-link ml-auto" href="/logout">Logout</a>
+                </div>
               </div>
-            </div>
-          </nav>)
-        : (<nav class="navbar navbar-expand-sm navbar-light d-flex">
-            <a class="navbar-brand" href="/">
-              <img class="home-icon" src="/static/my_flavicon.ico" />Home</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-              <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-              <div class="navbar-nav ml-auto">
-                <a class="nav-item nav-link ml-auto" href="/login">Log In</a>
-                <a class="nav-item nav-link ml-auto" href="/signup">Sign Up</a>
+            </nav>)
+          : (<nav class="navbar navbar-expand-sm navbar-light d-flex">
+              <a class="navbar-brand" href="/">
+                <img class="home-icon" src="/static/my_flavicon.ico" />Home</a>
+              <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="navbar-nav ml-auto">
+                  <a class="nav-item nav-link ml-auto" href="/login">Log In</a>
+                  <a class="nav-item nav-link ml-auto" href="/signup">Sign Up</a>
+                </div>
               </div>
+              </nav>)}
+        <div class="user">
+          <div class="avatarAndUsername">
+            <div class="img-container">
+              <img class="avatar" src={this.state.avatar} />
             </div>
-            </nav>)}
+            <div class="username">{this.state.username}</div>
+          </div>
+          <div class="info">{this.state.info}</div>
+        </div>
         <DndProvider backend={HTML5Backend}>
           <div id='Grid' style={{width: '100%',
                                  display: 'flex',

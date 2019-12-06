@@ -29,3 +29,6 @@ supported in some browsers, to the 'input' event and setCustomValidity/reportVal
 when the input changes and the focus is maintained)
 3. Look into refactoring a lot of the python validation to be in functions since
 the checks are similar
+4. On the gallery page, any errors will be above the navbar since React
+generates the navbar (necessary for the edit/follow button) - investigate
+alternatives

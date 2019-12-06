@@ -82,3 +82,43 @@
   line-height: normal;
   padding: 1px 6px;
 }
+
+
+/* User information */
+
+.user {
+  display: flex;
+  margin: 10px 0px;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.avatarAndUsername {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  height: 100px;
+}
+
+.img-container {
+  display: flex;
+  /* Will grow to fill the rest of the .inside height and width */
+  flex: 1 1 auto;
+}
+
+.img-container img {
+  /* Fill the container */
+  height: 100%;
+  width: 100%;
+}
+
+.username {
+  display: flex;
+  /* Will push the child text to the center of the div */
+  justify-content: center;
+}
+
+.info {
+  display: flex;
+  flex: 1 0 50%;
+  margin: 0px 15px;
+}

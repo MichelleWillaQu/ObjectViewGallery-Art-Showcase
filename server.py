@@ -481,6 +481,14 @@ def follow_changes():
 
 # These are the routes of the gallery page (provides data and will respond to any
 # changes)
+@app.route('/api/get-user-info.json', methods=['GET'])
+def get_user_info():
+    username = request.args.get('username')
+    user = User.query.filter_by(username = username).first()
+    user_dict = {'info': user.info,
+                 'avatar': user.avatar_url}
+    return jsonify({'data': user_dict})
+
 @app.route('/api/get-media.json', methods=['GET'])
 def get_media():
     username = request.args.get('username')
