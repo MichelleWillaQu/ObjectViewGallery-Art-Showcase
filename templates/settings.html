@@ -2,6 +2,9 @@
 
 {% block head %}
   <title>Settings</title>
+{% endblock %}
+
+{% block otherCSS %}
   <link rel="stylesheet" type="text/css" href="static/CSS/form.css"></link>
 {% endblock %}
 
@@ -55,7 +58,7 @@
       </div>
       <button class="btn-password" type="submit">Save</button>
     </div>
-    <div class="form-field bio">
+    <div class="form-field settings-bio">
       <label>Bio: Who are you?<br>
         <textarea rows="4" name="bio">{{bio}}</textarea>
       </label>
@@ -69,7 +72,7 @@
     <div class="form-field background">
       <label>Select a Theme For Your Gallery
         <select name="background">
-          <option value="none"></option>
+          <option value="none">No Changes</option>
           <option value="/static/themes/circles.jpg">Circles</option>
           <option value="/static/themes/cosmos.jpg">Cosmos</option>
           <option value="/static/themes/gravel.jpg">Gravel</option>

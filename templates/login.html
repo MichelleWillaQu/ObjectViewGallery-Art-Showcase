@@ -4,8 +4,8 @@
   <title>Login</title>
 {% endblock %}
 
-{% block button %}
-<button><a href="/">Home</a></button>
+{% block otherCSS %}
+  <link rel="stylesheet" type="text/css" href="static/CSS/form.css"></link>
 {% endblock %}
 
 {% block body %}
@@ -23,5 +23,5 @@
     </div>
     <button class="btn-login" type="submit">Submit</button>
   </form>
-  <button><a href="/signup">Signup</a></button>
+  <button class="signup"><a href="/signup">Signup</a></button>
 {% endblock %}

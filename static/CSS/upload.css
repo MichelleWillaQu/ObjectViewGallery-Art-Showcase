@@ -5,7 +5,7 @@ body {
   position: relative;
 }
 
-input[type="text"], input[type="date"], button{
+input[type="text"], input[type="date"], button {
   border-radius: 5px;
   overflow: hidden;
 }

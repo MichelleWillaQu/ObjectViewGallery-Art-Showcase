@@ -1,6 +1,74 @@
 input.invalid {
   border-color: red;
 }
+
 input, select {
   border: black 1px solid;
+}
+
+body {
+  background: url(/static/dust_scratches_yongja_kim.png);
+  background-size: cover;
+  height: 100%;
+  position: relative;
+}
+
+input[type="text"], input[type="date"], input[type="email"] {
+  border-radius: 5px;
+  overflow: hidden;
+}
+input[type="password"], button {
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+textarea {
+  /* So the size is not small initially */
+  width: 50vw;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-left: 5px;
+}
+
+label.radio label {
+  /* For spacing between the radio buttons */
+  margin: 0px 5px;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+}
+
+
+/* Navbar */
+
+nav {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.navbar-light .navbar-nav .nav-link, .navbar-light .nav-item {
+  color: rgba(0, 0, 0, 0.8);
+}
+
+.navbar-light .navbar-nav .nav-link:hover, .navbar-light .nav-item:hover {
+  color: rgba(0, 0, 0, 1);
+}
+
+
+/* For certain pages */
+.signup a:hover {
+  text-decoration: none;
+}
+
+.signup a {
+  color: black;
+}
+
+.signup {
+  margin-top: 5px;
+}
+
+.settings-bio {
+  margin-top: 8px;
 }

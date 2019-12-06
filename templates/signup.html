@@ -2,11 +2,10 @@
 
 {% block head %}
   <title>Signup</title>
-  <link rel="stylesheet" type="text/css" href="static/CSS/form.css"></link>
 {% endblock %}
 
-{% block button %}
-  <button><a href="/">Home</a></button>
+{% block otherCSS %}
+  <link rel="stylesheet" type="text/css" href="static/CSS/form.css"></link>
 {% endblock %}
 
 {% block body %}
@@ -35,7 +34,7 @@
       </label>
     </div>
     <div class="form-field">
-      <label>Bio
+      <label class="text">Bio
         <textarea rows="4" name="bio"
         placeholder="You can edit this whenever in your settings."></textarea>
       </label>
