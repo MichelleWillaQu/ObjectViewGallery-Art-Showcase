@@ -64,7 +64,9 @@ a.link:hover {
   display: flex;
   /* Will push the child text to the center of the div */
   justify-content: center;
-  color: rgb(0, 5, 68);
+  /* So it is not the star but it will attract attention */
+  color: rgb(79,84, 151);
+  font-weight: bold;
 }
 
 label {
@@ -82,7 +84,7 @@ label {
 }
 
 select {
-  background: rgba(240, 240, 240, 1);
+  background: rgba(240, 240, 240, 0.8);
   color: rgb(67.5, 67.5, 67.5);
 }
 

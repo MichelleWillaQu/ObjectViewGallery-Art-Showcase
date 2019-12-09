@@ -41,22 +41,8 @@ label.radio label {
 }
 
 
-/* Navbar */
+/* Specific for certain pages */
 
-nav {
-  background: rgba(0, 0, 0, 0.2);
-}
-
-.navbar-light .navbar-nav .nav-link, .navbar-light .nav-item {
-  color: rgba(0, 0, 0, 0.8);
-}
-
-.navbar-light .navbar-nav .nav-link:hover, .navbar-light .nav-item:hover {
-  color: rgba(0, 0, 0, 1);
-}
-
-
-/* For certain pages */
 .signup a:hover {
   text-decoration: none;
 }
@@ -71,4 +57,8 @@ nav {
 
 .settings-bio {
   margin-top: 8px;
+}
+
+.btn-settings {
+  margin-right: 10px;
 }

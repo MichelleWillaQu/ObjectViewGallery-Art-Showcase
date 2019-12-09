@@ -23,6 +23,7 @@ class Grid extends React.Component {
     // media while threeItems and threeActive affects the three.js functionality
     // (threeItems is the list of 3D items passed to three.js code)
     this.state = {username: "",
+                  currentUser: "",
                   userVerified: false,
                   editMode: false,
                   loggedin: false,
@@ -140,6 +141,9 @@ class Grid extends React.Component {
 
   // This is where the data is fetched for the gallery page and processed
   componentDidMount(){
+    const currentUserEl = document.querySelector('#currentUser');
+    this.setState({currentUser: currentUserEl.className});
+
     const pageElement = document.querySelector('#element');
     const username = pageElement.className;
     this.setState({username: username});
@@ -277,14 +281,14 @@ class Grid extends React.Component {
         {this.state.loggedin ?
           (<nav class="navbar navbar-expand-sm navbar-light d-flex">
               <a class="navbar-brand" href="/">
-                <img class="home-icon" src="/static/my_flavicon.ico" />Home</a>
+                <img class="home-icon" src="/static/my_flavicon.ico" />Discover</a>
               {loggedIn}
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarNav">
                 <div class="navbar-nav">
-                  <a class="nav-item ml-auto" href={"/gallery/" + this.state.username}>Gallery</a>
+                  <a class="nav-item ml-auto" href={"/gallery/" + this.state.currentUser}>Gallery</a>
                   <a class="nav-item nav-link ml-auto" href="/upload">Upload</a>
                   <a class="nav-item nav-link ml-auto" href="/settings">Settings</a>
                   <a class="nav-item nav-link ml-auto" href="/logout">Logout</a>

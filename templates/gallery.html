@@ -18,6 +18,7 @@
 {% endblock %}
 
 {% block body %}
+  <span class={{theUsername}} id="currentUser" hidden></span>
   <canvas id="c"></canvas>
   <div class={{user.username}} id="element"></div>
   <script src="/static/JS/gallery.js"></script>

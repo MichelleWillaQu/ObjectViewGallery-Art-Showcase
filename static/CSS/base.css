@@ -1,5 +1,5 @@
 /* Set my fonts */
-h3, h1 {
+h1, h3 {
   font-family: 'Baskervville', serif;
 }
 
@@ -25,6 +25,13 @@ select {
 }
 
 
+/* Title of pages (h1 or h3 depending) */
+
+h1, h3 {
+  margin: 5px 0px;
+}
+
+
 /* Bootstrap */
 
 .navbar-toggler, .navbar-brand {
@@ -36,7 +43,7 @@ select {
 nav {
   /* Nice curved bar for navigation */
   border-radius: 5px;
-  background: rgba(240, 240, 240, 1);
+  background: rgba(201, 201, 201, 1);
   font-family: 'Baskervville', serif;
 }
 
@@ -49,8 +56,8 @@ nav {
   /* So the borders of the hamburger and icon are not touching the bottom of the
      bar */
   padding: 2px 0px;
-  border: 1px solid black;
-  font-size: 1
+  font-size: 1;
+  border: 1px rgb(160, 160, 160) solid;
 }
 
 .navbar-collapse {
@@ -89,4 +96,7 @@ nav {
   height: 100%;
   width: auto;
   margin-right: 3px;
+  /* Rounded icon */
+  border-radius: 5px;
+  overflow: hidden;
 }
