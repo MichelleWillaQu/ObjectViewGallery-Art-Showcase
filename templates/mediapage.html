@@ -55,6 +55,16 @@
           {{media.meta_info}}
         </div>
       {% endif %}
+      {% if media.tags %}
+        <div id="tags">
+          Tags:
+          {% for tag in media.tags %}
+            <!-- Has to be on the same line or else there will be an extra
+                 space -->
+            {{tag.tag_name}}{{ ", " if not loop.last else ""}}
+          {% endfor %}
+        </div>
+      {% endif %}
       <div id="date">
         Date Created: {{formatted_date}}
       </div>
