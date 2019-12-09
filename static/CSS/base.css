@@ -36,14 +36,21 @@ select {
 nav {
   /* Nice curved bar for navigation */
   border-radius: 5px;
-  background: rgba(255, 255, 255, 0.65);
+  background: rgba(240, 240, 240, 1);
   font-family: 'Baskervville', serif;
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
 }
 
 .navbar {
   /* So the borders of the hamburger and icon are not touching the bottom of the
      bar */
   padding: 2px 0px;
+  border: 1px solid black;
+  font-size: 1
 }
 
 .navbar-collapse {
@@ -54,14 +61,14 @@ nav {
 
 .navbar-light .navbar-nav .nav-link, .navbar-light .nav-item {
   /* Readability */
-  color: rgba(0, 0, 0, .64);
+  color: rgb(50, 50, 50);
   /* Gets rid of the dynamic padding since .nav-item and buttons do not match */
   padding: 0px 0px;
 }
 
 .navbar-light .navbar-nav .nav-link:hover, .navbar-light .nav-item:hover {
   /* No hyperlinks and reactive to user with a color change */
-  color: rgba(0, 0, 0, .9);
+  color: rgb(10, 10, 10);
   text-decoration: none;
 }
 
@@ -78,6 +85,8 @@ nav {
 
 .home-icon {
   /* Size to nav */
+  top: 0;
   height: 100%;
   width: auto;
+  margin-right: 3px;
 }

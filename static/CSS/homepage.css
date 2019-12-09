@@ -1,9 +1,11 @@
 body {
   /*center both horizontally and vertically*/
-  background: url(/static/francisco-delgado-unsplash.jpg) no-repeat center center;
+  background: url(/static/francisco-delgado-unsplash.jpg) no-repeat;
+  background-position: center;
   background-size: cover;
  /* Unless this property is here, the image will sometimes not cover the whole page*/
   height: 100%;
+  min-height: 100vh;
   position: relative;
 }
 
@@ -23,7 +25,7 @@ body {
   margin: 3px;
   display: flex;
   align-items: flex-end;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(240, 240, 240, .8);
 }
 
 a.link {
@@ -62,12 +64,13 @@ a.link:hover {
   display: flex;
   /* Will push the child text to the center of the div */
   justify-content: center;
+  color: rgb(0, 5, 68);
 }
 
 label {
   /*For readability*/
   font-weight: bold;
-  color: white;
+  color: rgba(45, 45, 45);
 } 
 
 .artist {
@@ -75,4 +78,14 @@ label {
   position: absolute;
   bottom: 0px;
   margin-top: -50px;
+  color: rgb(67.5, 67.5, 67.5);
+}
+
+select {
+  background: rgba(240, 240, 240, 1);
+  color: rgb(67.5, 67.5, 67.5);
+}
+
+.pageLabel {
+  color: black;
 }

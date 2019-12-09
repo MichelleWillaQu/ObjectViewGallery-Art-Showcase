@@ -81,11 +81,13 @@
 /* Navbar */
 
 .my-button {
-  margin: 0px 5px;
+  background-color: rgb(200, 200, 200);
+  margin: 0px 10px;
   border-radius: 5px;
   /* Makes the button not inherit thus being smaller vertically */
   line-height: normal;
   padding: 1px 6px;
+  color: rgb(30, 30, 30);
 }
 
 
@@ -94,14 +96,13 @@
 .user {
   display: flex;
   margin: 10px 0px;
-  background: rgba(255, 255, 255, 0.5);
+  background: rgba(45, 45, 45, 0.9);
 }
 
 .avatarAndUsername {
   display: flex;
   flex-direction: column;
   width: 100px;
-  height: 100px;
 }
 
 .img-container {
@@ -120,10 +121,12 @@
   display: flex;
   /* Will push the child text to the center of the div */
   justify-content: center;
+  color: white;
 }
 
 .info {
   display: flex;
   flex: 1 0 50%;
   margin: 0px 15px;
+  color: white;
 }

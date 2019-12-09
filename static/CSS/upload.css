@@ -31,10 +31,6 @@ label.radio label {
 
 /* Navbar */
 
-nav {
-  background: rgba(0, 0, 0, 0.2);
-}
-
 .navbar-light .navbar-nav .nav-link, .navbar-light .nav-item {
   color: rgba(0, 0, 0, 0.8);
 }
