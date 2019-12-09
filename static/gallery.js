@@ -287,7 +287,7 @@ class Grid extends React.Component {
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarNav">
-                <div class="navbar-nav">
+                <div class="navbar-nav ml-auto">
                   <a class="nav-item ml-auto" href={"/gallery/" + this.state.currentUser}>Gallery</a>
                   <a class="nav-item nav-link ml-auto" href="/upload">Upload</a>
                   <a class="nav-item nav-link ml-auto" href="/settings">Settings</a>
@@ -301,7 +301,7 @@ class Grid extends React.Component {
               <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
-              <div class="collapse navbar-collapse" id="navbarNav">
+              <div class="collapse navbar-collapse ml-auto" id="navbarNav">
                 <div class="navbar-nav ml-auto">
                   <a class="nav-item nav-link ml-auto" href="/login">Log In</a>
                   <a class="nav-item nav-link ml-auto" href="/signup">Sign Up</a>

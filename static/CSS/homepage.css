@@ -1,6 +1,6 @@
 body {
   /*center both horizontally and vertically*/
-  background: url(/static/francisco-delgado-unsplash.jpg) no-repeat;
+  background: url(/static/willow_David_Veksler.png) no-repeat;
   background-position: center;
   background-size: cover;
  /* Unless this property is here, the image will sometimes not cover the whole page*/
@@ -80,7 +80,7 @@ label {
   position: absolute;
   bottom: 0px;
   margin-top: -50px;
-  color: rgb(67.5, 67.5, 67.5);
+  color: rgb(150, 150, 150);
 }
 
 select {
