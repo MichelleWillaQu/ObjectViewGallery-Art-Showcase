@@ -149,6 +149,7 @@ def signup_action():
                     info = bio,
                     email = email,
                     background_url = '/static/themes/parchment.png',
+                    avatar_url = '/static/default_avatar.png',
                     folder_url = folder_path)
     db.session.add(new_user)
     db.session.commit()
