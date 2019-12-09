@@ -48,8 +48,7 @@ class Media(db.Model):
 
     # Relationships
     user = db.relationship('User', backref=db.backref('owned_media',
-                                                       order_by="Media.order",
-                                                       primaryjoin="User.user_id==Media.user_id"))
+                                                       order_by='Media.order'))
     type_of = db.relationship('MediaType', backref=db.backref('all_media'))
 
     def __repr__(self):
@@ -116,7 +115,7 @@ class Tag(db.Model):
     # Relationship
     all_media = db.relationship('Media', 
                                 secondary='whichtags', 
-                                backref=db.backref('tags'))
+                                backref=db.backref('tags', order_by='Tag.tag_name'))
 
     def __repr__(self):
         """Provide information of the Tag object."""
