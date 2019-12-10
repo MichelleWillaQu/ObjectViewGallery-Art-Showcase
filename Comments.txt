@@ -18,6 +18,10 @@ render the different components in the content div and then call three.js code
 11. DeviantArt API (does not seem to work without a domain and https - deployment)
 
 
+Bugs:
+1. The id for canvas (c) means no 3D object can be called c or else the 3D object
+will be rendered in the large canvas - choose a reserved keyword for the canvas
+
 
 Reflection Notes:
 1. Perhaps disable form inputs in the beginning of JS script instead of inherently
@@ -32,3 +36,15 @@ the checks are similar
 4. On the gallery page, any errors will be above the navbar since React
 generates the navbar (necessary for the edit/follow button) - investigate
 alternatives
+5. In hindsight, probably some of the layout decisions for the mediapage was probably
+unwise since large amounts of media info will look really weird but I also liked
+being able to read the description and see the image. And there was a lot of extra
+whitespace since the screen is so wide (have similar media (tags?) show up to take
+up space if the screen width is large). Maybe some sort of balance (especially for
+description) can be found.
+6. Routes for Flask should have a static part of the url to avoid catching things
+like localhost://flavicon.ico, etc since it can trigger Flask flash messages when
+arguments are not passed to the route function
+7. GLTF (in JSON) file format do not have to have .bin files (unrequire it) and
+also accept .glb (binary) file formats which also use the GLTFLoader. They can
+also have textures (so match the obj texture settings)

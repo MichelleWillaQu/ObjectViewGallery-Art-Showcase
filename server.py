@@ -31,17 +31,22 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
 # silently. This is horrible. Fix this so that, instead, it raises an
 # error.
 app.jinja_env.undefined = StrictUndefined
+
+
 # For testing, the setup
 JS_TESTING_MODE = False
+
 @app.before_request
 def add_tests():
     g.jasmine_tests = JS_TESTING_MODE
+
 @app.route('/test')
 def test():
     return render_template('test.html')
 
+############################################################
 
-#Custom decorators
+# Custom decorators
 def must_be_logged_in(func):  # Runs when func is decorated with
     # "@wraps is a decorator that does some bookkeeping so that
     # decorated_function() appears as func() for the purposes of documentation
@@ -189,7 +194,8 @@ def upload_action():
         flash('You already have art with that name!')
         return redirect('/upload')
 
-    # To handle media file upload
+    # To handle media file upload - each media will have its own folder in order
+    # to hold any thumbnails/textures it has
     # Boolean for whether the file has an associated mtl
     has_mtl = False
     # Check the type of file first

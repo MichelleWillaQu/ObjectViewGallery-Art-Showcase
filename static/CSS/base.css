@@ -7,8 +7,9 @@ body, button, select {
   font-family: 'Open Sans Condensed', sans-serif;
 }
 
+
 body {
-  /* So the words are not directly on the edge of the page */
+  /* So the words are not directly touching the edge of the page */
   padding: 0px 16px;
 }
 
@@ -90,6 +91,7 @@ nav {
   padding: 2px 0px;
 }
 
+/* My icon right next to the .navbar-brand */
 .home-icon {
   /* Size to nav */
   top: 0;

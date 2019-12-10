@@ -5,7 +5,8 @@ import {passwordRegexCheck, usernameRegexCheck} from './functions'
 
 
 // For the email validation messages to appear only after the first type
-let firstType = false;
+let firstType1 = false;
+let firstType2 = false;
 let firstSubmit = false;
 // For asynchronous checks
 let check1passed = false;
@@ -54,6 +55,7 @@ function emailResolution (response){
 // it is focused while being submitted
 usernameInput.on('input', () => {
   // Ajax call to see if username exists (false is the wanted return)
+  firstType2 = true;
   checkUsername().then(usernameResolution);
 });
 
@@ -61,7 +63,7 @@ usernameInput.on('input', () => {
 emailInput.on('input', () => {
   // Check to make sure there is not a user with that email (false is the wanted
   // response)
-  firstType = true;
+  firstType1 = true;
   checkEmail().then(emailResolution);
 });
 
@@ -139,9 +141,7 @@ $('#username').on('focus', (evt) => {
 
 // Chrome browser bug: Occasionally may report type email specific errors when typing though
 $('#email').on('focus', (evt) => {
-  console.log('hi')
-  if (firstType){
-    console.log('me')
+  if (firstType1 && firstType2){
     evt.target.reportValidity();
   }
 });

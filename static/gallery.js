@@ -18,16 +18,19 @@ const ItemTypes = {
 class Grid extends React.Component {
   constructor(props){
     super(props);
+    // Starting props
     // The first 5 state keys are for the functionality of the page (what kind
-    // of buttons are present) then items holds the truth for the location of
-    // media while threeItems and threeActive affects the three.js functionality
-    // (threeItems is the list of 3D items passed to three.js code)
+    // of buttons are present) then there are 3 states (1 for the gallery button
+    // who is the current user, 2 for gallery user's info). After that the state
+    // has a state to hold the truth for the location of media while threeItems
+    // and threeActive affects the three.js functionality (threeItems is the
+    // list of 3D items passed to three.js code)
     this.state = {username: "",
-                  currentUser: "",
                   userVerified: false,
                   editMode: false,
                   loggedin: false,
                   following: false,
+                  currentUser: "",
                   info: "",
                   avatar: "",
                   items: [],
@@ -134,6 +137,8 @@ class Grid extends React.Component {
         }
       }
     });
+
+    // Always executes (flop state)
     this.setState((prevState) => {
       return {following: !prevState.following};
     });
@@ -141,12 +146,15 @@ class Grid extends React.Component {
 
   // This is where the data is fetched for the gallery page and processed
   componentDidMount(){
+    // The user in session
     const currentUserEl = document.querySelector('#currentUser');
     this.setState({currentUser: currentUserEl.className});
 
+    // The gallery's owner
     const pageElement = document.querySelector('#element');
     const username = pageElement.className;
     this.setState({username: username});
+    // Go get the information needed for functionality
     $.get('/api/gallery-settings-check.json', {username: username}, (response) => {
       if(response.loggedin){
         this.setState({userVerified: response.verified,
@@ -154,10 +162,13 @@ class Grid extends React.Component {
                        following: response.following});
       }
     });
+    // Get the gallery owner's data and add to state
     $.get('/api/get-user-info.json', {username: username}, (response) => {
         this.setState({info: response.data.info,
                        avatar: response.data.avatar});
     });
+    // Get all the media, categorize them (for React components), and change the
+    // state of items (add to threeItems if 3D)
     $.get('/api/get-media.json', {username: username}, (response) => {
       const updatedItems = [];
       const newThreeItems = [];
@@ -214,7 +225,7 @@ class Grid extends React.Component {
   }
 
   componentDidUpdate(){
-    // Length is not zero
+    // Will run if length is not zero
     if (!this.state.threeActive && this.state.threeItems.length){
       threejsEntry(this.state.threeItems);
       // Only want three.js to start one render loop - not one everytime the
@@ -253,6 +264,9 @@ class Grid extends React.Component {
     return media;
   }
 
+  // Generates a button if the user is logged in - if the user is the gallery
+  // owner, it will be an edit button, else if the user is someone else, it will
+  // be a follow button
   loggedInButtons(){
     const inside = [];
     if (!this.state.loggedin){
@@ -382,6 +396,10 @@ function TwoDMedia(props) {
 }
 
 
+// The 3D components are essentially the same as 2D except without a background
+// and a different type (obj and gltf are maintained separately for clarity but
+// it is likely to work properly if combined as long as ThreeJS gets the correct
+// file extensions)
 function Obj(props) {
   const reference = useRef(null);
 

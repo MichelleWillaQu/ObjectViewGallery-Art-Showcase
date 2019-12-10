@@ -1,9 +1,11 @@
 body {
-  /*center both horizontally and vertically*/
+  /* Center both horizontally and vertically */
   background: url(/static/willow_David_Veksler.png) no-repeat;
   background-position: center;
   background-size: cover;
  /* Unless this property is here, the image will sometimes not cover the whole page*/
+ /* This is also for maintaining the artist name at the bottom of the page at minimum
+     (can be lower than the bottom of the viewport) */
   height: 100%;
   min-height: 100vh;
   position: relative;
@@ -45,12 +47,13 @@ a.link:hover {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  flex: 1 1 100%;
 }
 
 .img-container {
   display: flex;
-  /* Will grow to fill the rest of the .inside height and width */
+  /* Necessary */
+  /* Will grow to fill the rest of the .inside height and width - in case the
+     img is too short*/
   flex: 1 1 auto;
 }
 
@@ -60,6 +63,7 @@ a.link:hover {
   width: 100%;
 }
 
+/* The usernames */
 .text {
   display: flex;
   /* Will push the child text to the center of the div */
@@ -70,7 +74,7 @@ a.link:hover {
 }
 
 label {
-  /*For readability*/
+  /* For readability - text next to dropdown */
   font-weight: bold;
   color: rgba(45, 45, 45);
 } 
@@ -84,10 +88,12 @@ label {
 }
 
 select {
+  /* Dropdown for search features */
   background: rgba(240, 240, 240, 0.8);
   color: rgb(67.5, 67.5, 67.5);
 }
 
 .pageLabel {
+  /* Header color */
   color: black;
 }

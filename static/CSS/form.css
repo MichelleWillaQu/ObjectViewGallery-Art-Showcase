@@ -1,11 +1,14 @@
+/* For a red box around an input to signal something is wrong */
 input.invalid {
   border-color: red;
 }
 
+/* Else, have a black box */
 input, select {
   border: black 1px solid;
 }
 
+/* Shared background */
 body {
   background: url(/static/dust_scratches_yongja_kim.png);
   background-size: cover;
@@ -13,6 +16,7 @@ body {
   position: relative;
 }
 
+/* Curved Edges */
 input[type="text"], input[type="date"], input[type="email"] {
   border-radius: 5px;
   overflow: hidden;
@@ -25,17 +29,15 @@ input[type="password"], button {
 textarea {
   /* So the size is not small initially */
   width: 50vw;
+  /* Curved edges */
   border-radius: 5px;
   overflow: hidden;
+  /* Spacing from the prompts */
   margin-left: 5px;
 }
 
-label.radio label {
-  /* For spacing between the radio buttons */
-  margin: 0px 5px;
-}
-
 .text {
+  /* So textarea prompts will line up with center of the textarea */
   display: flex;
   align-items: center;
 }
@@ -43,22 +45,39 @@ label.radio label {
 
 /* Specific for certain pages */
 
+label.radio label {
+  /* For spacing between the radio buttons */
+  margin: 0px 5px;
+}
+
+#settings-textarea {
+  /* The prompt is above, not next to so this element should not have a margin */
+  margin: 0px 0px;
+}
+
 .signup a:hover {
+  /* Underlines makes the buttons ugly */
   text-decoration: none;
 }
 
 .signup a {
+  /* Not blue like default */
   color: black;
 }
 
+/* Margin for signup button since there is a button above (no margin around buttons
+   by default) */
 .signup {
   margin-top: 5px;
 }
 
+/* Margin for after the buttons (to change email/password) */
 .settings-bio {
   margin-top: 8px;
 }
 
+/* Margin to the right for all buttons on page (submit is unnecessary but it makes
+   no difference) since the two buttons on top sit next to each other */
 .btn-settings {
   margin-right: 10px;
 }

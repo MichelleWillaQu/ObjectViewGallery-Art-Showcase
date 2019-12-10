@@ -46,7 +46,8 @@ class Media(db.Model):
     type_id = db.Column(db.Integer, db.ForeignKey('mediatypes.type_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
-    # Relationships
+    # Relationships - namespace of evaluations for python expressions (in strings)
+    # for relationships is all classes mapped for this declarative base
     user = db.relationship('User', backref=db.backref('owned_media',
                                                        order_by='Media.order'))
     type_of = db.relationship('MediaType', backref=db.backref('all_media'))

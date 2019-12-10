@@ -18,7 +18,7 @@
   z-index: -1;
 }
 
-.mediaElement, .media{
+.mediaElement, .media {
   /* Border-box considers padding and borders in the calculation of height/width
      BUT not margins */
   box-sizing: border-box;
@@ -29,11 +29,11 @@
 
 .mediaElement {
   /* Padding instead of margin because margins will break the flex format (will
-     cause the divs to wrap because they are too big) */
+     cause the divs to wrap because they are too big - see border-box above) */
   padding: 1px;
 }
 
-.media{
+.media {
   border: 1px solid black;
   width: 100%;
   height: 100%;
@@ -45,7 +45,7 @@
 @media(min-width: 1200px){ /* XL */
   .mediaElement{
     flex: 0 0 25%;
-    height: 400px;
+    height: 300px;
   }
 }
 
@@ -78,7 +78,7 @@
 }
 
 
-/* Navbar */
+/* Extra button on Navbar styling */
 
 .my-button {
   background-color: rgb(220, 220, 220);
