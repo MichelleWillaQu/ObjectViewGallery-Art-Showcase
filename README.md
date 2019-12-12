@@ -20,7 +20,7 @@
 
 
 ### Discover <a name="discover"></a>
-![Discover](./readme_files/home.jpg)
+![Discover](./readme_files/home.JPG)
 <br>
 This is the homepage of the website and shows all the artists, sorted alphabetically. Clicking on one of the artists' avatars will bring you to their gallery page.
 
@@ -43,12 +43,12 @@ Browsers can only have up to 8 WebGL contexts rendering at one time. Not only wi
 
 ### Form Validation and Events <a name="forms"></a>
 A look at some of my forms which have extra form validation on the Javascript side:
+![Some forms](./readme_files/form.gif)
 #### Regex, Ajax, and Promises <a name="promises"></a>
-![Signup Form](./readme_files/signup.gif)
 Some fields are checked every time the user types, such as the username, while other fields, liike the passwords, are checked everytime the form is submitted. I have also created custom error messages that will tell the user what the error is.
 #### Event handlers <a name="formComponents"></a>
-![Upload Form](./readme_files/upload.gif)
 With jQuery, I added event handlers to my forms to show/hide and disable/require different parts of the form. This was something I wanted to do especially for the Upload form since there are distinct files I would need to ask the user to upload depending on the art file format (for example, optional .mtl files for .obj 3D objects and .bin files for .gltf 3D objects).
+
 ### The Data Model <a name="datamodel"></a>
 ![Data Model](./readme_files/Web-App.png)
 A look at my database that is implemented with PostgreSQL and Flask-SQLAlchemy (dependent on SQLAlchemy and psycopg2). I ended up having enough time to implement the Following table from the Nice to Have features.
