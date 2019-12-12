@@ -20,7 +20,7 @@
 
 
 ### Discover <a name="discover"></a>
-![Discover](./readme_files/home.gif)
+![Discover](./readme_files/home.jpg)
 <br>
 This is the homepage of the website and shows all the artists, sorted alphabetically. Clicking on one of the artists' avatars will bring you to their gallery page.
 
