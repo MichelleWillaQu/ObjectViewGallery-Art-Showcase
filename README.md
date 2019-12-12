@@ -30,7 +30,7 @@ Each uploaded art will have its own page that contains more detailed information
 ![3D object on its page](./readme_files/3D.gif)
 3D models are rendered using ThreeJS with controls to move the object in 3D space.
 #### 2D <a name="vibrant"></a>
-![2D object an its page](./readme_files/2D.png)
+![2D object an its page](./readme_files/2D.PNG)
 2D art is displayed with its correct aspect ratio and with a theme of colors (produced by running the image through the VibrantJS API). This palette is present to inspire and describe the feeling of the art.
 
 ### Gallery
