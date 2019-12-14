@@ -34,7 +34,7 @@ Each uploaded art will have its own page that contains more detailed information
 2D art is displayed with its correct aspect ratio and with a theme of colors (produced by running the image through the VibrantJS API). This palette is present to inspire and describe the feeling of the art.
 
 ### Gallery
-![Gallery Page](https://drive.google.com/uc?export=view&id=1m4SVW0M-N_DCf39EL3DOWRCuV62bTYza)
+![Gallery Page](https://drive.google.com/uc?export=view&id=1vue2q5C_oDr3V0BmKboNwyZMiPiwLUus)
 A gallery page hosts the entirety of an artist's art. In edit mode, the user can drag their art around to dynamically reorder what is seen first. Outside edit mode, a click on any piece of art will lead to an individual art's page.
 #### React and React-DnD <a name="draganddrop"></a>
 The entire gallery page is created in React and the React-DnD library adds utilities to implement drag and drop (this is built on top of the HTML5 drag and drop API). I have three internal React components (one for 2D art and two for the different 3D art formats) wrapped by a large React component. Each internal component is draggable and can be dropped onto any of the other internal components. The reordering occurs when the dragged art is hovering over another art for increased responsiveness (avoids the flickering effect that occurs when items are reordered on drop).
