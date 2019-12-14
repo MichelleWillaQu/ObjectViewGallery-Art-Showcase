@@ -27,14 +27,17 @@ This is the homepage of the website and shows all the artists, sorted alphabetic
 ### An Art's Page <a name="mediapage"></a>
 Each uploaded art will have its own page that contains more detailed information about it (descriptions, tags, and the date of creation).
 #### 3D <a name="three-basic"></a>
-![3D object on its page](./readme_files/3D.gif)
+![3D object on its page](https://drive.google.com/uc?export=view&id=1EsZ34AwvtEOdnOks_ZPi-6r9TuEl3IcG)
+<br>
 3D models are rendered using ThreeJS with controls to move the object in 3D space.
 #### 2D <a name="vibrant"></a>
 ![2D object an its page](./readme_files/2D.JPG)
+<br>
 2D art is displayed with its correct aspect ratio and with a theme of colors (produced by running the image through the VibrantJS API). This palette is present to inspire and describe the feeling of the art.
 
 ### Gallery
 ![Gallery Page](https://drive.google.com/uc?export=view&id=1vue2q5C_oDr3V0BmKboNwyZMiPiwLUus)
+<br>
 A gallery page hosts the entirety of an artist's art. In edit mode, the user can drag their art around to dynamically reorder what is seen first. Outside edit mode, a click on any piece of art will lead to an individual art's page.
 #### React and React-DnD <a name="draganddrop"></a>
 The entire gallery page is created in React and the React-DnD library adds utilities to implement drag and drop (this is built on top of the HTML5 drag and drop API). I have three internal React components (one for 2D art and two for the different 3D art formats) wrapped by a large React component. Each internal component is draggable and can be dropped onto any of the other internal components. The reordering occurs when the dragged art is hovering over another art for increased responsiveness (avoids the flickering effect that occurs when items are reordered on drop).
@@ -43,7 +46,8 @@ Browsers can only have up to 8 WebGL contexts rendering at one time. Not only wi
 
 ### Form Validation and Events <a name="forms"></a>
 A look at some of my forms which have extra form validation on the Javascript side:
-![Some forms](./readme_files/form.gif)
+![Some forms](https://drive.google.com/uc?export=view&id=1DB-Jdtyy6nbc9o_iAdy6uO2n2i2rMRvG)
+<br>
 #### Regex, Ajax, and Promises <a name="promises"></a>
 Some fields are checked every time the user types, such as the username, while other fields, liike the passwords, are checked everytime the form is submitted. I have also created custom error messages that will tell the user what the error is.
 #### Event handlers <a name="formComponents"></a>
@@ -51,6 +55,7 @@ With jQuery, I added event handlers to my forms to show/hide and disable/require
 
 ### The Data Model <a name="datamodel"></a>
 ![Data Model](./readme_files/Web-App.png)
+<br>
 A look at my database that is implemented with PostgreSQL and Flask-SQLAlchemy (dependent on SQLAlchemy and psycopg2). I ended up having enough time to implement the Following table from the Nice to Have features.
 
 ### What I Used <a name="tech"></a>
